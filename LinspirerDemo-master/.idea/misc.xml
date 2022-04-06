@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Vink/.gradle/caches/transforms-3/c1154f4d1188eeb283362a20ae98fa1a/transformed/jetified-zxing-lite-2.1.1/res/layout/zxl_capture.xml" value="0.1015625" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2109375" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/layout/activity_sec.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/layout/activity_start.xml" value="0.1" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/layout/activity_start2.xml" value="0.17447916666666666" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/layout/content_start.xml" value="0.22" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/Vink/Desktop/LinspirerDemo-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable-v24/ic_add.xml" value="0.20364583333333333" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.16944444444444445" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/bottom_btn_login_fragment_selector.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/image_bg_off.xml" value="0.34140625" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/login_btn_dialog_text_bg_right.xml" value="0.24479166666666666" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/selector_capture_back.xml" value="0.3171875" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/Box_activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_aboutactivity.xml" value="0.9" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_back_dooradb.xml" value="0.21666666666666667" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_code_scan.xml" value="0.22864583333333333" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_ddpm.xml" value="0.25" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_device_auth.xml" value="0.67" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_new_detail.xml" value="0.25" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_new_ui.xml" value="0.25" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_qrcode.xml" value="0.24166666666666667" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_scan.xml" value="0.5" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_start2.xml" value="0.3046875" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_voicecallactivity.xml" value="0.18125" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_web_view.xml" value="0.3183876811594203" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_webview.xml" value="0.31068840579710144" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/capture.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/content_new.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/content_scan.xml" value="0.5" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/f_activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/f_activity_setting.xml" value="0.340625" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/f_app_item.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/float_test.xml" value="1.5" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/fragment_new_detail.xml" value="0.22" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/fragment_new_list.xml" value="0.25" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/generic_activity.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/item_package.xml" value="0.25" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/keyboard_view.xml" value="0.22" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/layout_app_gridview.xml" value="0.25104166666666666" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/layout_app_item.xml" value="0.25104166666666666" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/layout_newui_navigationview.xml" value="0.20625" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/login_dialog.xml" value="0.17864583333333334" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/new_list_content.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/premainactivity.xml" value="0.18125" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/scancodeactivity.xml" value="0.25" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/settings_activity.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/start2.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/view_toolbar.xml" value="0.1875" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.221875" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.221875" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/ids.xml" value="0.22864583333333333" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/myadmin.xml" value="0.67" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/pref_ownersettings.xml" value="0.33" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/provider_paths.xml" value="0.32890625" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/root_preferences.xml" value="0.17407407407407408" />
+        <entry key="..\:/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_new_ui.xml" value="0.3302083333333333" />
+        <entry key="..\:/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/item_grid_icon.xml" value="0.34466588511137164" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="NullableNotNullManager">
+    <option name="myDefaultNullable" value="androidx.annotation.Nullable" />
+    <option name="myDefaultNotNull" value="androidx.annotation.NonNull" />
+    <option name="myNullables">
+      <value>
+        <list size="14">
+          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
+          <item index="1" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
+          <item index="2" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
+          <item index="3" class="java.lang.String" itemvalue="androidx.annotation.Nullable" />
+          <item index="4" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNullable" />
+          <item index="5" class="java.lang.String" itemvalue="com.android.annotations.Nullable" />
+          <item index="6" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
+          <item index="7" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.Nullable" />
+          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableDecl" />
+          <item index="10" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
+          <item index="11" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.Nullable" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.annotations.Nullable" />
+          <item index="13" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.Nullable" />
+        </list>
+      </value>
+    </option>
+    <option name="myNotNulls">
+      <value>
+        <list size="14">
+          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
+          <item index="1" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
+          <item index="2" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
+          <item index="3" class="java.lang.String" itemvalue="androidx.annotation.NonNull" />
+          <item index="4" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNonNull" />
+          <item index="5" class="java.lang.String" itemvalue="com.android.annotations.NonNull" />
+          <item index="6" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
+          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.NonNull" />
+          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullDecl" />
+          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
+          <item index="10" class="java.lang.String" itemvalue="org.eclipse.jdt.annotation.NonNull" />
+          <item index="11" class="java.lang.String" itemvalue="io.reactivex.annotations.NonNull" />
+          <item index="12" class="java.lang.String" itemvalue="io.reactivex.rxjava3.annotations.NonNull" />
+          <item index="13" class="java.lang.String" itemvalue="lombok.NonNull" />
+        </list>
+      </value>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

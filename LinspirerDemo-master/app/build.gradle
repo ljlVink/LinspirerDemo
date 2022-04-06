@@ -1,0 +1,108 @@
+plugins {
+    id 'com.android.application'
+  //  id 'top.niunaijun.blackobfuscator'
+  //  id 'stringfog'
+}
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+    defaultConfig {
+        applicationId "vizpower.imeeting"
+        minSdkVersion 26
+        resValue "string", "app_name", "无限宝"
+        targetSdkVersion 29
+        versionCode 38880
+        versionName "V5.5.7.3_20220406"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+        flavorDimensions "versionCode"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        wps {
+            resValue "string", "app_name", "WPS Office"
+            applicationId "cn.wps.moffice_eng"
+        }
+        vizpower {
+            resValue "string", "app_name", "无限宝"
+            applicationId "vizpower.imeeting"
+        }
+        /*
+        word{
+            resValue "string", "app_name", "天天单词"
+            applicationId "com.etiantian.android.word"
+        }*/
+        /*
+        geogebra{
+            resValue "string", "app_name", "geogebra"
+            applicationId "org.geogebra"
+        }*/
+        lspdemo_bronya{
+            resValue "string", "app_name", "Lspdemo"
+            applicationId "cn.lspdemo_bronya"
+        }
+        lspdemo_mana{
+            resValue "string", "app_name", "Lspdemo"
+            applicationId "cn.lspdemo_mana"
+        }
+        sogou{
+            resValue "string", "app_name", "搜狗输入法"
+            applicationId "com.sohu.inputmethod.sogou.oem"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+/*
+BlackObfuscator {
+    // 是否启用
+    enabled false
+    // 混淆深度
+    depth 2
+    // 需要混淆的包或者类(匹配前面一段)
+    obfClass = ["com.ljlVink", "com.huosoft"]
+    // blackClass中的包或者类不会进行混淆(匹配前面一段)
+}
+stringfog {
+    enable false
+    implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
+    fogPackages = ["com.ljlVink", "com.huosoft"]
+}
+
+*/
+dependencies {
+   // implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
+
+    compileOnly 'com.huawei.mdm:mdmkit:11.1.0.300'
+    implementation 'com.github.jenly1314:zxing-lite:2.1.1'
+    implementation 'com.lahm.library:easy-protector-release:latest.release'
+   // implementation 'com.github.megatronking.stringfog:xor:3.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.github.princekin-f:EasyFloat:2.0.3'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:latest.release'
+    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'com.nbsp:materialfilepicker:1.9.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.preference:preference:1.1.1'
+    compileOnly files('libs\\framework_new.jar')
+    compileOnly files('libs/framework.jar')
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+}

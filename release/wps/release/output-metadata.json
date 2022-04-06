@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "cn.wps.moffice_eng",
+  "variantName": "wpsRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 38880,
+      "versionName": "V5.5.7.3_20220406",
+      "enabled": true,
+      "outputFile": "app-wps-release.apk"
+    }
+  ]
+}

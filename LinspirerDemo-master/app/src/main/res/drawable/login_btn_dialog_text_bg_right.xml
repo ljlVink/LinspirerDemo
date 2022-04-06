@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector>
+    <item xmlns:ns1="http://schemas.android.com/apk/res/android" ns1:state_focused="false" xmlns:ns2="http://schemas.android.com/apk/res/android" ns2:color="@color/white"/>
+    <item xmlns:ns3="http://schemas.android.com/apk/res/android" ns3:state_pressed="false" xmlns:ns4="http://schemas.android.com/apk/res/android" ns4:color="@color/white"/>
+</selector>

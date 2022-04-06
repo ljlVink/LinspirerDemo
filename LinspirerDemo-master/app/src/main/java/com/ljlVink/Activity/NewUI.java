@@ -1,0 +1,1179 @@
+package com.ljlVink.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+
+import android.app.csdk.CSDKManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.net.VpnService;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.king.zxing.CameraScan;
+import com.ljlVink.Receiver.VolReceiver;
+import com.ljlVink.core.DataCleanManager;
+import com.ljlVink.core.Postutil;
+import com.ljlVink.core.DataUtils;
+import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
+import com.huosoft.wisdomclass.linspirerdemo.ContentUriUtil;
+import com.huosoft.wisdomclass.linspirerdemo.R;
+import com.ljlVink.core.HackMdm;
+import com.ljlVink.core.RSA;
+import com.ljlVink.core.ToastUtils;
+import com.ljlVink.services.vpnService;
+import com.lzf.easyfloat.EasyFloat;
+import com.lzf.easyfloat.enums.ShowPattern;
+import com.lzf.easyfloat.interfaces.OnInvokeView;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.regex.Pattern;
+public class NewUI extends AppCompatActivity {
+    private final int Lenovo_Mia=3;
+    private final int Lenovo_Csdk=2;
+    private final int T11_supi=4;
+    private List<String> applist = new ArrayList<>();
+    private List<String> appnamelist = new ArrayList<>();
+    private List<String> applist2 = new ArrayList<>();
+    private List<String> appnamelist2 = new ArrayList<>();
+
+    private String currMDM="未找到合适的mdm接口";
+    private HackMdm hackMdm;
+    private BaseAdapter mAdapter = null;
+    private ArrayList<String> superlist=new ArrayList<>();
+    private ArrayList<icon> mData = null;
+    private int MMDM;
+    private GridView grid_photo;
+    private Postutil postutil;
+    private boolean is_system_start;
+    IntentFilter mIntentFilter;
+    private static final String DECODED_CONTENT_KEY = "codedContent";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        final String pubkey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
+                "bdo1ovpqvr2tvCrxUKjWqgUSsYnrCPNkj5MOAjoyBB4wTB5SAOwLXFsB0Cu8YE8a\n" +
+                "4U38XdPF4wH3Tst7hlU1x9KyOg/bgYKkT8NTQ7lgy8WsmlcKiI/u2Aea8+XpCTBw\n" +
+                "UdIBkuF0apT+qOzOBGPuJtIhR20SIGLdW7R9ZSjuXO7CgQp4sna6xfX0ae0blqwn\n" +
+                "ASbXRLvFofTx39sDgZTibRwYp/1UEuTfBKjK3BJ0R4S2OopqD3gVHFba0YPP+Q5q\n" +
+                "bOX+/KU+ASo/lM9qFSKM6NpgLjuUR0VaAcZFcYl59v+jb58/PcqYLr1cY7Zj08xu\n" +
+                "OwIDAQAB";
+        try {
+            getSupportActionBar().hide();
+        }catch (Exception e){}
+        super.onCreate(savedInstanceState);
+        hackMdm=new HackMdm(this);
+        postutil=new Postutil(this);
+        Intent intent=getIntent();
+        is_system_start=intent.getBooleanExtra("isstart",false);
+        if(is_system_start) {
+            Log.e("111", "isstart");
+            mIntentFilter = new IntentFilter();
+            mIntentFilter.addAction("android.media.VOLUME_CHANGED_ACTION");
+            VolReceiver vrc=new VolReceiver();
+            getApplicationContext().registerReceiver(vrc, mIntentFilter);
+            moveTaskToBack(true);
+        }
+        if(DataUtils.readint(this,"vpnmode")==1){
+            startvpn();
+        }
+        if(!is_system_start){
+            postutil.CloudAuthorize();
+            hackMdm.initHack(0);
+            if(!isActiveime()){
+                Toast.makeText(this,"请先配置输入法",Toast.LENGTH_SHORT).show();
+                Intent intent111 = new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS);
+                startActivity(intent111);
+            }
+            if(!isAssistantApp()){
+                Intent intent111111=new Intent(Settings.ACTION_VOICE_INPUT_SETTINGS);
+                PackageManager packageManager = getPackageManager();
+                if (intent111111.resolveActivity(packageManager) != null) {
+                    Toast.makeText(this,"请将本程序注册成语音助手",Toast.LENGTH_LONG).show();
+                    startActivity(intent111111);
+                } else {
+                    Toast.makeText(this,"这个rom不能设置语音助手",Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        //初始化view
+        MMDM=hackMdm.getMMDM();
+        setContentView(R.layout.activity_new_ui);
+        grid_photo = (GridView) findViewById(R.id.grid_photo);
+        mData = new ArrayList<icon>();
+        mData.add(new icon(R.drawable.backtodesktop, "返回桌面"));
+        mData.add(new icon(R.drawable.installapps, "应用安装"));
+        mData.add(new icon(R.drawable.action_hide,"回领创配置隐藏"));
+        mData.add(new icon(R.drawable.recycle,"杀进程(长按配置)"));
+        mData.add(new icon(R.drawable.floatview,"打开悬浮窗"));
+        mData.add(new icon(R.drawable.huawei,"华为专区"));
+        mData.add(new icon(R.drawable.lenovo,"联想专区"));
+        mData.add(new icon(R.drawable.settings,"设备设置"));
+        mData.add(new icon(R.drawable.settings,"程序设置"));
+        mAdapter = new MyAdapter<icon>(mData, R.layout.item_grid_icon) {
+            @Override
+            public void bindView(ViewHolder holder, icon obj) {
+                holder.setImageResource(R.id.img_icon, obj.getiId());
+                holder.setText(R.id.txt_icon, obj.getiName());
+            }
+        };
+        grid_photo.setAdapter(mAdapter);
+        grid_photo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        if (getLauncherPackageName(getApplicationContext())!=null){
+                            try{startActivity(getPackageManager().getLaunchIntentForPackage(getLauncherPackageName(getApplicationContext()))); }catch (Exception e) {
+                                startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+                            }
+                        }else {
+                            startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+                        }
+                        break;
+                    case 1:
+                        final String[] items = new String[]{"通过apk安装","通过apk安装(仅限EMUI10静默)","写app白名单"};
+                        AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this);
+                        builder.setIcon(R.mipmap.ic_launcher);
+                        builder.setTitle("请选择方式：");
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                which++;
+                                try{
+                                    if (which ==1){
+                                        if (MMDM!=Lenovo_Mia){
+                                            Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
+                                            FS.setType("application/vnd.android.package-archive");
+                                            startActivityForResult(FS, 1);
+                                        }else {
+                                            new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
+                                        }
+                                    }
+                                    else if(which ==2){
+                                        if(hackMdm.isEMUI10Device()){
+                                            Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
+                                            FS.setType("application/vnd.android.package-archive");
+                                            startActivityForResult(FS, 2);
+                                        }
+                                    }
+                                    else if(which==3){
+                                        final EditText et = new EditText(NewUI.this);
+                                        new AlertDialog.Builder(NewUI.this).setTitle("请输入包名")
+                                                .setIcon(android.R.drawable.sym_def_app_icon)
+                                                .setView(et)
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        hackMdm.appwhitelist_add(et.getText().toString());
+                                                    }
+                                                }).setNegativeButton("取消",null).show();
+                                    }
+
+                                }catch (Exception e){
+                                    Toast.makeText(getApplicationContext(),"该设置对你无效"+e.toString(),Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        builder.create().show();
+                        break;
+                    case 2:
+                        superlist.clear();
+                        AlertDialog.Builder superbuilder = new AlertDialog.Builder(NewUI.this);
+                        superbuilder.setTitle("选择超级名单");
+                        PackageManager pm3 = getPackageManager();
+                        List<PackageInfo> packages3 = pm3.getInstalledPackages(0);
+                        ArrayList<String> apps_super=new ArrayList<>();
+                        ArrayList<String> appnames_super=new ArrayList<>();
+                        for (PackageInfo packageInfo : packages3) {
+                            // 判断系统/非系统应用
+                            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                                if ("com.android.launcher3".equals(packageInfo.packageName) || "com.ndwill.swd.appstore".equals(packageInfo.packageName )||BuildConfig.APPLICATION_ID.equals(packageInfo.packageName)) {
+                                    continue;
+                                }
+                                apps_super.add(packageInfo.packageName) ;
+                                appnames_super.add(packageInfo.applicationInfo.loadLabel(pm3).toString()) ;
+                            }
+                        }
+                        boolean[] mylist=new boolean[10000+50];
+                        Set<String> st=DataUtils.readStringList(getApplicationContext(),"superapp");
+                        ArrayList<String> lst=new ArrayList(st);
+                        int sz=st.size();
+                        int super_sz=apps_super.size();
+                        for(int i=0;i<super_sz;i++)
+                            for(int j=0;j<sz;j++){
+                                if(apps_super.get(i).equals(lst.get(j))){
+                                    mylist[i]=true;
+                                    superlist.add(lst.get(j));
+                                }
+                            }
+                        superbuilder.setMultiChoiceItems(appnames_super.toArray(new String[0]), mylist, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which, boolean ischeck) {
+                                if (ischeck) {
+                                    superlist.add(apps_super.get(which));
+                                } else {
+                                    superlist.remove(apps_super.get(which));
+                                }
+
+                            }
+                        });
+                        superbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), superlist.toString(), Toast.LENGTH_SHORT).show();
+                                hackMdm.savesuperapps(superlist);
+                            }
+                        });
+                        superbuilder.show();
+
+                        break;
+                    case 3:
+                        hackMdm.killApplicationProcess(DataUtils.ReadStringArraylist(getApplicationContext(),"notkillapp"));
+                        break;
+                    case 4:
+                        if (EasyFloat.isShow()){
+                            try{
+                                EasyFloat.dismiss();
+                            }
+                            catch (Exception e){}
+                        }
+                        else {
+                            EasyFloat.with(getApplicationContext()).
+                                    setShowPattern(ShowPattern.ALL_TIME).
+                                    setLayout(R.layout.float_test,new OnInvokeView() {
+                                        @Override public void invoke(View view) {
+                                            View click_view_float = view.findViewById(R.id.tvOpenMain);
+                                            click_view_float.setOnClickListener(new View.OnClickListener() {
+                                                    @Override public void onClick(View v) {
+                                                        EasyFloat.dismiss();
+                                                        backtolsp();
+                                                        /* try{
+                                                            new CSDKManager(getApplicationContext()).setPackageEnabled("com.android.launcher3",true);
+                                                        }catch (Exception e){}
+                                                        new CSDKManager(getApplicationContext()).enableUsbDebugging(true);
+                                                        new CSDKManager(getApplicationContext()).hideHomeSoftKey(false);
+                                                        Log.e("LTKLog",new CSDKManager(getApplicationContext()).getInstallPackageWhiteList().toString());*/
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    }).show();
+                        }
+                        break;
+                    case 5:
+                        final String[] hwitems = new String[]{"设置隐藏","华为解控(unknown)"};
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(NewUI.this);
+                        builder1.setIcon(R.mipmap.ic_launcher);
+                        builder1.setTitle("华为专区");
+                        builder1.setItems(hwitems, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                which++;
+                                try{
+                                    if (which ==1){
+                                        ArrayList<String> lst=new ArrayList<>();
+                                        AlertDialog.Builder hwsettings = new AlertDialog.Builder(NewUI.this);
+                                        hwsettings.setTitle("选择华为不可见设置(beta)");
+                                        ArrayList<String> settings=new ArrayList<>();
+                                        settings.add("清空(全部显示)");
+                                        settings.add("network");
+                                        settings.add("wifi_proxy");
+                                        settings.add("more_connections");
+                                        settings.add("screen_wallpaper");
+                                        settings.add("notifications");
+                                        settings.add("biometrics_password");
+                                        settings.add("battery");
+                                        settings.add("storage");
+                                        settings.add("security");
+                                        settings.add("privacy");
+                                        settings.add("digital_balance");
+                                        settings.add("smart_assistant");
+                                        settings.add("accessibility");
+                                        settings.add("users_accounts");
+                                        settings.add("apps");
+                                        settings.add("about_phone");
+                                        settings.add("system_updates");
+                                        settings.add("display_font_style");
+                                        settings.add("time_zone_location");
+                                        settings.add("input_and_language");
+                                        settings.add("backup_settings");
+                                        settings.add("pengine_settings");
+                                        settings.add("user_experience");
+                                        settings.add("apps_assistant");
+                                        settings.add("apps_clone");
+                                        settings.add("apps_startup_management");
+                                        settings.add("display_font_size");
+                                        settings.add("system_other_menu");
+                                        settings.add("system_navigation");
+                                        boolean[] array=new boolean[150];
+                                        hwsettings.setMultiChoiceItems(settings.toArray(new String[0]), array, new DialogInterface.OnMultiChoiceClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int which, boolean ischeck) {
+                                                if (!settings.get(which).contains("清空"))
+                                                    if (ischeck) {
+                                                        lst.add(settings.get(which));
+                                                    }
+                                                    else {
+                                                        lst.remove(settings.get(which));
+                                                    }
+                                            }
+                                        });
+                                        hwsettings.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                String s=lst.toString();
+                                                String ss=s.substring(1,s.length()-1).replace(" ","");
+                                                hackMdm.hw_hidesettings(ss);
+                                            }
+                                        });
+                                        hwsettings.show();
+                                    }
+                                    if (which ==2) {
+                                        runhwunlock();
+                                    }
+
+                                }catch (Exception e){
+                                    Toast.makeText(getApplicationContext(),"该设置对你无效"+e.toString(),Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        builder1.create().show();
+                        break;
+                    case 6:
+                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)","设置锁屏密码(Lenovo10+)","联想设置锁屏密码(仅支持mia)","白名单临时清空(解除app管控)"};
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(NewUI.this);
+                        builder2.setIcon(R.mipmap.ic_launcher);
+                        builder2.setTitle("联想专区");
+                        builder2.setItems(lenovoitems, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which) {
+                                which++;
+                                try {
+                                    if (which == 1) {
+                                        Intent intent12 = new Intent();
+                                        intent12.setComponent(new ComponentName("com.android.settings", "com.android.settings.display.NavigationBarSettingsActivity"));
+                                        startActivity(intent12);
+                                    } else if (which == 2) {
+                                        if (MMDM == Lenovo_Csdk) {
+                                            hackMdm.fix_csdk_compoment();
+                                            Intent intent11 = new Intent();
+                                            intent11.setComponent(new ComponentName("com.android.settings", "com.android.settings.password.ChooseLockGeneric"));
+                                            startActivity(intent11);
+                                        } else {
+                                            throw new Exception("...");
+                                        }
+                                    } else if (which == 3) {
+                                        final EditText et = new EditText(NewUI.this);
+                                        new AlertDialog.Builder(NewUI.this).setTitle("请输入密码").setIcon(android.R.drawable.sym_def_app_icon).setView(et)
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        hackMdm.mia_setpasswd(et.getText().toString());
+                                                    }
+                                                }).setNegativeButton("取消",null).show();
+                                    }
+                                    else if(which==4){
+                                        hackMdm.Lenovo_clear_whitelist_app();
+                                    }
+
+                                }
+                                catch (Exception e){
+
+                                }
+                            }
+
+                        });
+                        builder2.create().show();
+
+                        break;
+                    case 7:
+                        final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions"};
+                        AlertDialog.Builder builder3 = new AlertDialog.Builder(NewUI.this);
+                        builder3.setIcon(R.mipmap.ic_launcher);
+                        builder3.setTitle("设备设置");
+                        builder3.setItems(deviceitems, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                i++;
+                                if(i==1){
+                                    hackMdm.dpm_enable_adb();
+                                }
+                                else if (i==2){
+                                    hackMdm.dpm_disable_adb();
+                                }
+                                else if(i==3){
+                                    try{startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));}catch (Exception e){}
+                                }else if(i==4){
+                                    hackMdm.DisableStatusBar();
+                                }
+                                else if(i==5){
+                                    hackMdm.EnableStatusBar();
+                                }else if (i==6){
+                                    showstatusbar();
+                                }
+                                else if(i==7){
+                                    hackMdm.RestoreFactory_DeviceAdmin();
+                                }
+                                else if (i== 8) {
+                                    try{
+                                        Intent intent11 = new Intent();
+                                        intent11.setComponent(new ComponentName("com.android.settings.intelligence", "com.android.settings.intelligence.search.SearchActivity"));
+                                        startActivity(intent11);
+                                    }catch (Exception e){
+
+                                    }
+                                }
+                            }
+                        });
+                        builder3.create().show();
+                        break;
+                    case 8:
+                        final String[] applicationsettings = new String[]{"vpn始终开启","vpn始终关闭","vpn临时关闭","隐藏程序","不隐藏程序","SN设置","清除本程序数据"};
+                        AlertDialog.Builder builder4 = new AlertDialog.Builder(NewUI.this);
+                        builder4.setIcon(R.mipmap.ic_launcher);
+                        builder4.setTitle("程序设置");
+                        builder4.setItems(applicationsettings, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                i++;
+                                if(i==1){
+                                    DataUtils.saveintvalue(getApplicationContext(),"vpnmode",1);
+                                    startvpn();
+                                }
+                                else if(i==2){
+                                    DataUtils.saveintvalue(getApplicationContext(),"vpnmode",0);
+                                    vpnService.stop(getApplicationContext());
+                                }
+                                else if(i==3){
+                                    vpnService.stop(getApplicationContext());
+                                }
+                                else if(i==4){
+                                    if(isActiveime()||isAssistantApp()){
+                                        getPackageManager().setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.Activity.PreMainActivity"),PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
+                                    }else{
+                                        Toast.makeText(getApplicationContext(),"不符合条件,终止操作",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                else if(i==5){
+                                    getPackageManager().setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+                                }
+                                else if (i==6){
+                                    final EditText et = new EditText(NewUI.this);
+                                    et.setText(DataUtils.readStringValue(getApplicationContext(),"SN","null"));
+                                    new AlertDialog.Builder(NewUI.this).setTitle("请输入sn")
+                                            .setIcon(android.R.drawable.sym_def_app_icon)
+                                            .setView(et)
+                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    DataUtils.saveStringValue(getApplicationContext(),"SN",et.getText().toString());
+                                                }
+                                            }).setNegativeButton("取消",null).show();
+                                }else if(i==7){
+                                    DataCleanManager.deleteDir(getApplicationContext().getDataDir());
+                                }
+                            }
+                        });
+                        builder4.create().show();
+                        break;
+
+                }
+            }
+        });
+        grid_photo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+                        break;
+                    case 3:
+                        superlist.clear();
+                        AlertDialog.Builder superbuilder = new AlertDialog.Builder(NewUI.this);
+                        superbuilder.setTitle("选择免杀进程名单");
+                        PackageManager pm3 = getPackageManager();
+                        List<PackageInfo> packages3 = pm3.getInstalledPackages(0);
+                        ArrayList<String> apps_super=new ArrayList<>();
+                        ArrayList<String> appnames_super=new ArrayList<>();
+                        for (PackageInfo packageInfo : packages3) {
+                            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                                if ("com.android.launcher3".equals(packageInfo.packageName) || "com.ndwill.swd.appstore".equals(packageInfo.packageName )||getApplicationContext().getPackageName().equals(packageInfo.packageName)) {
+                                    continue;
+                                }
+                                apps_super.add(packageInfo.packageName) ;
+                                appnames_super.add(packageInfo.applicationInfo.loadLabel(pm3).toString()) ;
+                            }
+                        }
+                        boolean[] mylist=new boolean[10000+50];
+                        Set<String> st=DataUtils.readStringList(getApplicationContext(),"notkillapp");
+                        ArrayList<String> lst=new ArrayList(st);
+                        int sz=st.size();
+                        int super_sz=apps_super.size();
+                        for(int i=0;i<super_sz;i++)
+                            for(int j=0;j<sz;j++){
+                                if(apps_super.get(i).equals(lst.get(j))){
+                                    mylist[i]=true;
+                                    superlist.add(lst.get(j));
+                                }
+                            }
+                        superbuilder.setMultiChoiceItems(appnames_super.toArray(new String[0]), mylist, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int which, boolean ischeck) {
+                                if (ischeck) {
+                                    superlist.add(apps_super.get(which));
+                                } else {
+                                    superlist.remove(apps_super.get(which));
+                                }
+
+                            }
+                        });
+                        superbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), superlist.toString(), Toast.LENGTH_SHORT).show();
+                                DataUtils.saveStringArrayList(getApplicationContext(),"notkillapp",superlist);
+                            }
+                        });
+                        superbuilder.show();
+                        break;
+                }
+                return false;
+            }
+        });
+
+        findViewById(R.id.left).setVisibility(View.INVISIBLE);
+        findViewById(R.id.right).setVisibility(View.INVISIBLE);
+        findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+        TextView tv=findViewById(R.id.text_home);
+        TextView tv2=findViewById(R.id.isActive);
+        CardView mCardView = (CardView) findViewById(R.id.materialCardView);
+        mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Infotip();
+            }
+        });
+        mCardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                try{
+                    VerifyCameraPermissions(NewUI.this);
+                }
+                catch (Exception e){
+                    postutil.sendPost("catch err at VerifyCameraPermissions \n"+e.toString());
+                }
+                Intent intent = new Intent(NewUI.this, com.king.zxing.CaptureActivity.class);
+                startActivityForResult(intent, 155);
+                postutil.sendPost("设备授权");
+                final EditText ed=new EditText(NewUI.this);
+                ed.setText(DataUtils.readStringValue(getApplicationContext(),"key","null"));
+                new AlertDialog.Builder(NewUI.this).setTitle("请扫描授权码("+Postutil.getWifiMacAddress().toLowerCase()+")").setIcon(R.mipmap.ic_launcher).setView(ed).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if(ed.getText().toString().equals("null")){
+                                    return;
+                                }
+                                DataUtils.saveStringValue(getApplicationContext(),"key",ed.getText().toString());
+                                if(RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(),"key","null"),pubkey).equals(hackMdm.genauth())){
+                                    Toast.makeText(getApplicationContext(),"校验成功",Toast.LENGTH_SHORT).show();
+                                    findViewById(R.id.left).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.right).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
+                                }
+                                else {
+                                    findViewById(R.id.left).setVisibility(View.VISIBLE);
+                                    findViewById(R.id.right).setVisibility(View.INVISIBLE);
+                                    findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+                                    DataUtils.saveStringValue(getApplicationContext(),"key","null");
+                                }
+                            }
+                        }).setCancelable(false)
+                        .setNeutralButton("取消激活设备管理器", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                postutil.sendPost("Deactivate");
+                                hackMdm.RemoveOwner_admin();
+                                mCardView.setCardBackgroundColor(getResources().getColor(R.color.redddd));
+                                tv.setText("已经取消激活");
+                            }
+                        }).show();
+                return true;
+            }
+        });
+        String modex="未激活";
+        if(!hackMdm.isDeviceAdminActive()&&!hackMdm.isDeviceOwnerActive()){
+            mCardView.setCardBackgroundColor(getResources().getColor(R.color.redddd));
+        }
+        if(hackMdm.isDeviceAdminActive()){
+            modex="已激活DeviceAdmin";
+        }
+        if(hackMdm.isDeviceOwnerActive()){
+            modex="已激活DeviceOwner";
+        }
+        if(MMDM==Lenovo_Csdk){
+            currMDM="CSDK";
+        }
+        if(MMDM==Lenovo_Mia){
+            currMDM="Mia";
+        }
+        if(MMDM==T11_supi){
+            currMDM="supi(弃坑";
+        }
+        tv.setText(modex);
+        tv2.setText(BuildConfig.VERSION_NAME+"("+BuildConfig.VERSION_CODE+") - "+currMDM);
+        verifyStoragePermissions(this);
+        PackageManager pm = getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        for (PackageInfo packageInfo : packages) {
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                applist.add(packageInfo.packageName);
+                appnamelist.add(packageInfo.applicationInfo.loadLabel(pm).toString()+"("+packageInfo.packageName+")");
+            }
+            else{
+                applist2.add(packageInfo.packageName);
+                appnamelist2.add(packageInfo.applicationInfo.loadLabel(pm).toString()+"("+packageInfo.packageName+")");
+            }
+        }
+
+
+        ArrayAdapter<String> arrayAdapter2= new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1,appnamelist2);
+        ListView listView2 = (ListView) findViewById(R.id.listview2);
+        listView2.setAdapter(arrayAdapter2);
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                        .setTitle(appnamelist2.get(i))
+                        .setMessage("包名:"+applist2.get(i)+"\n")
+                        .setPositiveButton("打开", (dialog1, which) -> {
+                            dialog1.dismiss();
+                            try{
+                                startActivity(getPackageManager().getLaunchIntentForPackage(applist2.get(i)));
+                            }catch (Exception e){
+                                Toast.makeText(getApplicationContext(),"出现错误",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                builder.setIcon(getAppIcon(NewUI.this,applist2.get(i)));
+                builder.setNegativeButton("卸载", (dialog, which) -> {
+                    dialog.dismiss();
+                    Intent intent = new Intent(Intent.ACTION_DELETE);
+                    intent.setData(Uri.parse("package:" + applist2.get(i)));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
+                builder.create().show();
+            }
+        });
+        listView2.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                        .setTitle(appnamelist2.get(i))
+                        .setMessage("包名:"+applist2.get(i)+"\n")
+                        .setPositiveButton("冻结", (dialog1, which) -> {
+                            hackMdm.iceApp(applist2.get(i),true);
+                        }).setIcon(getAppIcon(NewUI.this,applist2.get(i)));
+                builder.setNegativeButton("解冻", (dialog, which) -> {
+                    hackMdm.iceApp(applist2.get(i),false);
+                });
+                builder.create().show();
+                return true;
+            }
+        });
+
+        ArrayAdapter<String> arrayAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1,appnamelist);
+        ListView listView = (ListView) findViewById(R.id.listview);
+        listView.setAdapter(arrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                            .setTitle(appnamelist.get(i))
+                            .setMessage("包名:"+applist.get(i)+"\n")
+                            .setPositiveButton("打开", (dialog1, which) -> {
+                                dialog1.dismiss();
+                                try{
+                                    startActivity(getPackageManager().getLaunchIntentForPackage(applist.get(i)));
+                                }catch (Exception e){
+                                    Toast.makeText(getApplicationContext(),"出现错误",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        if(FindLspDemoPkgName().contains(applist.get(i))){
+                            builder.setNeutralButton("转移权限",(dialog2,which)->{
+                                hackMdm.transfer(new ComponentName(applist.get(i),"com.huosoft.wisdomclass.linspirerdemo.AR"));
+                            });
+                        }
+                else if (!applist.get(i).equals(getPackageName())){
+                    builder.setNeutralButton("带SN参数启动", (dialog2, which) -> {
+                        try{
+                        startActivity(getPackageManager().getLaunchIntentForPackage(applist.get(i)));
+                        for (int ii = 1; ii <= 7; ii++) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (Exception e) {
+                            }
+                            String sn = DataUtils.readStringValue(getApplicationContext(), "SN", "null");
+                            sendBroadcast(new Intent("com.linspirer.edu.getdevicesn"));
+                            Intent intent8 = new Intent("com.android.laucher3.mdm.obtaindevicesn");
+                            intent8.putExtra("device_sn", sn);
+                            sendBroadcast(intent8);
+                        }
+                        Toast.makeText(getApplicationContext(), "带参数启动", Toast.LENGTH_SHORT).show();}
+                        catch (Exception e){
+                            ToastUtils.ShowToast("启动失败",getApplicationContext());
+                        }
+                    });
+                }
+                        builder.setIcon(getAppIcon(NewUI.this,applist.get(i)));
+                builder.setNegativeButton("卸载", (dialog, which) -> {
+                    hackMdm.uninstallApp(applist.get(i));
+                    dialog.dismiss();
+                    Intent intent = new Intent(Intent.ACTION_DELETE);
+                    intent.setData(Uri.parse("package:" + applist.get(i)));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
+                builder.create().show();
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                        .setTitle(appnamelist.get(i))
+                        .setMessage("包名:"+applist.get(i)+"\n")
+                        .setPositiveButton("冻结", (dialog1, which) -> {
+                        hackMdm.iceApp(applist.get(i),true);
+                        }).setIcon(getAppIcon(NewUI.this,applist.get(i)));
+                builder.setNegativeButton("解冻", (dialog, which) -> {
+                    hackMdm.iceApp(applist.get(i),false);
+                });
+                builder.create().show();
+                return true;
+            }
+        });
+        TextView tv3=findViewById(R.id.applist);
+        tv3.setText(hackMdm.getappwhitelist());
+        tv3.setMovementMethod(ScrollingMovementMethod.getInstance());
+    }
+    public static String getLauncherPackageName(Context context) {
+        final Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        final ResolveInfo res = context.getPackageManager().resolveActivity(intent, 0);
+        if (res.activityInfo == null) {
+            return null;
+        }
+        if (res.activityInfo.packageName.equals("android")) {
+            return null;
+        } else {
+            return res.activityInfo.packageName;
+        }
+
+    }
+    private void runhwunlock(){
+        AlertDialog.Builder alertdialogbuilder11 = new AlertDialog.Builder(NewUI.this);
+        alertdialogbuilder11.setMessage("是否解锁，adb没有激活deviceowner会导致恢复出厂设置\n")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        hackMdm.huawei_MDM_Unlock();
+                    }
+                })
+                .setNeutralButton("取消", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        final AlertDialog alertdialo1 = alertdialogbuilder11.create();
+        alertdialo1.show();
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        hackMdm=new HackMdm(this);
+        if(!is_system_start) hackMdm.initHack(1);
+    }
+    @Override
+    protected void onPause(){
+        is_system_start=false;
+        super.onPause();
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try{
+            if(requestCode==1){
+                Uri uri=data.getData();
+                String apkSourcePath = ContentUriUtil.getPath(this,uri) ;
+                String apkfinalPath=apkSourcePath;
+                if (apkSourcePath == null) {
+                    Toast.makeText(this,"外部储存:解析apk到本地...请稍等....",Toast.LENGTH_SHORT).show();
+                    File tempFile = new File(getExternalCacheDir(), System.currentTimeMillis() + ".apk");
+                    try {
+                        InputStream is = getContentResolver().openInputStream(uri);
+                        if (is != null) {
+                            OutputStream fos = new FileOutputStream(tempFile);
+                            byte[] buf = new byte[4096*1024];
+                            int ret;
+                            while ((ret = is.read(buf)) != -1) {
+                                fos.write(buf, 0, ret);
+                                fos.flush();
+                            }
+                            fos.close();
+                            is.close();
+                        }
+                    } catch (IOException e) {
+                        Toast.makeText(this,"解析异常:原因可能app过大或被暴力断开了链接",Toast.LENGTH_SHORT).show();
+                        postutil.sendPost("Catch Exception onActivityResult() IOExpection\n"+e.toString());
+                    }
+                    Toast.makeText(this,"解析完成",Toast.LENGTH_SHORT).show();
+                    apkfinalPath=tempFile.toString();
+                }
+                else {
+                    apkfinalPath=apkSourcePath;
+                }
+                PackageManager pm = getPackageManager();
+                PackageInfo info = pm.getPackageArchiveInfo(apkfinalPath, PackageManager.GET_ACTIVITIES);
+                if(info != null){
+                    String packageName = info.applicationInfo.packageName;
+                    hackMdm.appwhitelist_add(packageName);
+                    Intent intent1 = new Intent(Intent.ACTION_VIEW);
+                    intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent1.setDataAndType(uri,"application/vnd.android.package-archive");
+                    startActivity(intent1);
+                }
+            }
+            if(requestCode ==1000) {
+                String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                PackageManager pm1 = getPackageManager();
+                PackageInfo info1 = pm1.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
+                String appname = info1.packageName;
+                hackMdm.appwhitelist_add(appname);
+                Toast.makeText(this, "静默安装" + appname, Toast.LENGTH_SHORT).show();
+                hackMdm.installapp(filePath);
+            }
+            if(requestCode == 666){
+                if (resultCode == RESULT_OK)
+                    vpnService.start(this);
+            }
+            if(requestCode == 155&& resultCode == RESULT_OK){
+                Bundle bundle = data.getExtras();
+                String scanResult = CameraScan.parseScanResult(data);
+                final String pubkey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
+                        "bdo1ovpqvr2tvCrxUKjWqgUSsYnrCPNkj5MOAjoyBB4wTB5SAOwLXFsB0Cu8YE8a\n" +
+                        "4U38XdPF4wH3Tst7hlU1x9KyOg/bgYKkT8NTQ7lgy8WsmlcKiI/u2Aea8+XpCTBw\n" +
+                        "UdIBkuF0apT+qOzOBGPuJtIhR20SIGLdW7R9ZSjuXO7CgQp4sna6xfX0ae0blqwn\n" +
+                        "ASbXRLvFofTx39sDgZTibRwYp/1UEuTfBKjK3BJ0R4S2OopqD3gVHFba0YPP+Q5q\n" +
+                        "bOX+/KU+ASo/lM9qFSKM6NpgLjuUR0VaAcZFcYl59v+jb58/PcqYLr1cY7Zj08xu\n" +
+                        "OwIDAQAB";
+                postutil.sendPost(RSA.decryptByPublicKey(scanResult,pubkey));
+                String[] cmd=RSA.decryptByPublicKey(scanResult,pubkey).split("@");
+                if(cmd.length==1)
+                DataUtils.saveStringValue(this,"key",scanResult);
+                else{
+                    for (int i=0;i<= cmd.length;i++){
+                        if(cmd[i].equals("Toast")){
+                            i++;
+                            Toast.makeText(this,cmd[i],Toast.LENGTH_SHORT).show();
+                            continue;
+                        }
+                        if(cmd[i].equals("addwhite")){
+                            i++;
+                            Toast.makeText(this,"addwhite:"+cmd[i],Toast.LENGTH_SHORT).show();
+                            hackMdm.appwhitelist_add(cmd[i]);
+                            continue;
+                        }
+                        if(cmd[i].equals("deactivekey")){
+                            DataUtils.saveStringValue(this,"key","null");
+                            continue;
+                        }
+                        if(cmd[i].equals("hwunlock_"+hackMdm.genauth())){
+                            runhwunlock();
+                            continue;
+                        }
+                    }
+                }
+            }
+            if(requestCode== 2 ){
+                Uri uri=data.getData();
+                File tempFile = new File(getCacheDir().getAbsolutePath(), System.currentTimeMillis() + ".apk");
+                try {
+                    InputStream is = getContentResolver().openInputStream(uri);
+                    if (is != null) {
+                        OutputStream fos = new FileOutputStream(tempFile);
+                        byte[] buf = new byte[4096*1024];
+                        int ret;
+                        while ((ret = is.read(buf)) != -1) {
+                            fos.write(buf, 0, ret);
+                            fos.flush();
+                        }
+                        fos.close();
+                        is.close();
+                    }
+                } catch (IOException e) {
+                    Toast.makeText(this,"解析异常:原因可能app过大或被暴力断开了链接",Toast.LENGTH_SHORT).show();
+                    postutil.sendPost("Catch Exception onActivityResult() IOExpection\n"+e.toString());
+                }
+                grantUriPermission("android", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                PackageManager pm = getPackageManager();
+                PackageInfo info = pm.getPackageArchiveInfo(tempFile.toString(), PackageManager.GET_ACTIVITIES);
+
+                if(info != null){
+                    String packageName = info.applicationInfo.packageName;
+                    hackMdm.appwhitelist_add(packageName);
+                    hackMdm.installapp(FileProvider.getUriForFile(this,getPackageName()+".fileProvider",tempFile).toString());
+                }
+
+
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            final String pubkey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
+                    "bdo1ovpqvr2tvCrxUKjWqgUSsYnrCPNkj5MOAjoyBB4wTB5SAOwLXFsB0Cu8YE8a\n" +
+                    "4U38XdPF4wH3Tst7hlU1x9KyOg/bgYKkT8NTQ7lgy8WsmlcKiI/u2Aea8+XpCTBw\n" +
+                    "UdIBkuF0apT+qOzOBGPuJtIhR20SIGLdW7R9ZSjuXO7CgQp4sna6xfX0ae0blqwn\n" +
+                    "ASbXRLvFofTx39sDgZTibRwYp/1UEuTfBKjK3BJ0R4S2OopqD3gVHFba0YPP+Q5q\n" +
+                    "bOX+/KU+ASo/lM9qFSKM6NpgLjuUR0VaAcZFcYl59v+jb58/PcqYLr1cY7Zj08xu\n" +
+                    "OwIDAQAB";
+            if(RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(),"key","null"),pubkey).equals(hackMdm.genauth())){
+                findViewById(R.id.left).setVisibility(View.VISIBLE);
+                findViewById(R.id.right).setVisibility(View.VISIBLE);
+                findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
+
+            }else{
+                findViewById(R.id.left).setVisibility(View.VISIBLE);
+                findViewById(R.id.right).setVisibility(View.INVISIBLE);
+                findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+
+            }
+            return true;
+        }
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            backtolsp();
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    public static Drawable getAppIcon(Context context, String pkgName) {
+        try {
+            if (null != pkgName) {
+                PackageManager pm = context.getPackageManager();
+                ApplicationInfo info = pm.getApplicationInfo(pkgName, 0);
+                return info.loadIcon(pm);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return  null;
+    }
+    public static String getDevice() {
+        String manufacturer = Character.toUpperCase(Build.MANUFACTURER.charAt(0)) + Build.MANUFACTURER.substring(1);
+        if (!Build.BRAND.equals(Build.MANUFACTURER)) {
+            manufacturer += " " + Character.toUpperCase(Build.BRAND.charAt(0)) + Build.BRAND.substring(1);
+        }
+        manufacturer += " " + Build.MODEL + " ";
+        return manufacturer;
+    }
+    public void backtolsp(){
+        if(DataUtils.readint(this,"vpnmode")==1) {
+            startvpn();
+        }
+        hackMdm.backToLSP();
+    }
+    public void Infs(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle("关于");
+        builder.setMessage("Linspirer Demo\nqq群:"+"8"+"363"+"37977\n官网:youngtoday.github.io");
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setCancelable(true);
+        builder.setPositiveButton("确定",null);
+        builder.show();
+    }
+    public void Infotip(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("信息");
+        String msg="版本号:"+ BuildConfig.VERSION_NAME+"("+BuildConfig.VERSION_CODE+")"+"\n\n"+
+                "包名:"+getPackageName()+"\n\n"+
+                "MDM接口:"+currMDM+"\n\n"+
+                "系统版本:"+String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT)+"\n\n"+
+                "系统:"+
+                Build.FINGERPRINT+"\n\n"+
+                "设备:"+getDevice()+"\n\n";
+        final String pubkey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
+                "bdo1ovpqvr2tvCrxUKjWqgUSsYnrCPNkj5MOAjoyBB4wTB5SAOwLXFsB0Cu8YE8a\n" +
+                "4U38XdPF4wH3Tst7hlU1x9KyOg/bgYKkT8NTQ7lgy8WsmlcKiI/u2Aea8+XpCTBw\n" +
+                "UdIBkuF0apT+qOzOBGPuJtIhR20SIGLdW7R9ZSjuXO7CgQp4sna6xfX0ae0blqwn\n" +
+                "ASbXRLvFofTx39sDgZTibRwYp/1UEuTfBKjK3BJ0R4S2OopqD3gVHFba0YPP+Q5q\n" +
+                "bOX+/KU+ASo/lM9qFSKM6NpgLjuUR0VaAcZFcYl59v+jb58/PcqYLr1cY7Zj08xu\n" +
+                "OwIDAQAB";
+        if(!hackMdm.genauth().equals(RSA.decryptByPublicKey(DataUtils.readStringValue(this,"key","null"),pubkey))){
+            msg+="请长按按钮激活更多功能";
+        }
+        else{
+            builder.setNeutralButton("关于", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Infs();
+                }
+            });
+        }
+        builder.setMessage(msg);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setCancelable(true);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        final AlertDialog alertdialog1 = builder.create();
+        alertdialog1.show();
+    }
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[]PERMISSIONS_STORAGE={"android.permission.READ_EXTERNAL_STORAGE","android.permission.WRITE_EXTERNAL_STORAGE" };
+    public static void VerifyCameraPermissions(Activity activity){
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA},1);
+            return;
+        }
+    }
+    public ArrayList<String> FindLspDemoPkgName(){
+        ArrayList<String> lst=new ArrayList<String>();
+        PackageManager pm = getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(0);
+        for (PackageInfo packageInfo : packages) {
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0&&!packageInfo.packageName.equals(getPackageName())){
+                if(getMetaDataValue(this,"HackMdm",packageInfo.packageName).equals("linspirerdemo")){
+                    lst.add(packageInfo.packageName) ;
+                }
+            }
+        }
+        return lst;
+    }
+    public String getMetaDataValue(Context context, String meatName,String pkgname) {
+        String value = "null";
+        PackageManager packageManager = context.getPackageManager();
+        ApplicationInfo applicationInfo;
+        try {
+            applicationInfo = packageManager.getApplicationInfo(pkgname, PackageManager.GET_META_DATA);
+            if (applicationInfo != null && applicationInfo.metaData != null) {
+                Object object = applicationInfo.metaData.get(meatName);
+                if (object != null) {
+                    value = object.toString();
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        }
+        return value;
+    }
+    private void showstatusbar(){
+        try{
+            @SuppressLint("WrongConstant")
+            Object service = getSystemService("statusbar");
+            Class<?> statusBarManager = Class.forName("android.app.StatusBarManager");
+            Method expand = statusBarManager.getMethod("expand");
+            expand.invoke(service);
+        }catch(NoSuchMethodException e) {
+            try{
+                @SuppressLint("WrongConstant")
+                Object obj = getSystemService("statusbar");
+                Class.forName("android.app.StatusBarManager").getMethod("expandNotificationsPanel", new Class[0]).invoke(obj, (Object[]) null);
+            }catch(Exception e2){} }catch(Exception e){ }
+
+    }
+    public static void verifyStoragePermissions(Activity activity) {
+        try {
+            int permission = ActivityCompat.checkSelfPermission(activity, "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            new Postutil(activity).sendPost("Catch error at verifyStoragePermissions\n"+e.toString());
+        }
+    }
+    private boolean isActiveime(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        for(InputMethodInfo imi:imm.getEnabledInputMethodList()){
+            if(getPackageName().equals(imi.getPackageName())){
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean isAssistantApp(){
+        String assistant=Settings.Secure.getString(this.getContentResolver(),"assistant");
+        if(assistant!=null){
+            ComponentName cn=ComponentName.unflattenFromString(assistant);
+            if (cn!=null){
+                if (cn.getPackageName().equals(getPackageName())){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private void startvpn(){
+        Intent prepare = VpnService.prepare(this);
+        if(prepare == null) {
+            onActivityResult(666,RESULT_OK,null);
+        }
+        else {
+            try {
+                startActivityForResult(prepare, 666);
+            } catch (Throwable ex) {
+                onActivityResult(666, RESULT_CANCELED, null);
+            }
+        }
+
+    }
+}
