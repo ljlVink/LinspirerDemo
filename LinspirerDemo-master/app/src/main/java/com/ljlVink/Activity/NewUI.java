@@ -382,7 +382,7 @@ public class NewUI extends AppCompatActivity {
                         builder1.create().show();
                         break;
                     case 6:
-                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)","设置锁屏密码(Lenovo10+)","联想设置锁屏密码(仅支持mia)","白名单临时清空(解除app管控)"};
+                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)","设置锁屏密码(Lenovo10+)","联想设置锁屏密码(仅支持mia)","联想清除锁屏(beta)","白名单临时清空(解除app管控)"};
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(NewUI.this);
                         builder2.setIcon(R.mipmap.ic_launcher);
                         builder2.setTitle("联想专区");
@@ -414,7 +414,10 @@ public class NewUI extends AppCompatActivity {
                                                     }
                                                 }).setNegativeButton("取消",null).show();
                                     }
-                                    else if(which==4){
+                                    else if(which ==4){
+                                        hackMdm.mia_clearLock();
+                                    }
+                                    else if(which==5){
                                         hackMdm.Lenovo_clear_whitelist_app();
                                     }
 
@@ -470,7 +473,7 @@ public class NewUI extends AppCompatActivity {
                         builder3.create().show();
                         break;
                     case 8:
-                        final String[] applicationsettings = new String[]{"vpn始终开启","vpn始终关闭","vpn临时关闭","隐藏程序","不隐藏程序","SN设置","清除本程序数据"};
+                        final String[] applicationsettings = new String[]{"vpn始终开启","vpn始终关闭","vpn临时关闭","隐藏程序","不隐藏程序","SN设置"};
                         AlertDialog.Builder builder4 = new AlertDialog.Builder(NewUI.this);
                         builder4.setIcon(R.mipmap.ic_launcher);
                         builder4.setTitle("程序设置");
@@ -512,8 +515,6 @@ public class NewUI extends AppCompatActivity {
                                                     DataUtils.saveStringValue(getApplicationContext(),"SN",et.getText().toString());
                                                 }
                                             }).setNegativeButton("取消",null).show();
-                                }else if(i==7){
-                                    DataCleanManager.deleteDir(getApplicationContext().getDataDir());
                                 }
                             }
                         });
