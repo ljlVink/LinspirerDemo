@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 
-import android.app.csdk.CSDKManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,7 +41,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.king.zxing.CameraScan;
 import com.ljlVink.Receiver.VolReceiver;
-import com.ljlVink.core.DataCleanManager;
 import com.ljlVink.core.Postutil;
 import com.ljlVink.core.DataUtils;
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
@@ -78,7 +76,6 @@ public class NewUI extends AppCompatActivity {
     private List<String> appnamelist = new ArrayList<>();
     private List<String> applist2 = new ArrayList<>();
     private List<String> appnamelist2 = new ArrayList<>();
-
     private String currMDM="未找到合适的mdm接口";
     private HackMdm hackMdm;
     private BaseAdapter mAdapter = null;
@@ -415,7 +412,7 @@ public class NewUI extends AppCompatActivity {
                                                 }).setNegativeButton("取消",null).show();
                                     }
                                     else if(which ==4){
-                                        hackMdm.mia_clearLock();
+                                        hackMdm.dpm_clearlockpass();
                                     }
                                     else if(which==5){
                                         hackMdm.Lenovo_clear_whitelist_app();
