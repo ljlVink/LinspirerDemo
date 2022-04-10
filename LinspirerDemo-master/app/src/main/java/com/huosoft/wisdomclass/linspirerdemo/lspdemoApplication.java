@@ -18,8 +18,6 @@ public class lspdemoApplication extends Application {
     int MMDM=0;
     @Override
     public void onCreate() {
-
-
         super.onCreate();
         DataCleanManager.clearAllCache(this);
         /*int keystatus = new Signutil(this, "97:8D:89:23:F9:F3:AF:C9:A3:79:37:2C:C8:A6:FF:A8:26:CC:DE:EF").f();

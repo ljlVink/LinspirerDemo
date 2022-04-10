@@ -112,10 +112,10 @@
 
 
                 <TextView
-                    android:id="@+id/textView27"
+                    android:id="@+id/refresh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="   已经安装的应用列表(长按配置冻结)"
+                    android:text="   已经安装的应用列表(长按配置冻结,点我刷新)"
                     android:textSize="20sp"/>
 
                 <LinearLayout

@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
-  //  id 'top.niunaijun.blackobfuscator'
-  //  id 'stringfog'
+    id 'top.niunaijun.blackobfuscator'
+    id 'stringfog'
 }
 android {
     compileSdkVersion 30
@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 29
-        versionCode 38899
-        versionName "V5.5.7.6_20220408"
+        versionCode 39001
+        versionName "V5.5.8.1beta_20220410"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -68,31 +68,38 @@ android {
     buildFeatures {
         viewBinding true
     }
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName = "${variant.flavorName}"
+            fileName = fileName + "-${variant.versionName}.apk"
+            outputFileName = fileName
+        }
+    }
 }
-/*
+
 BlackObfuscator {
     // 是否启用
-    enabled false
+    enabled true
     // 混淆深度
     depth 2
     // 需要混淆的包或者类(匹配前面一段)
-    obfClass = ["com.ljlVink", "com.huosoft"]
+    obfClass = ["com.ljlVink.core.HackMdm", "com.ljlVink.core.Postutil"]
     // blackClass中的包或者类不会进行混淆(匹配前面一段)
 }
 stringfog {
-    enable false
+    enable true
     implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
-    fogPackages = ["com.ljlVink", "com.huosoft"]
+    fogPackages = ["com.ljlVink.core.HackMdm", "com.ljlVink.core.Postutil}"]
 }
 
-*/
+
 dependencies {
    // implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
 
     compileOnly 'com.huawei.mdm:mdmkit:11.1.0.300'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.lahm.library:easy-protector-release:latest.release'
-   // implementation 'com.github.megatronking.stringfog:xor:3.0.0'
+    implementation 'com.github.megatronking.stringfog:xor:3.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.github.princekin-f:EasyFloat:2.0.3'

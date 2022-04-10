@@ -29,6 +29,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -36,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +50,7 @@ import com.huosoft.wisdomclass.linspirerdemo.ContentUriUtil;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.HackMdm;
 import com.ljlVink.core.RSA;
-import com.ljlVink.core.ToastUtils;
+
 import com.ljlVink.services.vpnService;
 import com.lzf.easyfloat.EasyFloat;
 import com.lzf.easyfloat.enums.ShowPattern;
@@ -72,8 +74,12 @@ public class NewUI extends AppCompatActivity {
     private final int Lenovo_Mia=3;
     private final int Lenovo_Csdk=2;
     private final int T11_supi=4;
-    private List<String> applist = new ArrayList<>();
-    private List<String> appnamelist = new ArrayList<>();
+    private List<AppInfo> data;
+    private AppAdapter adapter;
+    private ListView applistview;
+    private List<AppInfo> data_sys;
+    private sysAppAdapter adapter_sys;
+    private ListView applistview_sys;
     private List<String> applist2 = new ArrayList<>();
     private List<String> appnamelist2 = new ArrayList<>();
     private String currMDM="未找到合适的mdm接口";
@@ -86,7 +92,7 @@ public class NewUI extends AppCompatActivity {
     private Postutil postutil;
     private boolean is_system_start;
     IntentFilter mIntentFilter;
-    private static final String DECODED_CONTENT_KEY = "codedContent";
+    private  TextView refresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final String pubkey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
@@ -429,7 +435,7 @@ public class NewUI extends AppCompatActivity {
 
                         break;
                     case 7:
-                        final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions"};
+                        final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions","设置领创壁纸(仅限无mdm接口)","清空领创壁纸(仅限无mdm接口)"};
                         AlertDialog.Builder builder3 = new AlertDialog.Builder(NewUI.this);
                         builder3.setIcon(R.mipmap.ic_launcher);
                         builder3.setTitle("设备设置");
@@ -464,6 +470,15 @@ public class NewUI extends AppCompatActivity {
                                     }catch (Exception e){
 
                                     }
+                                }else if(i==9){
+                                    try{
+                                        new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择图片文件").withRequestCode(1011).start();
+                                    }catch (Exception e){
+
+                                    }
+                                }else if(i==10){
+                                    hackMdm.setwallpaper("1");
+                                    DataUtils.saveStringValue(getApplicationContext(),"wallpaper","");
                                 }
                             }
                         });
@@ -663,20 +678,145 @@ public class NewUI extends AppCompatActivity {
         tv.setText(modex);
         tv2.setText(BuildConfig.VERSION_NAME+"("+BuildConfig.VERSION_CODE+") - "+currMDM);
         verifyStoragePermissions(this);
-        PackageManager pm = getPackageManager();
-        List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
-        for (PackageInfo packageInfo : packages) {
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                applist.add(packageInfo.packageName);
-                appnamelist.add(packageInfo.applicationInfo.loadLabel(pm).toString()+"("+packageInfo.packageName+")");
+        applistview=(ListView)findViewById(R.id.listview);
+        data = getAllAppInfos();
+        adapter = new AppAdapter();
+        //显示列表
+        applistview.setAdapter(adapter);
+        applistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * parent : ListView
+             * view : 当前行的item视图对象
+             * position : 当前行的下标
+             */
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                //提示当前行的应用名称
+                String appName = data.get(position).getAppName();
+                String pkgname = data.get(position).getPackageName();
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                        .setTitle(appName)
+                        .setMessage("包名:"+pkgname+"\n")
+                        .setPositiveButton("打开", (dialog1, which) -> {
+                            dialog1.dismiss();
+                            try{
+                                startActivity(getPackageManager().getLaunchIntentForPackage(pkgname));
+                            }catch (Exception e){
+                                Toast.makeText(getApplicationContext(),"出现错误",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                builder.setIcon(getAppIcon(NewUI.this,pkgname));
+                builder.setNegativeButton("卸载", (dialog, which) -> {
+                    dialog.dismiss();
+                    hackMdm.uninstallApp(pkgname);
+                    Intent intent = new Intent(Intent.ACTION_DELETE);
+                    intent.setData(Uri.parse("package:" + pkgname));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
+                if(FindLspDemoPkgName().contains(pkgname)) {
+                    builder.setNeutralButton("转移权限", (dialog2, which) -> {
+                        hackMdm.transfer(new ComponentName(pkgname, "com.huosoft.wisdomclass.linspirerdemo.AR"));
+                    });
+                }else {
+                    builder.setNeutralButton("领创强力静默卸载(无mdm)", (dialog2, which) -> {
+                        hackMdm.uninstall_linspirer_silent(pkgname);
+                    });
+                }
+                builder.create().show();
             }
-            else{
-                applist2.add(packageInfo.packageName);
-                appnamelist2.add(packageInfo.applicationInfo.loadLabel(pm).toString()+"("+packageInfo.packageName+")");
+        });
+        applistview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String appName = data.get(position).getAppName();
+                String pkgname = data.get(position).getPackageName();
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                        .setTitle(appName)
+                        .setMessage("包名:"+pkgname+"\n")
+                        .setPositiveButton("冻结", (dialog1, which) -> {
+                            hackMdm.iceApp(pkgname,true);
+                        }).setIcon(getAppIcon(NewUI.this,pkgname));
+                builder.setNegativeButton("解冻", (dialog, which) -> {
+                    hackMdm.iceApp(pkgname,false);
+                });
+                builder.create().show();
+                return true;
             }
-        }
+        });
 
+        applistview_sys=(ListView)findViewById(R.id.listview2);
+        data_sys=getsysAppInfos();
+        adapter_sys=new sysAppAdapter();
+        //显示列表
+        applistview_sys.setAdapter(adapter_sys);
+        applistview_sys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * parent : ListView
+             * view : 当前行的item视图对象
+             * position : 当前行的下标
+             */
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                //提示当前行的应用名称
+                String appName = data_sys.get(position).getAppName();
+                String pkgname = data_sys.get(position).getPackageName();
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                        .setTitle(appName)
+                        .setMessage("包名:"+pkgname+"\n")
+                        .setPositiveButton("打开", (dialog1, which) -> {
+                            dialog1.dismiss();
+                            try{
+                                startActivity(getPackageManager().getLaunchIntentForPackage(pkgname));
+                            }catch (Exception e){
+                                Toast.makeText(getApplicationContext(),"出现错误",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                builder.setIcon(getAppIcon(NewUI.this,pkgname));
+                builder.setNegativeButton("卸载", (dialog, which) -> {
+                    dialog.dismiss();
+                    Intent intent = new Intent(Intent.ACTION_DELETE);
+                    intent.setData(Uri.parse("package:" + pkgname));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                });
 
+                    builder.create().show();
+            }
+        });
+        applistview_sys.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String appName = data_sys.get(position).getAppName();
+                String pkgname = data_sys.get(position).getPackageName();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewUI.this)
+                        .setTitle(appName)
+                        .setMessage("包名:"+pkgname+"\n")
+                        .setPositiveButton("冻结", (dialog1, which) -> {
+                            hackMdm.iceApp(pkgname,true);
+                        }).setIcon(getAppIcon(NewUI.this,pkgname));
+                builder.setNegativeButton("解冻", (dialog, which) -> {
+                    hackMdm.iceApp(pkgname,false);
+                });
+                builder.create().show();
+                return true;
+            }
+        });
+
+        refresh=findViewById(R.id.refresh);
+        refresh.setClickable(true);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                data = getAllAppInfos();
+
+                adapter.notifyDataSetChanged();
+            }
+        });
+      /*
         ArrayAdapter<String> arrayAdapter2= new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1,appnamelist2);
         ListView listView2 = (ListView) findViewById(R.id.listview2);
         listView2.setAdapter(arrayAdapter2);
@@ -722,6 +862,9 @@ public class NewUI extends AppCompatActivity {
             }
         });
 
+*/
+
+/*
         ArrayAdapter<String> arrayAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1,appnamelist);
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(arrayAdapter);
@@ -792,7 +935,7 @@ public class NewUI extends AppCompatActivity {
                 builder.create().show();
                 return true;
             }
-        });
+        });*/
         TextView tv3=findViewById(R.id.applist);
         tv3.setText(hackMdm.getappwhitelist());
         tv3.setMovementMethod(ScrollingMovementMethod.getInstance());
@@ -834,6 +977,12 @@ public class NewUI extends AppCompatActivity {
         super.onResume();
         hackMdm=new HackMdm(this);
         if(!is_system_start) hackMdm.initHack(1);
+        try{
+            data=getAllAppInfos();
+            adapter.notifyDataSetChanged();
+        }catch (Exception e){
+
+        }
     }
     @Override
     protected void onPause(){
@@ -864,7 +1013,7 @@ public class NewUI extends AppCompatActivity {
                             is.close();
                         }
                     } catch (IOException e) {
-                        Toast.makeText(this,"解析异常:原因可能app过大或被暴力断开了链接",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,"解析异常:原因可能app过大或被断开了链接",Toast.LENGTH_SHORT).show();
                         postutil.sendPost("Catch Exception onActivityResult() IOExpection\n"+e.toString());
                     }
                     Toast.makeText(this,"解析完成",Toast.LENGTH_SHORT).show();
@@ -875,6 +1024,9 @@ public class NewUI extends AppCompatActivity {
                 }
                 PackageManager pm = getPackageManager();
                 PackageInfo info = pm.getPackageArchiveInfo(apkfinalPath, PackageManager.GET_ACTIVITIES);
+                if(info==null){
+                    Toast.makeText(this, "Invalid apk:请选择一个正常的应用", Toast.LENGTH_SHORT).show();
+                }
                 if(info != null){
                     String packageName = info.applicationInfo.packageName;
                     hackMdm.appwhitelist_add(packageName);
@@ -892,6 +1044,10 @@ public class NewUI extends AppCompatActivity {
                 hackMdm.appwhitelist_add(appname);
                 Toast.makeText(this, "静默安装" + appname, Toast.LENGTH_SHORT).show();
                 hackMdm.installapp(filePath);
+            }if(requestCode ==1011) {
+                String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                DataUtils.saveStringValue(this,"wallpaper",filePath);
+                hackMdm.setwallpaper(filePath);
             }
             if(requestCode == 666){
                 if (resultCode == RESULT_OK)
@@ -952,7 +1108,7 @@ public class NewUI extends AppCompatActivity {
                         is.close();
                     }
                 } catch (IOException e) {
-                    Toast.makeText(this,"解析异常:原因可能app过大或被暴力断开了链接",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"解析异常:原因可能app过大或被断开了链接",Toast.LENGTH_SHORT).show();
                     postutil.sendPost("Catch Exception onActivityResult() IOExpection\n"+e.toString());
                 }
                 grantUriPermission("android", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -1174,4 +1330,99 @@ public class NewUI extends AppCompatActivity {
         }
 
     }
+    class  AppAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return data.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return data.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+        //返回带数据当前行的Item视图对象
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //1. 若是convertView是null, 加载item的布局文件
+            if(convertView==null) {
+                Log.e("TAG", "getView() load layout");
+                convertView = View.inflate(NewUI.this, R.layout.item_applist, null);
+            }
+            //2. 获得当前行数据对象
+            AppInfo appInfo = data.get(position);
+            //3. 获得当前行须要更新的子View对象
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_item_icon);
+            TextView textView = (TextView) convertView.findViewById(R.id.tv_item_name);
+            //4. 给视图设置数据
+            imageView.setImageDrawable(appInfo.getIcon());
+            textView.setText(appInfo.getAppName());
+            //返回convertView
+            return convertView;
+        }
+    }
+    class  sysAppAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return data_sys.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return data_sys.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+        //返回带数据当前行的Item视图对象
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            //1. 若是convertView是null, 加载item的布局文件
+            if(convertView==null) {
+                Log.e("TAG", "getView() load layout");
+                convertView = View.inflate(NewUI.this, R.layout.item_applist, null);
+            }
+            //2. 获得当前行数据对象
+            AppInfo appInfo = data_sys.get(position);
+            //3. 获得当前行须要更新的子View对象
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.iv_item_icon);
+            TextView textView = (TextView) convertView.findViewById(R.id.tv_item_name);
+            //4. 给视图设置数据
+            imageView.setImageDrawable(appInfo.getIcon());
+            textView.setText(appInfo.getAppName());
+            //返回convertView
+            return convertView;
+        }
+    }
+
+    protected List<AppInfo> getAllAppInfos() {
+        List<AppInfo> list = new ArrayList<AppInfo>();
+        PackageManager pm = getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        for (PackageInfo packageInfo : packages) {
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                list.add(new AppInfo(getAppIcon(this,packageInfo.packageName),packageInfo.applicationInfo.loadLabel(pm).toString(),packageInfo.packageName));
+            }
+        }
+        return list;
+    }
+    protected List<AppInfo> getsysAppInfos() {
+        List<AppInfo> list = new ArrayList<AppInfo>();
+        PackageManager pm = getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+        for (PackageInfo packageInfo : packages) {
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {}
+            else{
+                list.add(new AppInfo(getAppIcon(this,packageInfo.packageName),packageInfo.applicationInfo.loadLabel(pm).toString(),packageInfo.packageName));
+            }
+        }
+        return list;
+    }
+
 }
