@@ -1,18 +1,13 @@
 package com.huosoft.wisdomclass.linspirerdemo;
 import android.app.Application;
-import android.system.ErrnoException;
 import android.util.Log;
+
 import com.ljlVink.MDM;
 import com.ljlVink.core.CrashHandler;
 import com.ljlVink.core.DataCleanManager;
 import com.ljlVink.core.FileUtils;
 import com.ljlVink.core.HackMdm;
-import com.ljlVink.core.security.AppEntranceChecker;
-import com.ljlVink.core.security.EasyProtectDetector;
 import com.ljlVink.core.security.ROM_identifier;
-import com.ljlVink.core.security.Signutil;
-import com.ljlVink.core.security.SoChecker;
-import com.ljlVink.core.ToastUtils;
 import com.tencent.bugly.Bugly;
 public class lspdemoApplication extends Application {
     int MMDM=0;
@@ -30,9 +25,7 @@ public class lspdemoApplication extends Application {
         if (!new AppEntranceChecker(this).checkEntrance()){
             exit("fuckYou bitch");
         }
-        if (!new EasyProtectDetector(this).check()){
-            exit("fucKyou bitch");
-        }*/
+        */
         new ROM_identifier(this).checkrom();
         Bugly.init(getApplicationContext(), "50a36059a3", true);
         CrashHandler crashHandler=CrashHandler.getInstance();
@@ -48,4 +41,5 @@ public class lspdemoApplication extends Application {
             e.printStackTrace();
         }
     }
+
 }

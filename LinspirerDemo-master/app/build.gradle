@@ -4,15 +4,15 @@ plugins {
     id 'stringfog'
 }
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "vizpower.imeeting"
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
-        targetSdkVersion 29
-        versionCode 39001
-        versionName "V5.5.8.1beta_20220410"
+        targetSdkVersion 31
+        versionCode 40000
+        versionName "V5.6Release_20220416"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -89,19 +89,18 @@ BlackObfuscator {
 stringfog {
     enable true
     implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
-    fogPackages = ["com.ljlVink.core.HackMdm", "com.ljlVink.core.Postutil}"]
+    fogPackages = ["com.ljlVink.core.HackMdm", "com.ljlVink.core.Postutil"]
 }
 
 
 dependencies {
    // implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
 
-    compileOnly 'com.huawei.mdm:mdmkit:11.1.0.300'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
-    implementation 'com.lahm.library:easy-protector-release:latest.release'
+ //   implementation 'com.lahm.library:easy-protector-release:latest.release'
     implementation 'com.github.megatronking.stringfog:xor:3.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:+'
     implementation 'com.github.princekin-f:EasyFloat:2.0.3'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'com.squareup.okhttp3:okhttp:latest.release'

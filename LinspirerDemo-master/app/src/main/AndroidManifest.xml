@@ -4,6 +4,8 @@
     package="com.huosoft.wisdomclass.linspirerdemo">
 
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
         android:name="android.permission.READ_LOGS"
@@ -54,6 +56,7 @@
             android:theme="@style/CaptureTheme" />
         <activity
             android:name="com.ljlVink.Activity.NewUI"
+            android:excludeFromRecents="false"
             android:exported="false" />
             <meta-data
                 android:name="design_width_in_dp"
@@ -65,7 +68,8 @@
 
         <service
             android:name="com.ljlVink.services.BeepMainService"
-            android:permission="android.permission.BIND_INPUT_METHOD">
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
@@ -101,6 +105,7 @@
         <activity
             android:name=".ddpm"
             android:exported="true"
+            android:excludeFromRecents="false"
             android:label="后门解除lspdemo控制" />
 
         <receiver
@@ -118,18 +123,6 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="com.ljlVink.Receiver.MyReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter android:priority="2147483647">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.ljlVink.Receiver.VolReceiver"
-            android:enabled="true"
-            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -140,13 +133,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name="com.ljlVink.Activity.voicecallactivity"
+            android:excludeFromRecents="false"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST" />
@@ -154,7 +147,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ljlVink.Activity.PreMainActivity">
+        <activity android:name="com.ljlVink.Activity.PreMainActivity"
+            android:excludeFromRecents="false"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

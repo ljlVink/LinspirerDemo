@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector>
-    <item xmlns:ns1="http://schemas.android.com/apk/res/android" ns1:state_focused="true" xmlns:ns2="http://schemas.android.com/apk/res/android" ns2:state_pressed="true" xmlns:ns3="http://schemas.android.com/apk/res/android" ns3:color="@color/black"/>
-    <item xmlns:ns4="http://schemas.android.com/apk/res/android" ns4:state_focused="false" xmlns:ns5="http://schemas.android.com/apk/res/android" ns5:state_pressed="true" xmlns:ns6="http://schemas.android.com/apk/res/android" ns6:color="@color/black"/>
-    <item xmlns:ns7="http://schemas.android.com/apk/res/android" ns7:state_selected="true" xmlns:ns8="http://schemas.android.com/apk/res/android" ns8:color="@color/black"/>
-    <item xmlns:ns9="http://schemas.android.com/apk/res/android" ns9:state_focused="true" xmlns:ns10="http://schemas.android.com/apk/res/android" ns10:color="@color/black"/>
-    <item xmlns:ns11="http://schemas.android.com/apk/res/android" ns11:state_focused="false" xmlns:ns12="http://schemas.android.com/apk/res/android" ns12:color="@color/white"/>
-    <item xmlns:ns13="http://schemas.android.com/apk/res/android" ns13:state_pressed="false" xmlns:ns14="http://schemas.android.com/apk/res/android" ns14:color="@color/white"/>
-</selector>

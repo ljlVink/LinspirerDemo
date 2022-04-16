@@ -3,7 +3,6 @@
     <uses-policies>
         <wipe-data/>
         <reset-password />
-
     </uses-policies>
     <support-transfer-ownership />
 </device-admin>
