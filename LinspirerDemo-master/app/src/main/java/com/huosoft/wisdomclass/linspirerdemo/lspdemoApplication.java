@@ -27,12 +27,13 @@ public class lspdemoApplication extends Application {
         }
         */
         new ROM_identifier(this).checkrom();
-        Bugly.init(getApplicationContext(), "50a36059a3", true);
+        Bugly.init(getApplicationContext(), "50a36059a3", false);
         CrashHandler crashHandler=CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
         MMDM=new MDM(this).MDM();
         HackMdm hminit=new HackMdm(this);
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
+        Log.e("加载","加载完毕");
     }
     public void exit(String str){
         try{
