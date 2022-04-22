@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 
+import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -74,7 +75,6 @@ import java.util.regex.Pattern;
 public class NewUI extends AppCompatActivity {
     private final int Lenovo_Mia=3;
     private final int Lenovo_Csdk=2;
-    private final int T11_supi=4;
     private List<AppInfo> data;
     private AppAdapter adapter;
     private ListView applistview;
@@ -105,14 +105,9 @@ public class NewUI extends AppCompatActivity {
         }catch (Exception e){}
         try{
             setContentView(R.layout.activity_new_ui);
-
         }catch (Throwable rh){
             rh.printStackTrace();
         }
-
-
-
-        Log.e("NewUI","NewUI_after_setcontentview");
         super.onCreate(savedInstanceState);
         hackMdm=new HackMdm(this);
         postutil=new Postutil(this);
@@ -693,17 +688,18 @@ public class NewUI extends AppCompatActivity {
         }
         if(hackMdm.isDeviceAdminActive()&&!hackMdm.isDeviceOwnerActive()&&MMDM==Lenovo_Mia){
             mCardView.setCardBackgroundColor(getResources().getColor(R.color.holo_orange_bright));
-            modex="已激活DeviceAdmin,需要激活deviceowner";
-        }
-        if(MMDM==T11_supi){
-            currMDM="supi(弃坑";
+            modex="已激活DeviceAdmin,需激活deviceowner";
         }
         tv.setText(modex);
         tv2.setText(BuildConfig.VERSION_NAME+"("+BuildConfig.VERSION_CODE+") - "+currMDM);
         verifyStoragePermissions(this);
+
         applistview=(ListView)findViewById(R.id.listview);
+        Log.e("here","1");
         data = getAllAppInfos();
+        Log.e("here","2");
         adapter = new AppAdapter();
+
         //显示列表
         applistview.setAdapter(adapter);
         applistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -831,8 +827,7 @@ public class NewUI extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 });
-
-                    builder.create().show();
+                builder.create().show();
             }
         });
         applistview_sys.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -907,6 +902,25 @@ public class NewUI extends AppCompatActivity {
             data=getAllAppInfos();adapter.notifyDataSetChanged();
         }catch (Exception e){
         }
+        String modex="未激活";
+        CardView mCardView = (CardView) findViewById(R.id.materialCardView);
+        if(!hackMdm.isDeviceAdminActive()&&!hackMdm.isDeviceOwnerActive()){
+            mCardView.setCardBackgroundColor(getResources().getColor(R.color.redddd));
+        }
+        if(hackMdm.isDeviceAdminActive()){
+            modex="已激活DeviceAdmin";
+            mCardView.setCardBackgroundColor(getResources().getColor(R.color.lspdemo));
+        }
+        if(hackMdm.isDeviceOwnerActive()){
+            modex="已激活DeviceOwner";
+            mCardView.setCardBackgroundColor(getResources().getColor(R.color.lspdemo));
+        }
+        if(hackMdm.isDeviceAdminActive()&&!hackMdm.isDeviceOwnerActive()&&MMDM==Lenovo_Mia){
+            mCardView.setCardBackgroundColor(getResources().getColor(R.color.holo_orange_bright));
+            modex="已激活DeviceAdmin,需激活deviceowner";
+        }
+        TextView tv=findViewById(R.id.text_home);
+        tv.setText(modex);
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

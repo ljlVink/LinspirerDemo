@@ -45,6 +45,7 @@
     <color name="color_v">#999999</color>
     <color name="contents_text">#000000</color>
     <color name="defaultColor">#ffffff</color>
+    <color name="lspdemo">#8BC34A</color>
     <color name="dialog_bottom_color">#4ba7e8</color>
     <color name="dialog_text_color">#4e72a9</color>
     <color name="dialog_title_color">#347c85</color>

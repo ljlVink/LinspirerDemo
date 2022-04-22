@@ -41,9 +41,6 @@ public class MDM {
         if(LENOVO_CSDK==true&&LENOVO_MIAMDM==true){
             return 3;
         }
-        if(NewUI.getDevice().contains("T11")){
-            return 4;
-        }
         return -1;
     }
 }

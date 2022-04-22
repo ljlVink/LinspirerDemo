@@ -7,7 +7,6 @@ public class AppInfo {
     private Drawable icon;// 应用图标
     private String appName;// 应用名称
     private String packageName;// 包名
-
     public AppInfo(Drawable icon, String appName, String packageName) {
         super();
         this.icon = icon;

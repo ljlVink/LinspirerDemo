@@ -33,7 +33,7 @@ public class lspdemoApplication extends Application {
         MMDM=new MDM(this).MDM();
         HackMdm hminit=new HackMdm(this);
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
-        Log.e("加载","加载完毕");
+
     }
     public void exit(String str){
         try{
