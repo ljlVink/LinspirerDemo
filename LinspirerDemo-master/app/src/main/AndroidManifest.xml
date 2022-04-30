@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.huosoft.wisdomclass.linspirerdemo">
 
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
@@ -10,15 +11,17 @@
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="WRITE_SETTINGS"/>
+    <uses-permission android:name="WRITE_SETTINGS" />
     <uses-permission android:name="QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -52,24 +55,32 @@
         android:theme="@style/Theme.LinspirerDemo"
         android:usesCleartextTraffic="true">
         <activity
+            android:name="com.ljlVink.Activity.autostart"
+            android:excludeFromRecents="true"
+            android:theme="@style/TranslucentTheme"
+            android:exported="true" />
+        <activity
+            android:name="com.ljlVink.Activity.webview"
+            android:exported="false" />
+        <activity
             android:name="com.king.zxing.CaptureActivity"
             android:theme="@style/CaptureTheme" />
         <activity
             android:name="com.ljlVink.Activity.NewUI"
             android:excludeFromRecents="false"
             android:exported="false" />
-            <meta-data
-                android:name="design_width_in_dp"
-                android:value="1280"/>
-            <meta-data
-                android:name="design_height_in_dp"
-                android:value="800"/>
 
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="1280" />
+        <meta-data
+            android:name="design_height_in_dp"
+            android:value="800" />
 
         <service
             android:name="com.ljlVink.services.BeepMainService"
-            android:permission="android.permission.BIND_INPUT_METHOD"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
@@ -104,8 +115,8 @@
 
         <activity
             android:name=".ddpm"
-            android:exported="true"
             android:excludeFromRecents="false"
+            android:exported="true"
             android:label="后门解除lspdemo控制" />
 
         <receiver
@@ -123,15 +134,22 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.ljlVink.Receiver.MyReceiver"
+        <receiver
+            android:name="com.ljlVink.Receiver.MyReceiver"
             android:enabled="true"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.linspirer.edu.return.userinfo" />
             </intent-filter>
-
+           <intent-filter>
+            <action android:name="android.intent.action.PACKAGE_ADDED"/>
+            <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+            <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+            <data android:scheme="package"/>
+        </intent-filter>
         </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
@@ -141,6 +159,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
@@ -148,14 +167,16 @@
         <activity
             android:name="com.ljlVink.Activity.voicecallactivity"
             android:excludeFromRecents="false"
-            android:exported="false">
+            android:exported="true"
+            android:label="语音助手拉起lspdemo">
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.ljlVink.Activity.PreMainActivity"
+        <activity
+            android:name="com.ljlVink.Activity.PreMainActivity"
             android:excludeFromRecents="false"
             android:exported="true">
             <intent-filter>
@@ -163,6 +184,23 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="activitylauncher.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="locked" />
+        <activity
+            android:name="activitylauncher.SettingsActivity"
+            android:exported="false"
+            android:label="@string/activity_settings" />
+        <activity
+            android:name="activitylauncher.RootLauncherActivity"
+            android:exported="true"
+            android:label="@string/context_action_launch_as_root">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
     </application>

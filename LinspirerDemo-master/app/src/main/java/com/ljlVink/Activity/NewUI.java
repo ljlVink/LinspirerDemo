@@ -1,16 +1,12 @@
 package com.ljlVink.Activity;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 
-import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +21,7 @@ import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -42,8 +39,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.king.zxing.CameraScan;
+import com.ljlVink.Receiver.MyReceiver;
 import com.ljlVink.core.Postutil;
 import com.ljlVink.core.DataUtils;
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
@@ -72,6 +71,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import activitylauncher.MainActivity;
+
 public class NewUI extends AppCompatActivity {
     private final int Lenovo_Mia=3;
     private final int Lenovo_Csdk=2;
@@ -103,11 +105,7 @@ public class NewUI extends AppCompatActivity {
         try {
             getSupportActionBar().hide();
         }catch (Exception e){}
-        try{
-            setContentView(R.layout.activity_new_ui);
-        }catch (Throwable rh){
-            rh.printStackTrace();
-        }
+        setContentView(R.layout.activity_new_ui);
         super.onCreate(savedInstanceState);
         hackMdm=new HackMdm(this);
         postutil=new Postutil(this);
@@ -131,7 +129,15 @@ public class NewUI extends AppCompatActivity {
                 Toast.makeText(this,"这个rom不能设置语音助手",Toast.LENGTH_LONG).show();
             }
         }
-
+        if(DataUtils.readint(NewUI.this,"broadcastDebug")==1){
+            IntentFilter intentFilter=new IntentFilter();
+            MyReceiver myReceiver=new MyReceiver();
+            intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
+            intentFilter.addAction("android.intent.action.PACKAGE_REMOVED");
+            intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
+            intentFilter.addDataScheme("package");
+            registerReceiver(myReceiver,intentFilter);
+        }
         //初始化view
         MMDM=hackMdm.getMMDM();
         lspdemopkgname=FindLspDemoPkgName();
@@ -144,8 +150,11 @@ public class NewUI extends AppCompatActivity {
         mData.add(new icon(R.drawable.floatview,"打开悬浮窗"));
         mData.add(new icon(R.drawable.huawei,"华为专区"));
         mData.add(new icon(R.drawable.lenovo,"联想专区"));
-        mData.add(new icon(R.drawable.settings,"设备设置"));
+        mData.add(new icon(R.drawable.device_settings,"设备设置"));
         mData.add(new icon(R.drawable.app_settings,"程序设置"));
+        mData.add(new icon(R.drawable.activitylauncher_ic_launcher_foreground,"活动启动器"));
+        mData.add(new icon(R.drawable.help,"帮助"));
+        mData.add(new icon(R.drawable.ic_baseline_calculate_24,"计算器"));
         mAdapter = new MyAdapter<icon>(mData, R.layout.item_grid_icon) {
             @Override
             public void bindView(ViewHolder holder, icon obj) {
@@ -168,7 +177,7 @@ public class NewUI extends AppCompatActivity {
                         }
                         break;
                     case 1:
-                        final String[] items = new String[]{"通过apk安装","通过apk安装(仅限EMUI10静默)","写app白名单"};
+                        final String[] items = new String[]{"通过apk安装(自动选择)","通过apk安装(DocumentUI)","静默安装(Filepicker)","静默安装(仅限EMUI10静默)","写app白名单"};
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewUI.this);
                         builder.setIcon(R.drawable.installapps);
                         builder.setTitle("请选择方式：");
@@ -185,15 +194,22 @@ public class NewUI extends AppCompatActivity {
                                         }else {
                                             new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
                                         }
+                                    }else if (which ==2){
+                                        Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
+                                        FS.setType("application/vnd.android.package-archive");
+                                        startActivityForResult(FS, 1);
                                     }
-                                    else if(which ==2){
+                                    else if(which ==3){
+                                        new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
+                                    }
+                                    else if(which ==4){
                                         if(hackMdm.isEMUI10Device()){
                                             Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
                                             FS.setType("application/vnd.android.package-archive");
                                             startActivityForResult(FS, 2);
                                         }
                                     }
-                                    else if(which==3){
+                                    else if(which==5){
                                         final EditText et = new EditText(NewUI.this);
                                         new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入包名")
                                                 .setIcon(R.drawable.installapps)
@@ -311,37 +327,82 @@ public class NewUI extends AppCompatActivity {
                                         ArrayList<String> lst=new ArrayList<>();
                                         MaterialAlertDialogBuilder hwsettings = new MaterialAlertDialogBuilder(NewUI.this);
                                         hwsettings.setTitle("选择华为不可见设置(beta)");
+
                                         ArrayList<String> settings=new ArrayList<>();
                                         settings.add("清空(全部显示)");
-                                        settings.add("network");
-                                        settings.add("wifi_proxy");
-                                        settings.add("more_connections");
-                                        settings.add("screen_wallpaper");
-                                        settings.add("notifications");
-                                        settings.add("biometrics_password");
-                                        settings.add("battery");
-                                        settings.add("storage");
-                                        settings.add("security");
-                                        settings.add("privacy");
-                                        settings.add("digital_balance");
-                                        settings.add("smart_assistant");
-                                        settings.add("accessibility");
-                                        settings.add("users_accounts");
-                                        settings.add("apps");
-                                        settings.add("about_phone");
-                                        settings.add("system_updates");
-                                        settings.add("display_font_style");
-                                        settings.add("time_zone_location");
-                                        settings.add("input_and_language");
-                                        settings.add("backup_settings");
-                                        settings.add("pengine_settings");
-                                        settings.add("user_experience");
-                                        settings.add("apps_assistant");
-                                        settings.add("apps_clone");
-                                        settings.add("apps_startup_management");
-                                        settings.add("display_font_size");
-                                        settings.add("system_other_menu");
-                                        settings.add("system_navigation");
+
+                                        if(Build.VERSION.SDK_INT>=29){
+                                            settings.add("network");
+                                            settings.add("wifi_proxy");
+                                            settings.add("more_connections");
+                                            settings.add("screen_wallpaper");
+                                            settings.add("notifications");
+                                            settings.add("biometrics_password");
+                                            settings.add("battery");
+                                            settings.add("storage");
+                                            settings.add("security");
+                                            settings.add("privacy");
+                                            settings.add("digital_balance");
+                                            settings.add("smart_assistant");
+                                            settings.add("accessibility");
+                                            settings.add("users_accounts");
+                                            settings.add("apps");
+                                            settings.add("about_phone");
+                                            settings.add("system_updates");
+                                            settings.add("display_font_style");
+                                            settings.add("time_zone_location");
+                                            settings.add("input_and_language");
+                                            settings.add("backup_settings");
+                                            settings.add("pengine_settings");
+                                            settings.add("user_experience");
+                                            settings.add("apps_assistant");
+                                            settings.add("apps_clone");
+                                            settings.add("apps_startup_management");
+                                            settings.add("display_font_size");
+                                            settings.add("system_other_menu");
+                                            settings.add("system_navigation");
+                                        }
+                                        else {
+                                            settings.add("com.android.settings.Settings$AppAndNotificationDashboardActivity");
+                                            settings.add("com.android.settings.Settings$HomeAndUnlockSettingsActivity");
+                                            settings.add("com.huawei.notificationmanager.ui.NotificationManagmentActivity");
+                                            settings.add("com.android.settings.Settings$StorageDashboardActivity");
+                                            settings.add("com.huawei.parentcontrol.ui.activity.HomeActivity");
+                                            settings.add("com.android.settings.Settings$SecurityDashboardActivity");
+                                            settings.add("com.android.settings.Settings$BluetoothSettingsActivity");
+                                            settings.add("com.huawei.systemmanager.power.ui.HwPowerManagerActivity");
+                                            settings.add("com.android.settings.Settings$UserAndAccountDashboardActivity");
+                                            settings.add("com.android.settings.Settings$MoreAssistanceSettingsActivity");
+                                            settings.add("com.android.settings.Settings$AppCloneActivity");
+                                            settings.add("com.huawei.hwid.cloudsettings.ui.HuaweiIDForSettingsActivity");
+                                            settings.add("com.google.android.gms.app.settings.GoogleSettingsIALink");
+                                            settings.add("com.android.settings.Settings$FingerprintEnrollSuggestionActivity");
+                                            settings.add("com.android.settings.Settings$ZenModeAutomationSuggestionActivity");
+                                            settings.add(" com.android.settings.facechecker.unlock.FaceUnLockSettingsActivity$FaceUnLockSuggestionActivity");
+                                            settings.add("com.android.settings.wallpaper.WallpaperSuggestionActivity");
+                                            settings.add("com.huawei.android.remotecontrol.ui.PhoneFinderForSettingActivity");
+                                            settings.add("com.huawei.android.hicloud.ui.activity.BackupMainforSettingActivity");
+                                            settings.add("com.huawei.android.FloatTasks.settings.FloatTaskSuggestionSettings");
+                                            settings.add("toggle_airplane");
+                                            settings.add("title_traffic_management");
+                                            settings.add("vpn_settings");
+                                            settings.add("system_navigation");
+                                            settings.add("language_settings");
+                                            settings.add("data_transmission");
+                                            settings.add("backup_settings");
+                                            settings.add("reset_settings");
+                                            settings.add("user_experience_improve_plan");
+                                            settings.add("authentication_info");
+                                            settings.add("air_sharing");
+                                            settings.add("usb_mode");
+                                            settings.add("print_settings");
+                                            settings.add("wifi_display");
+                                            settings.add("font_size");
+                                            settings.add("mobile_network_settings");
+                                            settings.add("tether_settings");
+                                            settings.add("call_settings");
+
+                                        }
                                         boolean[] array=new boolean[150];
                                         hwsettings.setMultiChoiceItems(settings.toArray(new String[0]), array, new DialogInterface.OnMultiChoiceClickListener() {
                                             @Override
@@ -377,7 +438,7 @@ public class NewUI extends AppCompatActivity {
                         builder1.create().show();
                         break;
                     case 6:
-                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)","设置锁屏密码(Lenovo10+)","联想设置锁屏密码(仅支持mia)","联想清除锁屏(beta)","白名单临时清空(解除app管控)","禁止任务栏通知(android10+)","允许任务栏通知(android10+)","设置四中默认桌面(beta)"};
+                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)","设置锁屏密码(Lenovo10+)","联想设置锁屏密码(仅支持mia)","联想清除锁屏(beta)","白名单临时清空(解除app管控)","禁止任务栏通知(android10+)","允许任务栏通知(android10+)","设置四中默认桌面"};
                         MaterialAlertDialogBuilder builder2 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder2.setIcon(R.drawable.lenovo);
                         builder2.setTitle("联想专区");
@@ -421,6 +482,7 @@ public class NewUI extends AppCompatActivity {
                                     else if(which==7){
                                         hackMdm.enable_notify();
                                     }
+
                                     else if (which == 8){
                                         hackMdm.set_default_launcher("com.etiantian.stulauncherlc","com.etiantian.stulauncherlc.func.page.StuHomePageActivity");
                                     }
@@ -432,7 +494,6 @@ public class NewUI extends AppCompatActivity {
 
                         });
                         builder2.create().show();
-
                         break;
                     case 7:
                         final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions","设置领创壁纸(仅限无mdm接口)","清空领创壁纸(仅限无mdm接口)"};
@@ -547,7 +608,20 @@ public class NewUI extends AppCompatActivity {
                         });
                         builder4.create().show();
                         break;
+                    case 9:
+                        startActivity(new Intent(NewUI.this, MainActivity.class));
+                        break;
+                    case 10:
 
+                        Intent intent= new Intent(NewUI.this, webview.class);
+                        intent.putExtra("url","https://gitee.com/ljlvink/huovink_-mdm_catch_for_-lenovo/blob/master/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E(app).md");
+                        startActivity(intent);
+                        break;
+                    case 11:
+                        Intent intent1= new Intent(NewUI.this, webview.class);
+                        intent1.putExtra("url","http://tools-vue.zuoyebang.com/static/hy/tools-vue/calculator.html");
+                        startActivity(intent1);
+                        break;
                 }
             }
         });
@@ -607,6 +681,17 @@ public class NewUI extends AppCompatActivity {
                         });
                         superbuilder.show();
                         break;
+                    case 10:
+                        if(DataUtils.readint(NewUI.this,"broadcastDebug")==0){
+                            DataUtils.saveintvalue(NewUI.this,"broadcastDebug",1);
+                            Toast.makeText(NewUI.this, "开启广播调试", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            DataUtils.saveintvalue(NewUI.this,"broadcastDebug",0);
+                            Toast.makeText(NewUI.this, "关闭广播调试", Toast.LENGTH_SHORT).show();
+                        }
+                        hackMdm.easteregg();
+                        break;
                 }
                 return false;
             }
@@ -616,7 +701,7 @@ public class NewUI extends AppCompatActivity {
         findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
         TextView tv=findViewById(R.id.text_home);
         TextView tv2=findViewById(R.id.isActive);
-        CardView mCardView = (CardView) findViewById(R.id.materialCardView);
+        MaterialCardView mCardView = (MaterialCardView) findViewById(R.id.materialCardView);
         mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -646,14 +731,10 @@ public class NewUI extends AppCompatActivity {
                                 DataUtils.saveStringValue(getApplicationContext(),"key",ed.getText().toString());
                                 if(RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(),"key","null"),pubkey).equals(hackMdm.genauth())){
                                     Toast.makeText(getApplicationContext(),"校验成功",Toast.LENGTH_SHORT).show();
-                                    findViewById(R.id.left).setVisibility(View.VISIBLE);
-                                    findViewById(R.id.right).setVisibility(View.VISIBLE);
-                                    findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
+                                    setvisibility(true);
                                 }
                                 else {
-                                    findViewById(R.id.left).setVisibility(View.VISIBLE);
-                                    findViewById(R.id.right).setVisibility(View.INVISIBLE);
-                                    findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+                                    setvisibility(false);
                                     DataUtils.saveStringValue(getApplicationContext(),"key","null");
                                 }
                             }
@@ -693,13 +774,9 @@ public class NewUI extends AppCompatActivity {
         tv.setText(modex);
         tv2.setText(BuildConfig.VERSION_NAME+"("+BuildConfig.VERSION_CODE+") - "+currMDM);
         verifyStoragePermissions(this);
-
         applistview=(ListView)findViewById(R.id.listview);
-        Log.e("here","1");
         data = getAllAppInfos();
-        Log.e("here","2");
         adapter = new AppAdapter();
-
         //显示列表
         applistview.setAdapter(adapter);
         applistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -793,7 +870,6 @@ public class NewUI extends AppCompatActivity {
         applistview_sys=(ListView)findViewById(R.id.listview2);
         data_sys=getsysAppInfos();
         adapter_sys=new sysAppAdapter();
-        //显示列表
         applistview_sys.setAdapter(adapter_sys);
         applistview_sys.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
@@ -849,14 +925,12 @@ public class NewUI extends AppCompatActivity {
                 return true;
             }
         });
-
         refresh=findViewById(R.id.refresh);
         refresh.setClickable(true);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 data = getAllAppInfos();
-
                 adapter.notifyDataSetChanged();
             }
         });
@@ -893,6 +967,7 @@ public class NewUI extends AppCompatActivity {
                     }
                 }).create().show();
     }
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -903,7 +978,7 @@ public class NewUI extends AppCompatActivity {
         }catch (Exception e){
         }
         String modex="未激活";
-        CardView mCardView = (CardView) findViewById(R.id.materialCardView);
+        MaterialCardView mCardView = (MaterialCardView) findViewById(R.id.materialCardView);
         if(!hackMdm.isDeviceAdminActive()&&!hackMdm.isDeviceOwnerActive()){
             mCardView.setCardBackgroundColor(getResources().getColor(R.color.redddd));
         }
@@ -983,11 +1058,9 @@ public class NewUI extends AppCompatActivity {
                 hackMdm.setwallpaper(filePath);
             }
             if(requestCode == 666){
-                if (resultCode == RESULT_OK)
-                    vpnService.start(this);
+                if (resultCode == RESULT_OK)vpnService.start(this);
             }
             if(requestCode == 155&& resultCode == RESULT_OK){
-                Bundle bundle = data.getExtras();
                 String scanResult = CameraScan.parseScanResult(data);
                 final String pubkey="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
                         "bdo1ovpqvr2tvCrxUKjWqgUSsYnrCPNkj5MOAjoyBB4wTB5SAOwLXFsB0Cu8YE8a\n" +
@@ -1082,14 +1155,10 @@ public class NewUI extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if(et.getText().toString().equals(program_passwd)){
                                     if(isActivited){
-                                        findViewById(R.id.left).setVisibility(View.VISIBLE);
-                                        findViewById(R.id.right).setVisibility(View.VISIBLE);
-                                        findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
+                                        setvisibility(true);
 
                                     }else{
-                                        findViewById(R.id.left).setVisibility(View.VISIBLE);
-                                        findViewById(R.id.right).setVisibility(View.INVISIBLE);
-                                        findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+                                        setvisibility(false);
                                     }
 
                                 }
@@ -1109,14 +1178,9 @@ public class NewUI extends AppCompatActivity {
                         .show();
             }else {
                 if(isActivited){
-                    findViewById(R.id.left).setVisibility(View.VISIBLE);
-                    findViewById(R.id.right).setVisibility(View.VISIBLE);
-                    findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
-
+                    setvisibility(true);
                 }else{
-                    findViewById(R.id.left).setVisibility(View.VISIBLE);
-                    findViewById(R.id.right).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+                    setvisibility(false);
                 }
 
             }
@@ -1137,6 +1201,19 @@ public class NewUI extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void setvisibility(boolean isVisible){
+        if(isVisible){
+            findViewById(R.id.left).setVisibility(View.VISIBLE);
+            findViewById(R.id.right).setVisibility(View.VISIBLE);
+            findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
+            showdialog();
+        }else {
+            findViewById(R.id.left).setVisibility(View.VISIBLE);
+            findViewById(R.id.right).setVisibility(View.INVISIBLE);
+            findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+        }
     }
     public static Drawable getAppIcon(Context context, String pkgName) {
         try {
@@ -1250,19 +1327,7 @@ public class NewUI extends AppCompatActivity {
         return value;
     }
     private void showstatusbar(){
-        try{
-            @SuppressLint("WrongConstant")
-            Object service = getSystemService("statusbar");
-            Class<?> statusBarManager = Class.forName("android.app.StatusBarManager");
-            Method expand = statusBarManager.getMethod("expand");
-            expand.invoke(service);
-        }catch(NoSuchMethodException e) {
-            try{
-                @SuppressLint("WrongConstant")
-                Object obj = getSystemService("statusbar");
-                Class.forName("android.app.StatusBarManager").getMethod("expandNotificationsPanel", new Class[0]).invoke(obj, (Object[]) null);
-            }catch(Exception e2){} }catch(Exception e){ }
-
+        hackMdm.RootCommand("cmd statusbar expand-notifications");
     }
     public static void verifyStoragePermissions(Activity activity) {
         try {
@@ -1310,10 +1375,39 @@ public class NewUI extends AppCompatActivity {
                         onActivityResult(666, RESULT_CANCELED, null);
                     }
                 }
-
             }
         });
         th.start();
+    }
+    private void showdialog(){
+        if(hackMdm.isDeviceOwnerActive()){
+            return;
+        }
+        if(MMDM==Lenovo_Mia){
+              MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
+                alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下\nadb shell dpm set-device-owner "+getPackageName()+"/com.huosoft.wisdomclass.linspirerdemo.AR");
+                alertdialogbuilder1.setPositiveButton("仍然使用",null)
+                        .setNeutralButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        hackMdm.RootCommand("dpm set-device-owner "+getPackageName()+"/com.huosoft.wisdomclass.linspirerdemo.AR");
+                    }
+                }).create().show();
+        }
+        if (MMDM==-1){
+            if(hackMdm.isDeviceOwnerActive("com.android.launcher3")){
+                return;
+            }
+            MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
+            alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下:\nadb shell dpm set-device-owner "+getPackageName()+"/com.huosoft.wisdomclass.linspirerdemo.AR");
+            alertdialogbuilder1.setPositiveButton("仍然使用", null).
+                    setNeutralButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        hackMdm.RootCommand("dpm set-device-owner "+getPackageName()+"/com.huosoft.wisdomclass.linspirerdemo.AR");
+                    }
+            }).create().show();
+        }
 
     }
     class  AppAdapter extends BaseAdapter {
@@ -1321,12 +1415,10 @@ public class NewUI extends AppCompatActivity {
         public int getCount() {
             return data.size();
         }
-
         @Override
         public Object getItem(int position) {
             return data.get(position);
         }
-
         @Override
         public long getItemId(int position) {
             return 0;
@@ -1336,7 +1428,6 @@ public class NewUI extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             //1. 若是convertView是null, 加载item的布局文件
             if(convertView==null) {
-                Log.e("TAG", "getView() load layout");
                 convertView = View.inflate(NewUI.this, R.layout.item_applist, null);
             }
             //2. 获得当前行数据对象
@@ -1356,12 +1447,10 @@ public class NewUI extends AppCompatActivity {
         public int getCount() {
             return data_sys.size();
         }
-
         @Override
         public Object getItem(int position) {
             return data_sys.get(position);
         }
-
         @Override
         public long getItemId(int position) {
             return 0;
@@ -1371,7 +1460,6 @@ public class NewUI extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             //1. 若是convertView是null, 加载item的布局文件
             if(convertView==null) {
-                Log.e("TAG", "getView() load layout");
                 convertView = View.inflate(NewUI.this, R.layout.item_applist, null);
             }
             //2. 获得当前行数据对象
@@ -1411,8 +1499,7 @@ public class NewUI extends AppCompatActivity {
         intent.setAction(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         // 获得包含应用信息的列表
-        List<ResolveInfo> ResolveInfos = pm.queryIntentActivities(
-                intent, 0);
+        List<ResolveInfo> ResolveInfos = pm.queryIntentActivities(intent, 0);
         // 遍历
         for (ResolveInfo ri : ResolveInfos) {
             // 获得包名
@@ -1426,7 +1513,6 @@ public class NewUI extends AppCompatActivity {
             // 添加到list
             list.add(appInfo);
         }
-
         return cleanlist(list);
     }
     protected List<AppInfo> getsysAppInfos() {
@@ -1441,5 +1527,4 @@ public class NewUI extends AppCompatActivity {
         }
         return list;
     }
-
 }

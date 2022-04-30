@@ -17,5 +17,6 @@ public class ddpm extends AppCompatActivity {
             ToastUtils.ShowToast("失败",this);
         }
         ToastUtils.ShowToast("成功",this);
+        finish();
     }
 }
