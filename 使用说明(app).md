@@ -177,8 +177,6 @@ adb shell pm grant 包名 android.permission.WRITE_SECURE_SETTINGS
 唯一的缺点就是不能隐藏自身
 
 
-
-
 ## 解控的华为隐藏设置
 
 根据华为mdm api文档 暂不支持低于emui10的解控机(能做到)
@@ -187,14 +185,11 @@ adb shell pm grant 包名 android.permission.WRITE_SECURE_SETTINGS
 
 注意 要adb给予权限 命令在上 不多说
 
-
-
-## EMUI10应用安装FAQs
-
-1.静默安装不成功:多按几次就好了
-
-2.安装失败 xx策略禁止:静默安装
-
 ## 解除deviceowner|deviceadmin
 
 长按左上角绿色按钮，点击解除设备管理器
+
+## 执剑计划
+
+长按计算器 打开执剑计划
+
