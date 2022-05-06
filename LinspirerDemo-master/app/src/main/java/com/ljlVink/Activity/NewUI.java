@@ -514,7 +514,7 @@ public class NewUI extends AppCompatActivity {
                         builder2.create().show();
                         break;
                     case 7:
-                        final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions","设置领创壁纸(仅限无mdm接口)","清空领创壁纸(仅限无mdm接口)","允许系统App联网(仅限无mdm接口)","禁止系统App联网(仅限无mdm接口)","打开多用户切换"};
+                        final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions","设置领创壁纸(仅限无mdm接口)","清空领创壁纸(仅限无mdm接口)","允许系统App联网(仅限无mdm接口)","禁止系统App联网(仅限无mdm接口)","打开多用户切换","设置设备名称"};
                         MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder3.setIcon(R.drawable.settings);
                         builder3.setTitle("设备设置");
@@ -573,7 +573,19 @@ public class NewUI extends AppCompatActivity {
 
                                     }
                                 }
+                                else if(i==14){
+                                    final EditText et = new EditText(NewUI.this);
+                                    new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入设备名称")
+                                            .setIcon(R.drawable.app_settings)
+                                            .setView(et)
+                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    hackMdm.SetDeviceName(et.getText().toString());
+                                                }
+                                            }).setNegativeButton("取消",null).show();
 
+                                }
                             }
                         });
                         builder3.create().show();
