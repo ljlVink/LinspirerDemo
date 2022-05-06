@@ -34,6 +34,10 @@ public class lspdemoApplication extends Application {
         }
         MMDM=new MDM(this).MDM();
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
+        Log.e("lsptest","application_finish");
+    }
+    public int getMMDM(){
+        return MMDM;
     }
     public void exit(String str){
         try{

@@ -10,7 +10,6 @@ public class PreMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.premainactivity);
         Intent intent = new Intent(PreMainActivity.this, NewUI.class);
-        intent.putExtra("isstart",false);
         startActivity(intent);
         finish();
     }

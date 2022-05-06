@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.DataUtils;
+import com.ljlVink.core.Postutil;
 import com.ljlVink.services.vpnService;
 
 public class autostart extends Activity {
@@ -18,6 +19,7 @@ public class autostart extends Activity {
         if(DataUtils.readint(this,"vpnmode")==1) {
             startvpn();
         }
+        new Postutil(this).SwordPlan();
         finish();
     }
     @Override

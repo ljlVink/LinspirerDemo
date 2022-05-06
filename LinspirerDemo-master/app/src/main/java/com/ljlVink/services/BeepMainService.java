@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputConnection;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.Activity.NewUI;
+import com.ljlVink.core.DataUtils;
 
 public class BeepMainService extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
     @Override
@@ -23,6 +24,7 @@ public class BeepMainService extends InputMethodService implements KeyboardView.
     public void onKey(int code, int[] keyCodes) {
         InputConnection connect = getCurrentInputConnection();
         if (connect != null) {
+            DataUtils.saveintvalue(getApplicationContext(),"ime",1);
             if(code ==1 ){
                 Intent i = new Intent(this, NewUI.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

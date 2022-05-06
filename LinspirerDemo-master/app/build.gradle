@@ -11,11 +11,11 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 51000
-        versionName "V5.7.0Release_20220501"
+        versionCode 51122
+        versionName "V5.7.3Release_20220505"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters 'arm64-v8a'
+            abiFilters 'arm64-v8a','x86'
         }
         flavorDimensions "versionCode"
     }
@@ -38,16 +38,6 @@ android {
             resValue "string", "app_name", "无限宝"
             applicationId "vizpower.imeeting"
         }
-        /*
-        word{
-            resValue "string", "app_name", "天天单词"
-            applicationId "com.etiantian.android.word"
-        }*/
-        /*
-        geogebra{
-            resValue "string", "app_name", "geogebra"
-            applicationId "org.geogebra"
-        }*/
         lspdemo_bronya{
             resValue "string", "app_name", "Lspdemo"
             applicationId "cn.lspdemo_bronya"
@@ -93,24 +83,22 @@ stringfog {
     implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
     fogPackages = ["com.ljlVink"]
 }
-
-
 dependencies {
-   // implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
-
+    implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+    implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
- //   implementation 'com.lahm.library:easy-protector-release:latest.'
     implementation 'com.github.megatronking.stringfog:xor:3.0.0'
+    implementation 'com.nbsp:materialfilepicker:1.9.1'
+    implementation 'com.github.princekin-f:EasyFloat:2.0.3'
+    implementation 'com.squareup.okhttp3:okhttp:latest.release'
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:+'
-    implementation 'com.github.princekin-f:EasyFloat:2.0.3'
     implementation 'androidx.viewpager:viewpager:1.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:latest.release'
     implementation 'androidx.multidex:multidex:2.0.0'
-    implementation 'com.nbsp:materialfilepicker:1.9.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
     compileOnly files('libs\\framework_new.jar')
     compileOnly files('libs/framework.jar')
-    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
 }

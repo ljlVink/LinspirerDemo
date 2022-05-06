@@ -57,6 +57,9 @@ public class AllTasksListFragment extends Fragment implements AllTasksListAsyncP
                                     ContextMenuInfo menuInfo) {
         var rooted = isRootAllowed();
 
+       // menu.add(Menu.NONE, 0, Menu.NONE, "启用组件");
+       // menu.add(Menu.NONE, 0, Menu.NONE, "禁用组件");
+
         menu.add(Menu.NONE, 0, Menu.NONE, R.string.context_action_shortcut);
         if (rooted) {
             menu.add(Menu.NONE, 1, Menu.NONE, R.string.context_action_shortcut_as_root);

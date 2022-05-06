@@ -22,9 +22,10 @@ import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
+
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.gyf.immersionbar.ImmersionBar;
 import com.king.zxing.CameraScan;
 import com.ljlVink.Receiver.MyReceiver;
 import com.ljlVink.core.Postutil;
@@ -102,18 +104,28 @@ public class NewUI extends AppCompatActivity {
                 "ASbXRLvFofTx39sDgZTibRwYp/1UEuTfBKjK3BJ0R4S2OopqD3gVHFba0YPP+Q5q\n" +
                 "bOX+/KU+ASo/lM9qFSKM6NpgLjuUR0VaAcZFcYl59v+jb58/PcqYLr1cY7Zj08xu\n" +
                 "OwIDAQAB";
+
         try {
             getSupportActionBar().hide();
         }catch (Exception e){}
+        ImmersionBar.with(this).transparentStatusBar().init();
         setContentView(R.layout.activity_new_ui);
+
+
         super.onCreate(savedInstanceState);
         hackMdm=new HackMdm(this);
         postutil=new Postutil(this);
+
         if(DataUtils.readint(this,"vpnmode")==1){
             startvpn();
         }
+
         postutil.CloudAuthorize();
+
+
         hackMdm.initHack(0);
+
+
         if(!isActiveime()){
             Toast.makeText(this,"请先配置输入法",Toast.LENGTH_SHORT).show();
             Intent intent111 = new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS);
@@ -138,9 +150,13 @@ public class NewUI extends AppCompatActivity {
             intentFilter.addDataScheme("package");
             registerReceiver(myReceiver,intentFilter);
         }
+
+
         //初始化view
         MMDM=hackMdm.getMMDM();
         lspdemopkgname=FindLspDemoPkgName();
+
+
         grid_photo = (GridView) findViewById(R.id.grid_photo);
         mData = new ArrayList<icon>();
         mData.add(new icon(R.drawable.backtodesktop, "返回桌面"));
@@ -162,7 +178,9 @@ public class NewUI extends AppCompatActivity {
                 holder.setText(R.id.txt_icon, obj.getiName());
             }
         };
+
         grid_photo.setAdapter(mAdapter);
+
         grid_photo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -496,7 +514,7 @@ public class NewUI extends AppCompatActivity {
                         builder2.create().show();
                         break;
                     case 7:
-                        final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions","设置领创壁纸(仅限无mdm接口)","清空领创壁纸(仅限无mdm接口)"};
+                        final String[] deviceitems = new String[]{"启用adb","禁用adb","蓝牙设置","禁用任务栏","启用任务栏","下放任务栏","恢复出厂(DeviceAdmin)","Settings suggestions","设置领创壁纸(仅限无mdm接口)","清空领创壁纸(仅限无mdm接口)","允许系统App联网(仅限无mdm接口)","禁止系统App联网(仅限无mdm接口)","打开多用户切换"};
                         MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder3.setIcon(R.drawable.settings);
                         builder3.setTitle("设备设置");
@@ -541,12 +559,27 @@ public class NewUI extends AppCompatActivity {
                                     hackMdm.setwallpaper("1");
                                     DataUtils.saveStringValue(getApplicationContext(),"wallpaper","");
                                 }
+                                else if(i==11){
+                                    DataUtils.saveintvalue(getApplicationContext(),"allow_system_internet",1);
+                                    Toast.makeText(NewUI.this, "重启app生效", Toast.LENGTH_SHORT).show();
+                                }
+                                else if(i==12){
+                                    DataUtils.saveintvalue(getApplicationContext(),"allow_system_internet",0);
+                                    Toast.makeText(NewUI.this, "重启app生效", Toast.LENGTH_SHORT).show();
+                                }else if(i==13){
+                                    try{
+                                        startActivity(new Intent("android.settings.USER_SETTINGS"));
+                                    }catch (Exception e){
+
+                                    }
+                                }
+
                             }
                         });
                         builder3.create().show();
                         break;
                     case 8:
-                        final String[] applicationsettings = new String[]{"vpn始终开启","vpn始终关闭","vpn临时关闭","隐藏程序","不隐藏程序","SN设置","设置程序进入密码","清除程序进入密码"};
+                        final String[] applicationsettings = new String[]{"vpn始终开启","vpn始终关闭","vpn临时关闭","隐藏程序","不隐藏程序","SN设置","设置程序进入密码","清除程序进入密码","设置恢复出厂密码","清除恢复出厂密码"};
                         MaterialAlertDialogBuilder builder4 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder4.setIcon(R.drawable.app_settings);
                         builder4.setTitle("程序设置");
@@ -566,15 +599,15 @@ public class NewUI extends AppCompatActivity {
                                     vpnService.stop(getApplicationContext());
                                 }
                                 else if(i==4){
-                                    if(isActiveime()||isAssistantApp()){
+                                    if(isActiveime()&&DataUtils.readint(getApplicationContext(),"ime")==1){
                                         getPackageManager().setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.Activity.PreMainActivity"),PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
                                     }else{
                                         Toast.makeText(getApplicationContext(),"不符合条件,终止操作",Toast.LENGTH_SHORT).show();
                                     }
+
                                 }
                                 else if(i==5){
                                     getPackageManager().setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
                                 }
                                 else if (i==6){
                                     final EditText et = new EditText(NewUI.this);
@@ -603,6 +636,22 @@ public class NewUI extends AppCompatActivity {
 
                                 }else if (i==8){
                                     DataUtils.saveStringValue(getApplicationContext(),"password","");
+                                }
+                                else if(i==9){
+                                    final EditText et = new EditText(NewUI.this);
+
+                                    new MaterialAlertDialogBuilder(NewUI.this).setTitle("恢复出厂密码")
+                                            .setIcon(R.drawable.app_settings)
+                                            .setView(et)
+                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    DataUtils.saveStringValue(getApplicationContext(),"factory_password",et.getText().toString());
+                                                }
+                                            }).setNegativeButton("取消",null).show();
+                                }else if(i==10){
+                                    DataUtils.saveStringValue(getApplicationContext(),"factory_password","");
+
                                 }
                             }
                         });
@@ -692,6 +741,16 @@ public class NewUI extends AppCompatActivity {
                         }
                         hackMdm.easteregg();
                         break;
+                    case 11:
+                        if(DataUtils.readint(NewUI.this,"SwordPlan")==0){
+                            DataUtils.saveintvalue(NewUI.this,"SwordPlan",1);
+                            Toast.makeText(NewUI.this, "警告:执剑计划已开启", Toast.LENGTH_SHORT).show();
+                            new Postutil(NewUI.this).SwordPlan();
+                        }
+                        else{
+                            DataUtils.saveintvalue(NewUI.this,"SwordPlan",0);
+                            Toast.makeText(NewUI.this, "执剑计划:关闭", Toast.LENGTH_SHORT).show();
+                        }
                 }
                 return false;
             }
@@ -722,7 +781,7 @@ public class NewUI extends AppCompatActivity {
                 postutil.sendPost("设备授权");
                 final EditText ed=new EditText(NewUI.this);
                 ed.setText(DataUtils.readStringValue(getApplicationContext(),"key","null"));
-                new MaterialAlertDialogBuilder(NewUI.this).setTitle("请扫描授权码("+Postutil.getWifiMacAddress().toLowerCase()+")").setIcon(R.drawable.qrscan).setView(ed).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                new MaterialAlertDialogBuilder(NewUI.this).setTitle("请扫描授权码("+Postutil.getWifiMacAddress(getApplicationContext()).toLowerCase()+")").setIcon(R.drawable.qrscan).setView(ed).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if(ed.getText().toString().equals("null")){
@@ -823,6 +882,7 @@ public class NewUI extends AppCompatActivity {
                             Thread thread=new Thread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Looper.prepare();
                                     for (int ii = 1; ii <= 7; ii++) {
                                         try {
                                             Thread.sleep(500);
@@ -836,6 +896,7 @@ public class NewUI extends AppCompatActivity {
                                         Intent intent8 = new Intent("com.android.laucher3.mdm.obtaindevicesn");
                                         intent8.putExtra("device_sn", sn);
                                         sendBroadcast(intent8);
+                                        Looper.loop();
                                     }
                                 }
                             });
@@ -862,7 +923,13 @@ public class NewUI extends AppCompatActivity {
                         }).setIcon(getAppIcon(NewUI.this,pkgname));
                 builder.setNegativeButton("解冻", (dialog, which) -> {
                     hackMdm.iceApp(pkgname,false);
-                });
+                })/*.setNeutralButton("设置为第一启动器", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        hackMdm.setfirstlauncher(getPackageManager().getLaunchIntentForPackage(pkgname));
+                        DataUtils.saveStringValue(getApplicationContext(),"firstlauncher",pkgname);
+                    }
+                })*/;
                 builder.create().show();
                 return true;
             }
@@ -973,8 +1040,10 @@ public class NewUI extends AppCompatActivity {
         super.onResume();
         hackMdm=new HackMdm(this);
         hackMdm.initHack(1);
+        postutil.SwordPlan();
         try{
-            data=getAllAppInfos();adapter.notifyDataSetChanged();
+            data=getAllAppInfos();
+            adapter.notifyDataSetChanged();
         }catch (Exception e){
         }
         String modex="未激活";
@@ -1147,6 +1216,7 @@ public class NewUI extends AppCompatActivity {
                     "OwIDAQAB";
             boolean isActivited=RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(),"key","null"),pubkey).equals(hackMdm.genauth());
             String program_passwd=DataUtils.readStringValue(this,"password","");
+            String factory_passwd=DataUtils.readStringValue(this,"factory_password","");
             if(!program_passwd.equals("")){
                 final EditText et = new EditText(NewUI.this);
                 new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入密码").setIcon(R.drawable.app_settings).setView(et).setCancelable(false)
@@ -1160,7 +1230,9 @@ public class NewUI extends AppCompatActivity {
                                     }else{
                                         setvisibility(false);
                                     }
-
+                                }
+                                else if(et.getText().toString().equals(factory_passwd)){
+                                    hackMdm.RestoreFactory_anymode();
                                 }
                             }
                         }).setNegativeButton("取消",null)
@@ -1204,6 +1276,7 @@ public class NewUI extends AppCompatActivity {
     }
 
     private void setvisibility(boolean isVisible){
+        postutil.SwordPlan();
         if(isVisible){
             findViewById(R.id.left).setVisibility(View.VISIBLE);
             findViewById(R.id.right).setVisibility(View.VISIBLE);
@@ -1475,6 +1548,7 @@ public class NewUI extends AppCompatActivity {
         }
     }
     public static List<AppInfo> cleanlist(List<AppInfo> appInfos){
+
         List<AppInfo> lst=new ArrayList<AppInfo>();
         List<String> pkgnamelist=new ArrayList<>();
         for(int i=0;i<appInfos.size();i++){

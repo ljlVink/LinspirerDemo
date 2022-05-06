@@ -23,6 +23,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="WRITE_SETTINGS" />
     <uses-permission android:name="QUERY_ALL_PACKAGES" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+    </queries>
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -67,7 +72,7 @@
             android:theme="@style/CaptureTheme" />
         <activity
             android:name="com.ljlVink.Activity.NewUI"
-            android:excludeFromRecents="false"
+            android:excludeFromRecents="true"
             android:exported="false" />
 
         <meta-data
@@ -115,7 +120,7 @@
 
         <activity
             android:name=".ddpm"
-            android:excludeFromRecents="false"
+            android:excludeFromRecents="true"
             android:exported="true"
             android:label="后门解除lspdemo控制" />
 
@@ -166,7 +171,7 @@
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name="com.ljlVink.Activity.voicecallactivity"
-            android:excludeFromRecents="false"
+            android:excludeFromRecents="true"
             android:exported="true"
             android:label="语音助手拉起lspdemo">
             <intent-filter>
@@ -177,7 +182,7 @@
         </activity>
         <activity
             android:name="com.ljlVink.Activity.PreMainActivity"
-            android:excludeFromRecents="false"
+            android:excludeFromRecents="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
