@@ -1,15 +1,29 @@
 package com.huosoft.wisdomclass.linspirerdemo;
 import android.app.Application;
+import android.content.Context;
+import android.net.VpnService;
 import android.util.Log;
 
+import com.ljlVink.Activity.NewUI;
+import com.ljlVink.Activity.autostart;
 import com.ljlVink.MDM;
+import com.ljlVink.Receiver.MyReceiver;
 import com.ljlVink.core.CrashHandler;
 import com.ljlVink.core.DataCleanManager;
 import com.ljlVink.core.FileUtils;
 import com.ljlVink.core.HackMdm;
 import com.ljlVink.core.security.ROM_identifier;
 import com.ljlVink.core.security.Signutil;
+import com.ljlVink.keepalive.Activity1;
+import com.ljlVink.keepalive.Activity2;
+import com.ljlVink.keepalive.Receiver1;
+import com.ljlVink.keepalive.Receiver2;
+import com.ljlVink.keepalive.Service2;
 import com.tencent.bugly.Bugly;
+
+import me.weishu.leoric.Leoric;
+import me.weishu.leoric.LeoricConfigs;
+
 public class lspdemoApplication extends Application {
     int MMDM=0;
     @Override
@@ -45,6 +59,25 @@ public class lspdemoApplication extends Application {
         }catch (Error e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        // 在这里调用Context的方法会崩溃
+        super.attachBaseContext(base);
+        Leoric.init(base, new LeoricConfigs(
+                new LeoricConfigs.LeoricConfig(
+                        getPackageName() + ":resident",
+                        Service2.class.getCanonicalName(),
+                        Receiver1.class.getCanonicalName(),
+                        autostart.class.getCanonicalName()),
+                new LeoricConfigs.LeoricConfig(
+                        "android.media",
+                        VpnService.class.getCanonicalName(),
+                        Receiver2.class.getCanonicalName(),
+                        Activity2.class.getCanonicalName())
+        ));
+        // 在这里可以正常调用Context的方法
     }
 
 }

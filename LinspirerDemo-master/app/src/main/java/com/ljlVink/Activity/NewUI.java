@@ -894,21 +894,18 @@ public class NewUI extends AppCompatActivity {
                             Thread thread=new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Looper.prepare();
                                     for (int ii = 1; ii <= 7; ii++) {
                                         try {
                                             Thread.sleep(500);
                                         } catch (Exception e) { }
                                         String sn = DataUtils.readStringValue(getApplicationContext(), "SN", hackMdm.getCSDK_sn_code());
                                         if(sn.equals("null")){
-                                            Toast.makeText(getApplicationContext(),"请先配置SN",Toast.LENGTH_LONG).show();
                                             return;
                                         }
                                         sendBroadcast(new Intent("com.linspirer.edu.getdevicesn"));
                                         Intent intent8 = new Intent("com.android.laucher3.mdm.obtaindevicesn");
                                         intent8.putExtra("device_sn", sn);
                                         sendBroadcast(intent8);
-                                        Looper.loop();
                                     }
                                 }
                             });

@@ -11,11 +11,11 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 51123
-        versionName "V5.7.4Release_20220506"
+        versionCode 51133
+        versionName "V5.7.5Release_20220509"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
-            abiFilters 'arm64-v8a','x86'
+            abiFilters 'arm64-v8a'
         }
         flavorDimensions "versionCode"
     }
@@ -71,7 +71,7 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled true
+    enabled false
     // 混淆深度
     depth 2
     // 需要混淆的包或者类(匹配前面一段)
@@ -84,6 +84,7 @@ stringfog {
     fogPackages = ["com.ljlVink"]
 }
 dependencies {
+    implementation project(":Leoric_lib")
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
