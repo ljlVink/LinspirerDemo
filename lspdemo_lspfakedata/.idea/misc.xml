@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/lspdemo_lspfakedata/app/src/main/res/layout/activity_main.xml" value="0.12552083333333333" />
+        <entry key="..\:/Users/Vink/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.309375" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/lspdemo_lspfakedata/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/lspdemo_lspfakedata/app/src/main/res/layout/activity_mine.xml" value="0.5" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/lspdemo_lspfakedata/app/src/main/res/layout/test.xml" value="0.309375" />
       </map>
     </option>
   </component>

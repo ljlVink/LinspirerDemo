@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
 
@@ -18,6 +19,9 @@ public class webview extends AppCompatActivity {
         setContentView(R.layout.activity_webview);
          webView = (WebView) findViewById(R.id.webview);
         String url=getIntent().getStringExtra("url");
+        if(url.contains("github")){
+            Toast.makeText(this, "github可能要打开较长时间,请稍等...", Toast.LENGTH_SHORT).show();
+        }
         webView.loadUrl(url);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);

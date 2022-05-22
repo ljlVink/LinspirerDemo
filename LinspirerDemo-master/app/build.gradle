@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 51133
-        versionName "V5.7.5Release_20220509"
+        versionCode 58000
+        versionName "V5.8.0Release_20220521"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -30,6 +30,10 @@ android {
         }
     }
     productFlavors {
+        linspirer_screen{
+            resValue "string", "app_name", "开启截屏"
+            applicationId "com.linspirer.enablescreen"
+        }
         wps {
             resValue "string", "app_name", "WPS Office"
             applicationId "cn.wps.moffice_eng"
@@ -71,7 +75,7 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled false
+    enabled true
     // 混淆深度
     depth 2
     // 需要混淆的包或者类(匹配前面一段)
@@ -84,7 +88,6 @@ stringfog {
     fogPackages = ["com.ljlVink"]
 }
 dependencies {
-    implementation project(":Leoric_lib")
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
@@ -93,6 +96,7 @@ dependencies {
     implementation 'com.github.princekin-f:EasyFloat:2.0.3'
     implementation 'com.squareup.okhttp3:okhttp:latest.release'
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    implementation 'com.alibaba:fastjson:1.2.79'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:+'
@@ -100,6 +104,6 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
-    compileOnly files('libs\\framework_new.jar')
+    compileOnly files('libs/framework_new.jar')
     compileOnly files('libs/framework.jar')
 }

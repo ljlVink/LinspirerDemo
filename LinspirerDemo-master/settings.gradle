@@ -1,4 +1,3 @@
 rootProject.name = "Linspirer Demo"
-include ':app',':Leoric_lib'
-project(':Leoric_lib').projectDir = new File(rootDir, 'Leoric/')
+include ':app'
 

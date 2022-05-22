@@ -2,12 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.huosoft.wisdomclass.linspirerdemo">
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
         android:name="android.permission.READ_LOGS"
@@ -24,11 +27,13 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="WRITE_SETTINGS" />
     <uses-permission android:name="QUERY_ALL_PACKAGES" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
         </intent>
     </queries>
+
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -61,25 +66,35 @@
         android:theme="@style/Theme.LinspirerDemo"
         android:usesCleartextTraffic="true">
         <activity
+            android:name="com.ljlVink.Activity.linspirer_fakeuploader"
+            android:excludeFromRecents="true"
+            android:label="领创应用列表上传"
+            android:exported="false" />
+        <activity
+            android:name="com.ljlVink.Activity.linspirer_pwdcalc"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:icon="@mipmap/icon"
+            android:label="领创密码计算" />
+        <activity
             android:name="com.ljlVink.Activity.autostart"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:icon="@mipmap/icon"
-            android:process=":resident"
-            android:theme="@style/TranslucentTheme"
-            android:exported="true" />
+            android:theme="@style/TranslucentTheme" />
         <activity
             android:name="com.ljlVink.Activity.webview"
-            android:icon="@mipmap/icon"
-            android:exported="false" />
+            android:exported="false"
+            android:icon="@mipmap/icon" />
         <activity
             android:name="com.king.zxing.CaptureActivity"
             android:icon="@mipmap/icon"
             android:theme="@style/CaptureTheme" />
         <activity
             android:name="com.ljlVink.Activity.NewUI"
-            android:icon="@mipmap/icon"
             android:excludeFromRecents="true"
-            android:exported="false" />
+            android:exported="false"
+            android:icon="@mipmap/icon" />
 
         <meta-data
             android:name="design_width_in_dp"
@@ -96,13 +111,15 @@
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
+
             <meta-data
                 android:name="android.view.im"
                 android:resource="@xml/method" />
         </service>
-        <service android:name="com.ljlVink.services.QuickStartSvc_backtolsp"
-            android:exported="true"
+        <service
+            android:name="com.ljlVink.services.QuickStartSvc_backtolsp"
             android:enabled="true"
+            android:exported="true"
             android:icon="@drawable/backtodesktop"
             android:label="快速返回到领创"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -110,9 +127,10 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-        <service android:name="com.ljlVink.services.QuickStartSvc_openMain"
-            android:exported="true"
+        <service
+            android:name="com.ljlVink.services.QuickStartSvc_openMain"
             android:enabled="true"
+            android:exported="true"
             android:icon="@drawable/device_settings"
             android:label="打开主程序"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -128,19 +146,19 @@
         <receiver
             android:name="com.ljlVink.Receiver.thirdpartyreceiver"
             android:enabled="true"
-            android:icon="@mipmap/icon"
-            android:exported="true">
+            android:exported="true"
+            android:icon="@mipmap/icon">
             <intent-filter>
                 <action android:name="ljlVink.thirdparty.app.calldeviceowner" />
+                <action android:name="ljlVink.thirdparty.app.pullrsa" />
             </intent-filter>
         </receiver>
 
         <service
             android:name="com.ljlVink.services.vpnService"
             android:enabled="true"
-            android:icon="@mipmap/icon"
             android:exported="true"
-            android:process="android.media"
+            android:icon="@mipmap/icon"
             android:permission="android.permission.BIND_VPN_SERVICE">
             <intent-filter>
                 <action android:name="android.net.VpnService" />
@@ -149,9 +167,9 @@
 
         <activity
             android:name=".ddpm"
-            android:icon="@mipmap/icon"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:icon="@mipmap/icon"
             android:label="后门解除lspdemo控制" />
 
         <receiver
@@ -173,18 +191,19 @@
         <receiver
             android:name="com.ljlVink.Receiver.MyReceiver"
             android:enabled="true"
-            android:icon="@mipmap/icon"
-            android:exported="true">
+            android:exported="true"
+            android:icon="@mipmap/icon">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.linspirer.edu.return.userinfo" />
             </intent-filter>
-           <intent-filter>
-            <action android:name="android.intent.action.PACKAGE_ADDED"/>
-            <action android:name="android.intent.action.PACKAGE_REMOVED"/>
-            <action android:name="android.intent.action.PACKAGE_REPLACED"/>
-            <data android:scheme="package"/>
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
         </receiver>
 
         <provider
@@ -196,23 +215,17 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <receiver android:name="com.ljlVink.keepalive.Receiver1" android:process=":resident" />
-        <activity android:name="com.ljlVink.keepalive.Activity1" android:process=":resident" />
-
-        <receiver android:name="com.ljlVink.keepalive.Receiver2" android:process="android.media" />
-        <activity android:name="com.ljlVink.keepalive.Activity2" android:process="android.media" />
-        <service android:name="com.ljlVink.keepalive.Service2" android:process=":resident" />
 
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
-            android:icon="@mipmap/icon"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:icon="@mipmap/icon"
             android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name="com.ljlVink.Activity.voicecallactivity"
-            android:icon="@mipmap/icon"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:icon="@mipmap/icon"
             android:label="语音助手拉起lspdemo">
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST" />
@@ -223,8 +236,8 @@
         <activity
             android:name="com.ljlVink.Activity.PreMainActivity"
             android:excludeFromRecents="true"
-            android:icon="@mipmap/icon"
-            android:exported="true">
+            android:exported="true"
+            android:icon="@mipmap/icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

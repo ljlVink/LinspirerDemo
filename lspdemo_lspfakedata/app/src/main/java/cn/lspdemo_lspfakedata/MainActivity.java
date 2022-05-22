@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -17,17 +19,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e("tag", AesUtil.encrypt("1191ADF18489D8DA","aaaa"));
-        //new LingchuangUtils(this).User_login("acc","1243","aaa","bbb","ccc","ddd","eee");
+        ListView blacklistview=(ListView)findViewById(R.id.listview_black);
+        ListView whitelistview=(ListView)findViewById(R.id.listview_white);
+        ArrayAdapter<String> arrayAdapter= new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1);
+        blacklistview.setAdapter(arrayAdapter);
+        whitelistview.setAdapter(arrayAdapter);
 
-        Intent intent=new Intent();
-        intent.setAction("111");
-        intent.setClassName("com.ndwill.swd.appstore","com.ndwill.swd.appstore.receiver.ControlAppReceiver");
-        ArrayList<String>a=new ArrayList<>();
-        a.add("com.teslacoilsw.launcher");
-        a.add("com.tencent.mm");
-        a.add("com.ljlVink.broadcastdemo");
-        intent.putExtra("control_apps",a);
-        sendBroadcast(intent);
+
     }
 }

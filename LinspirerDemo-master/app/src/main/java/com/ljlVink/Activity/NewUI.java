@@ -54,6 +54,7 @@ import com.ljlVink.core.HackMdm;
 import com.ljlVink.core.RSA;
 
 import com.ljlVink.core.ToastUtils;
+import com.ljlVink.linspirerfake.uploadHelper;
 import com.ljlVink.services.vpnService;
 import com.lzf.easyfloat.EasyFloat;
 import com.lzf.easyfloat.enums.ShowPattern;
@@ -171,6 +172,9 @@ public class NewUI extends AppCompatActivity {
         mData.add(new icon(R.drawable.activitylauncher_ic_launcher_foreground,"活动启动器"));
         mData.add(new icon(R.drawable.help,"帮助"));
         mData.add(new icon(R.drawable.ic_baseline_calculate_24,"计算器"));
+        mData.add(new icon(R.drawable.swordplan,"执剑计划"));
+        mData.add(new icon(R.drawable.linspirer,"密码计算"));
+        mData.add(new icon(R.drawable.linspirer,"应用上传(长按配置)"));
         mAdapter = new MyAdapter<icon>(mData, R.layout.item_grid_icon) {
             @Override
             public void bindView(ViewHolder holder, icon obj) {
@@ -675,13 +679,41 @@ public class NewUI extends AppCompatActivity {
                     case 10:
 
                         Intent intent= new Intent(NewUI.this, webview.class);
-                        intent.putExtra("url","https://gitee.com/ljlvink/huovink_-mdm_catch_for_-lenovo/blob/master/%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E(app).md");
+                        intent.putExtra("url","youngtoday.github.io");
                         startActivity(intent);
                         break;
                     case 11:
                         Intent intent1= new Intent(NewUI.this, webview.class);
                         intent1.putExtra("url","http://tools-vue.zuoyebang.com/static/hy/tools-vue/calculator.html");
                         startActivity(intent1);
+                        break;
+                    case 12:
+                        final EditText et2 = new EditText(NewUI.this);
+                        et2.setHint("执剑计划,将设备交给云端决定设备恢复出厂,\n此处填写第三方接口地址,相关api搭建请参考 github.com/Lspdemo-team/swordplan");
+                        et2.setText(DataUtils.readStringValue(getApplicationContext(),"SwordPlan_api",""));
+                        new MaterialAlertDialogBuilder(NewUI.this)
+                                .setIcon(R.drawable.app_settings)
+                                .setView(et2).setTitle("执剑计划:"+(DataUtils.readint(getApplicationContext(),"SwordPlan")==1?"已启动":"未启动"))
+                                .setPositiveButton("保存并启动执剑计划", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        DataUtils.saveintvalue(getApplicationContext(),"SwordPlan",1);
+                                        DataUtils.saveStringValue(getApplicationContext(),"SwordPlan_api",et2.getText().toString());
+                                    }
+                                }).setNegativeButton("取消",null)
+                                .setNeutralButton("停止", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        DataUtils.saveintvalue(getApplicationContext(),"SwordPlan",0);
+                                    }
+                                }).show();
+
+                        break;
+                    case 13:
+                        startActivity(new Intent(NewUI.this,linspirer_pwdcalc.class));
+                        break;
+                    case 14:
+                        new uploadHelper(getApplicationContext()).uplpadfakeapps();
                         break;
                 }
             }
@@ -753,16 +785,9 @@ public class NewUI extends AppCompatActivity {
                         }
                         hackMdm.easteregg();
                         break;
-                    case 11:
-                        if(DataUtils.readint(NewUI.this,"SwordPlan")==0){
-                            DataUtils.saveintvalue(NewUI.this,"SwordPlan",1);
-                            Toast.makeText(NewUI.this, "警告:执剑计划已开启", Toast.LENGTH_SHORT).show();
-                            new Postutil(NewUI.this).SwordPlan();
-                        }
-                        else{
-                            DataUtils.saveintvalue(NewUI.this,"SwordPlan",0);
-                            Toast.makeText(NewUI.this, "执剑计划:关闭", Toast.LENGTH_SHORT).show();
-                        }
+                    case 14:
+                        startActivity(new Intent(NewUI.this,linspirer_fakeuploader.class));
+                        break;
                 }
                 return false;
             }
@@ -1325,7 +1350,7 @@ public class NewUI extends AppCompatActivity {
     }
     public void Infs(){
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this).setTitle("关于");
-        builder.setMessage("Linspirer Demo\nqq群:"+"8"+"363"+"37977\n官网:youngtoday.github.io");
+        builder.setMessage("Linspirer Demo\nqq群:"+"970610587"+"\n官网:youngtoday.github.io");
         builder.setIcon(R.drawable.app_settings);
         builder.setCancelable(true);
         builder.setPositiveButton("确定",null);
