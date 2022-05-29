@@ -4,14 +4,15 @@
 > 比领创更懂你的mdm
 > 
 > 革命尚未结束 加油勇士
-> <p align="right">——ljlVink</p>
-
+> <p align="right"></p>
 
 
 
 针对各种教育平台(联想和华为)领创平板的研究
 
-目前支持接口：联想csdk 联想mia 
+
+
+目前支持接口：联想csdk 联想mia 其余靠魔法控制 
 
 目前支持系统:API>=27(Android 8.1)
 
@@ -21,51 +22,26 @@
 
 华为:仅在emui10测试过
 
+出于某些原因 不开源核心代码
 
-qq群:836337977
-
-如果你想强制在正常csdk接口中启动mdm的话可参照网站填写信息
-
-[Project Management Dashboard (lenovocust.cn)](https://onlinecn.lenovocust.cn/lenovo/OnlineCustomization/Screens/DashboardCN.html)
-
-
-加密混淆规则
-
-```
-com.ljlVink.**
-```
-
-
+qq群(每日构建):970610587
 
 ### 贡献
-**控制流混淆**
 
-[BlackObfuscator](https://github.com/CodingGay/BlackObfuscator-ASPlugin)
+**控制流混淆** [BlackObfuscator](https://github.com/CodingGay/BlackObfuscator-ASPlugin)
 
-**加固程序**
-
-[nmmp](https://github.com/maoabc/nmmp)
+**加固程序** [nmmp](https://github.com/maoabc/nmmp)
 
 
-**悬浮窗**
+**悬浮窗** [EasyFloat](https://github.com/princekin-f/EasyFloat)
 
-[princekin-f/EasyFloat:  EasyFloat：浮窗从未如此简单](https://github.com/princekin-f/EasyFloat)
+**bugly** [bugly](https://bugly.qq.com/)
 
-**bugly**
+**zxing-lite** [zxing-lite](https://github.com/jenly1314/ZXingLite/)
 
-[bugly](https://bugly.qq.com/)
+**easy-protector** [easy-protector](https://github.com/lamster2018/EasyProtector)
 
-**zxing-lite**
-
-[zxing-lite](https://github.com/jenly1314/ZXingLite/)
-
-**easy-protector**
-
-[easy-protector](https://github.com/lamster2018/EasyProtector)
-
-**stringfog**
-
-[stringfog](https://github.com/MegatronKing/StringFog)
+**stringfog** [stringfog](https://github.com/MegatronKing/StringFog)
 
 #### 主要调用
 

@@ -2,8 +2,6 @@ package com.ljlVink;
 import android.app.csdk.CSDKManager;
 import android.content.Context;
 
-import com.ljlVink.Activity.NewUI;
-
 public class MDM {
     static  boolean LENOVO_MIAMDM=true;
     static boolean LENOVO_CSDK=true;

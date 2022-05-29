@@ -92,7 +92,6 @@
             android:theme="@style/CaptureTheme" />
         <activity
             android:name="com.ljlVink.Activity.NewUI"
-            android:excludeFromRecents="true"
             android:exported="false"
             android:icon="@mipmap/icon" />
 

@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class linspirer_pwdcalc extends AppCompatActivity {
-
-
         String key500 = "1191ADF1-8489-D8DA-5E9B-755A8B674394-485SDEWQ-QWYHK586";
         String key501 = "40E06F51-30D0-D6AD-7F7D-008AD0ADC570";
         public void OnClick(final View view) {
@@ -72,19 +70,12 @@ public class linspirer_pwdcalc extends AppCompatActivity {
         }
         catch (Exception ex) {}
     }
-        @Override
-        protected void onCreate(Bundle savedInstanceState)
-        {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_linspirer_pwdcalc);
-        }
-
-	/*
-	 领创apk里扣的代码 微改
-	 renamed from: com.innofidei.guardsecure.util.c
-	 loaded from: classes.dex
-	 */
-   public static String calc(String str,String key) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_linspirer_pwdcalc);
+    }
+    public static String calc(String str,String key) {
         String str2 = new SimpleDateFormat("yyyyMMdd").format(new Date()) + str + key;
         String b = m3759b(str2);
         if (b.length() > 8) {
@@ -92,9 +83,7 @@ public class linspirer_pwdcalc extends AppCompatActivity {
         }
         return "";
     }
-
-        /* renamed from: b */
-        public static String m3759b(String str) {
+    public static String m3759b(String str) {
         try {
             byte[] bytes = str.getBytes();
             MessageDigest instance = MessageDigest.getInstance("md5");
@@ -115,14 +104,12 @@ public class linspirer_pwdcalc extends AppCompatActivity {
         }
         return "";
     }
-
-        /* renamed from: c */
-        public static String m3758c(String str) {
+    public static String m3758c(String str) {
         String valueOf = String.valueOf(Long.parseLong(str, 16));
         if (valueOf.length() <= 8) {
             return valueOf;
         }
         return valueOf.substring(valueOf.length() - 8, valueOf.length());
     }
-    }
+}
 

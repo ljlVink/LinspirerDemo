@@ -31,6 +31,10 @@ public class DataUtils {
         SharedPreferences spf =context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE);
         return spf.getInt(tag,0);
     }
+    public static int readint(Context context,String tag,int defval){
+        SharedPreferences spf =context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE);
+        return spf.getInt(tag,defval);
+    }
     public static void saveintvalue(Context context,String tag,int value){
         SharedPreferences.Editor editor = context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE).edit();
         editor.putInt(tag,value);

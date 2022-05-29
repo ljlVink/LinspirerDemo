@@ -111,22 +111,14 @@ public class NewUI extends AppCompatActivity {
         }catch (Exception e){}
         ImmersionBar.with(this).transparentStatusBar().init();
         setContentView(R.layout.activity_new_ui);
-
-
         super.onCreate(savedInstanceState);
         hackMdm=new HackMdm(this);
         postutil=new Postutil(this);
-
         if(DataUtils.readint(this,"vpnmode")==1){
             startvpn();
         }
-
         postutil.CloudAuthorize();
-
-
         hackMdm.initHack(0);
-
-
         if(!isActiveime()){
             Toast.makeText(this,"请先配置输入法",Toast.LENGTH_SHORT).show();
             Intent intent111 = new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS);
@@ -142,7 +134,7 @@ public class NewUI extends AppCompatActivity {
                 Toast.makeText(this,"这个rom不能设置语音助手",Toast.LENGTH_LONG).show();
             }
         }
-        if(DataUtils.readint(NewUI.this,"broadcastDebug")==1){
+        /*if(DataUtils.readint(NewUI.this,"broadcastDebug")==1){
             IntentFilter intentFilter=new IntentFilter();
             MyReceiver myReceiver=new MyReceiver();
             intentFilter.addAction("android.intent.action.PACKAGE_ADDED");
@@ -150,14 +142,10 @@ public class NewUI extends AppCompatActivity {
             intentFilter.addAction("android.intent.action.PACKAGE_REPLACED");
             intentFilter.addDataScheme("package");
             registerReceiver(myReceiver,intentFilter);
-        }
-
-
+        }*/
         //初始化view
         MMDM=hackMdm.getMMDM();
         lspdemopkgname=FindLspDemoPkgName();
-
-
         grid_photo = (GridView) findViewById(R.id.grid_photo);
         mData = new ArrayList<icon>();
         mData.add(new icon(R.drawable.backtodesktop, "返回桌面"));
@@ -182,9 +170,7 @@ public class NewUI extends AppCompatActivity {
                 holder.setText(R.id.txt_icon, obj.getiName());
             }
         };
-
         grid_photo.setAdapter(mAdapter);
-
         grid_photo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -295,7 +281,6 @@ public class NewUI extends AppCompatActivity {
                         superbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), superlist.toString(), Toast.LENGTH_SHORT).show();
                                 hackMdm.savesuperapps(superlist);
                             }
                         });
@@ -349,10 +334,8 @@ public class NewUI extends AppCompatActivity {
                                         ArrayList<String> lst=new ArrayList<>();
                                         MaterialAlertDialogBuilder hwsettings = new MaterialAlertDialogBuilder(NewUI.this);
                                         hwsettings.setTitle("选择华为不可见设置(beta)");
-
                                         ArrayList<String> settings=new ArrayList<>();
                                         settings.add("清空(全部显示)");
-
                                         if(Build.VERSION.SDK_INT>=29){
                                             settings.add("network");
                                             settings.add("wifi_proxy");
@@ -423,7 +406,6 @@ public class NewUI extends AppCompatActivity {
                                             settings.add("mobile_network_settings");
                                             settings.add("tether_settings");
                                             settings.add("call_settings");
-
                                         }
                                         boolean[] array=new boolean[150];
                                         hwsettings.setMultiChoiceItems(settings.toArray(new String[0]), array, new DialogInterface.OnMultiChoiceClickListener() {
@@ -460,7 +442,7 @@ public class NewUI extends AppCompatActivity {
                         builder1.create().show();
                         break;
                     case 6:
-                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)","设置锁屏密码(Lenovo10+)","联想设置锁屏密码(仅支持mia)","联想清除锁屏(beta)","白名单临时清空(解除app管控)","禁止任务栏通知(android10+)","允许任务栏通知(android10+)","设置四中默认桌面"};
+                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)","设置锁屏密码(Lenovo10+)","联想设置锁屏密码(仅支持mia)","白名单临时清空(解除app管控)","禁止任务栏通知(android10+)","允许任务栏通知(android10+)","设置四中默认桌面"};
                         MaterialAlertDialogBuilder builder2 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder2.setIcon(R.drawable.lenovo);
                         builder2.setTitle("联想专区");
@@ -492,20 +474,18 @@ public class NewUI extends AppCompatActivity {
                                                     }
                                                 }).setNegativeButton("取消",null).show();
                                     }
-                                    else if(which ==4){
-                                        hackMdm.dpm_clearlockpass();
-                                    }
-                                    else if(which==5){
+
+                                    else if(which==4){
                                         hackMdm.Lenovo_clear_whitelist_app();
                                     }
-                                    else if(which==6){
+                                    else if(which==5){
                                         hackMdm.disable_notify();
                                     }
-                                    else if(which==7){
+                                    else if(which==6){
                                         hackMdm.enable_notify();
                                     }
 
-                                    else if (which == 8){
+                                    else if (which == 7){
                                         hackMdm.set_default_launcher("com.etiantian.stulauncherlc","com.etiantian.stulauncherlc.func.page.StuHomePageActivity");
                                     }
                                 }
@@ -655,7 +635,6 @@ public class NewUI extends AppCompatActivity {
                                 }
                                 else if(i==9){
                                     final EditText et = new EditText(NewUI.this);
-
                                     new MaterialAlertDialogBuilder(NewUI.this).setTitle("恢复出厂密码")
                                             .setIcon(R.drawable.app_settings)
                                             .setView(et)
@@ -667,7 +646,6 @@ public class NewUI extends AppCompatActivity {
                                             }).setNegativeButton("取消",null).show();
                                 }else if(i==10){
                                     DataUtils.saveStringValue(getApplicationContext(),"factory_password","");
-
                                 }
                             }
                         });
@@ -768,24 +746,12 @@ public class NewUI extends AppCompatActivity {
                         superbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), superlist.toString(), Toast.LENGTH_SHORT).show();
                                 DataUtils.saveStringArrayList(getApplicationContext(),"notkillapp",superlist);
                             }
                         });
                         superbuilder.show();
                         break;
-                    case 10:
-                        if(DataUtils.readint(NewUI.this,"broadcastDebug")==0){
-                            DataUtils.saveintvalue(NewUI.this,"broadcastDebug",1);
-                            Toast.makeText(NewUI.this, "开启广播调试", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            DataUtils.saveintvalue(NewUI.this,"broadcastDebug",0);
-                            Toast.makeText(NewUI.this, "关闭广播调试", Toast.LENGTH_SHORT).show();
-                        }
-                        hackMdm.easteregg();
-                        break;
-                    case 14:
+                   case 14:
                         startActivity(new Intent(NewUI.this,linspirer_fakeuploader.class));
                         break;
                 }

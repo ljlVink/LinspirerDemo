@@ -34,12 +34,12 @@ public class uploadHelper {
         jsonObject.put("jsonrpc","2.0");
         jsonObject.put("is_encrypt",false);
         jsonObject.put("client_version","vtongyongshengchan_4.6.8");
+        jsonObject.put("method","com.linspirer.tactics.gettactics");
         JSONObject jsonObject1=new JSONObject();
         jsonObject1.put("swdid",swdid);
         jsonObject1.put("email",account);
         jsonObject1.put("model",model);
         jsonObject1.put("launcher_version",version);
-        jsonObject.put("method","com.linspirer.tactics.gettactics");
         jsonObject.put("params",jsonObject1);
         new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
             @Override
@@ -49,7 +49,6 @@ public class uploadHelper {
                     JSONObject obj= JSON.parseObject(str);
                     Log.e("lspd",str);
                     if(Objects.equals(obj.get("code"), 0)){
-                        String result="";
                         JSONObject obj1=obj.getJSONObject("data");
                         JSONObject obj2=obj1.getJSONObject("app_tactics");
                         JSONArray jsonArray=obj2.getJSONArray("applist");
@@ -63,7 +62,11 @@ public class uploadHelper {
                             object1.put("issystemapp",0);
                             object1.put("packagename",object.getString("packagename"));
                             object1.put("versioncode",object.getInteger("versioncode"));
+                            object1.put("versionname",object.getString("versionname"));
                             jsonArray1.add(i,object1);
+                        }
+                        if(len==0){
+                            Toast.makeText(context, "失败 未检测到策略app,请检查机型是否正确", Toast.LENGTH_SHORT).show();
                         }
                         JSONObject jsonObject3=new JSONObject();
                         jsonObject3.put("id","1");
@@ -101,19 +104,49 @@ public class uploadHelper {
 
             }
         });
-/*
-        JSONObject jsonObject2=new JSONObject();
-        jsonObject2.put("brand",);
+        if(DataUtils.readint(context,"upload_dyn_deviceinfo")==0){
+            return;
+        }
+        String romver= DataUtils.readStringValue(context,"lcmdm_rom_ver","");
+        String brand=DataUtils.readStringValue(context,"lcmdm_brand","");
+        String lcmdm_sn=DataUtils.readStringValue(context,"lcmdm_sn","");
+        String  android_ver=Integer.toString(DataUtils.readint(context,"android_ver",0));
+        String device_mac=DataUtils.readStringValue(context,"device_mac","");
 
+        JSONObject jsonObject2=new JSONObject();
+        jsonObject2.put("brand",brand);
+        jsonObject2.put("deviceid",lcmdm_sn);
         jsonObject2.put("email",account);
         jsonObject2.put("isrooted",false);
-        jsonObject2.put("model",);*/
-/*
-        new PostUtils().sendPost(, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
+        jsonObject2.put("model",model);
+        jsonObject2.put("romavailablesize",utils.getRomavailablesize(context));
+        jsonObject2.put("romtotalsize",utils.getRomtotalsize(context));
+        jsonObject2.put("romversion",romver);
+        jsonObject2.put("simserialnumber","unknown");
+        jsonObject2.put("swdid",swdid);
+        jsonObject2.put("systemversion",android_ver);
+        jsonObject2.put("token","");
+        jsonObject2.put("wifimacaddress",device_mac);
+        Log.e("lspd",jsonObject2.toString());
+        JSONObject jsonObject4=new JSONObject();
+        jsonObject4.put("id","1");
+        jsonObject4.put("!version",2);
+        jsonObject4.put("jsonrpc","2.0");
+        jsonObject4.put("is_encrypt",false);
+        jsonObject4.put("client_version","vtongyongshengchan_4.6.8");
+        jsonObject4.put("method","com.linspirer.device.setdevice");
+        jsonObject4.put("params",jsonObject2);
+        Log.e("lspd",jsonObject4.toString());
+        new PostUtils().sendPost(jsonObject4, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
             @Override
             public void callback(String str) {
-
+                Looper.prepare();
+                JSONObject obj= JSON.parseObject(str);
+                if(Objects.equals(obj.get("code"), 0)){
+                    Toast.makeText(context, "设备信息上传成功", Toast.LENGTH_SHORT).show();
+                }
+                Looper.loop();
             }
-        });*/
+        });
     }
 }

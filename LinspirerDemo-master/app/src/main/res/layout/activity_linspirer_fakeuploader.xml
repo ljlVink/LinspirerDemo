@@ -5,101 +5,141 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ljlVink.Activity.linspirer_fakeuploader">
+<ScrollView
+    android:id="@+id/scrollview1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="197dp"
-        tools:layout_editor_absoluteY="16dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <Space
             android:layout_width="match_parent"
-            android:layout_height="15dp">
-        </Space>
+            android:layout_height="15dp"></Space>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="伪装上传应用列表app(策略)"
+            android:textSize="20sp"
+
+            />
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/transparent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
             <EditText
                 android:id="@+id/launcher_version"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="领创桌面版本"
-                >
-            </EditText>
+                android:hint="领创桌面版本"></EditText>
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/transparent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
             <EditText
                 android:id="@+id/launcher_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="领创账号"/>
+                android:hint="领创账号" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/transparent"
 
             >
+
             <EditText
                 android:id="@+id/linspirer_swdid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="swdid:emui10为sn 其余为mac地址" />
+                android:hint="swdid:华为emui10为sn 其余为mac地址" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/transparent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
             <EditText
                 android:id="@+id/device_model"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="设备机型" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/checkBox_upload_device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="是否上传设备信息(适合rom与管控rom不同时)" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/transparent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
             <EditText
                 android:id="@+id/rom_ver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ROM版本(暂不支持)" />
+                android:hint="ROM版本" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/transparent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/brand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="设备品牌(如Lenovo,若已给定则不需修改)(暂不支持)" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/transparent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/device_sn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="设备序列号(SN)需要大写(暂不支持)"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            app:boxBackgroundColor="@color/transparent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
             <EditText
                 android:id="@+id/android_ver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="android版本号(例如12,11,10,9,8)(暂不支持)"/>
+                android:hint="android版本号(例如12,11,10,9,8)" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
+            <EditText
+                android:id="@+id/brand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="设备品牌(如Lenovo,若已给定则不需修改)" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
+            <EditText
+                android:id="@+id/device_sn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="设备序列号(SN)需要大写" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/transparent">
+
+            <EditText
+                android:id="@+id/device_mac"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="设备mac地址" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -118,14 +158,15 @@
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:digits="0123456789"
                 android:text="保存" />
 
             <TextView
                 android:id="@+id/textview_information"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                 />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
+</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

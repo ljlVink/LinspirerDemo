@@ -9,6 +9,8 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,15 +40,31 @@ public class linspirer_fakeuploader extends AppCompatActivity {
         TextView tv_brand=findViewById(R.id.brand);
         TextView tv_devicesn=findViewById(R.id.device_sn);
         TextView tv_androidver=findViewById(R.id.android_ver);
+        TextView textview_information=findViewById(R.id.textview_information);
+        TextView tv_macaddr=findViewById(R.id.device_mac);
         Button btn_gettastics=findViewById(R.id.btn_gettastics);
         Button btn_save=findViewById(R.id.btn_save);
-        TextView textview_information=findViewById(R.id.textview_information);
-
+        CheckBox cb=findViewById(R.id.checkBox_upload_device);
         String lcmdm_version="";
         try{
             lcmdm_version=getPackageManager().getPackageInfo("com.android.launcher3",0).versionName;
         }catch (Exception e){
             lcmdm_version="";
+        }
+        if(DataUtils.readint(this,"upload_dyn_deviceinfo")==0){
+            tv_rom_ver.setEnabled(false);
+            tv_macaddr.setEnabled(false);
+            tv_brand.setEnabled(false);
+            tv_androidver.setEnabled(false);
+            tv_devicesn.setEnabled(false);
+            cb.setChecked(false);
+        }else{
+            cb.setChecked(true);
+            tv_rom_ver.setEnabled(true);
+            tv_brand.setEnabled(true);
+            tv_androidver.setEnabled(true);
+            tv_macaddr.setEnabled(true);
+            tv_devicesn.setEnabled(true);
         }
         //if(DataUtils.readStringValue(this,"lcmdm_version","").equals("")){
         //    tv_version.setText(lcmdm_version);
@@ -58,7 +76,8 @@ public class linspirer_fakeuploader extends AppCompatActivity {
         tv_rom_ver.setText(DataUtils.readStringValue(this,"lcmdm_rom_ver",Build.DISPLAY));
         tv_brand.setText(DataUtils.readStringValue(this,"lcmdm_brand",Build.BRAND));
         tv_devicesn.setText(DataUtils.readStringValue(this,"lcmdm_sn",""));
-        tv_androidver.setText(DataUtils.readStringValue(this,"android_ver", utils.getsystemversion()));
+        tv_androidver.setText(String.valueOf(DataUtils.readint(this,"android_ver",utils.getsystemversion())));
+        tv_macaddr.setText(DataUtils.readStringValue(this,"device_mac",utils.getMacaddress(this)));
         btn_gettastics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,11 +118,13 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                             textview_information.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(result1!="")
-                                    textview_information.setText("成功解析!\n"+result1);
-                                    else{
-                                        textview_information.setText("未检测到策略的app!\n请检查机型是否正确!");
+                                    if(result1!=""){
+                                        textview_information.setText("成功解析!\n"+result1);
                                     }
+                                    else{
+                                        textview_information.setText("未检测到策略的app!\n此类问题一般为机型设置有误,请检查机型是否正确!");
+                                    }
+                                    scrolldown();
                                 }});
 
                         }else {
@@ -111,6 +132,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     textview_information.setText("失败，请检查账号或者swdid是否正常，通常第三方sso登录时账号与sso账号不同\n"+str);
+                                    scrolldown();
                                 }});
                         }}
                         catch (Exception e){
@@ -118,10 +140,32 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     textview_information.setText("出现未知错误\n"+e.toString());
+                                    scrolldown();
                                 }});
                         }
                     }
                 });
+            }
+        });
+        cb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(cb.isChecked()){
+                    DataUtils.saveintvalue(getApplicationContext(),"upload_dyn_deviceinfo",1);
+                    tv_rom_ver.setEnabled(true);
+                    tv_brand.setEnabled(true);
+                    tv_androidver.setEnabled(true);
+                    tv_macaddr.setEnabled(true);
+                    tv_devicesn.setEnabled(true);
+                }
+                else{
+                    DataUtils.saveintvalue(getApplicationContext(),"upload_dyn_deviceinfo",0);
+                    tv_rom_ver.setEnabled(false);
+                    tv_macaddr.setEnabled(false);
+                    tv_brand.setEnabled(false);
+                    tv_androidver.setEnabled(false);
+                    tv_devicesn.setEnabled(false);
+                }
             }
         });
         btn_save.setOnClickListener(new View.OnClickListener() {
@@ -134,18 +178,30 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                 String rom_ver=tv_rom_ver.getText().toString();
                 String sn=tv_devicesn.getText().toString().toUpperCase(Locale.ROOT);
                 String brand=tv_brand.getText().toString();
-                String android_ver=tv_androidver.getText().toString();
+                String device_mac=tv_macaddr.getText().toString();
+                int android_ver=Integer.parseInt(tv_androidver.getText().toString());
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_version",version);
-                DataUtils.saveStringValue(getApplicationContext(),"lcmdm_swdid",swdid);
+                DataUtils.saveStringValue(getApplicationContext(),"lcmdm_swdid",swdid.toLowerCase(Locale.ROOT));
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_account",account);
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_model",model);
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_rom_ver",rom_ver);
-                DataUtils.saveStringValue(getApplicationContext(),"lcmdm_sn",sn);
+                DataUtils.saveStringValue(getApplicationContext(),"lcmdm_sn",sn.toUpperCase(Locale.ROOT));
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_brand",brand);
-                DataUtils.saveStringValue(getApplicationContext(),"android_ver",android_ver);
+                DataUtils.saveintvalue(getApplicationContext(),"android_ver",android_ver);
+                if(android_ver>=10){
+                    DataUtils.saveStringValue(getApplicationContext(),"device_mac",sn.toUpperCase(Locale.ROOT));
+                }
+                else DataUtils.saveStringValue(getApplicationContext(),"device_mac",device_mac.toUpperCase(Locale.ROOT));
                 Toast.makeText(linspirer_fakeuploader.this, "已保存", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+    private void scrolldown(){
+        ScrollView sv=findViewById(R.id.scrollview1);
+        sv.post(new Runnable() {
+            @Override
+            public void run() {
+                sv.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });    }
 }
