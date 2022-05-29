@@ -75,7 +75,7 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled false
+    enabled true
     // 混淆深度
     depth 2
     // 需要混淆的包或者类(匹配前面一段)

@@ -103,7 +103,6 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                     public void callback(String str) {
                         try{
                         JSONObject obj= JSON.parseObject(str);
-                        Log.e("lspd",str);
                         if(Objects.equals(obj.get("code"), 0)){
                             String result="";
                             JSONObject obj1=obj.getJSONObject("data");

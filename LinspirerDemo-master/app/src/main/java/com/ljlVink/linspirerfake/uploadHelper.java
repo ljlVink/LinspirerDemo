@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.ConditionVariable;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -47,7 +46,6 @@ public class uploadHelper {
                 Looper.prepare();
                 try{
                     JSONObject obj= JSON.parseObject(str);
-                    Log.e("lspd",str);
                     if(Objects.equals(obj.get("code"), 0)){
                         JSONObject obj1=obj.getJSONObject("data");
                         JSONObject obj2=obj1.getJSONObject("app_tactics");
@@ -67,6 +65,7 @@ public class uploadHelper {
                         }
                         if(len==0){
                             Toast.makeText(context, "失败 未检测到策略app,请检查机型是否正确", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                         JSONObject jsonObject3=new JSONObject();
                         jsonObject3.put("id","1");
@@ -81,14 +80,12 @@ public class uploadHelper {
                         jsonObject4.put("swdid",swdid);
                         jsonObject4.put("reportlist",jsonArray1);
                         jsonObject3.put("params",jsonObject4);
-                        Log.e("tag",jsonObject3.toString());
                         new PostUtils().sendPost(jsonObject3, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
                             @Override
                             public void callback(String str) {
                                 Looper.prepare();
                                 JSONObject obj= JSON.parseObject(str);
                                 if(Objects.equals(obj.get("code"), 0)){
-                                    Log.e("lspd",str);
                                     Toast.makeText(context , "成功!已上传"+String.valueOf(len)+"个app", Toast.LENGTH_SHORT).show();
                                 }
                                 Looper.loop();
@@ -127,7 +124,6 @@ public class uploadHelper {
         jsonObject2.put("systemversion",android_ver);
         jsonObject2.put("token","");
         jsonObject2.put("wifimacaddress",device_mac);
-        Log.e("lspd",jsonObject2.toString());
         JSONObject jsonObject4=new JSONObject();
         jsonObject4.put("id","1");
         jsonObject4.put("!version",2);
@@ -136,7 +132,6 @@ public class uploadHelper {
         jsonObject4.put("client_version","vtongyongshengchan_4.6.8");
         jsonObject4.put("method","com.linspirer.device.setdevice");
         jsonObject4.put("params",jsonObject2);
-        Log.e("lspd",jsonObject4.toString());
         new PostUtils().sendPost(jsonObject4, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
             @Override
             public void callback(String str) {

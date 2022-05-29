@@ -657,7 +657,7 @@ public class NewUI extends AppCompatActivity {
                     case 10:
 
                         Intent intent= new Intent(NewUI.this, webview.class);
-                        intent.putExtra("url","youngtoday.github.io");
+                        intent.putExtra("url","https://lilvink.coding.net/public/huovink_mdmcatch_forlenovocsdk/wiki/git/files");
                         startActivity(intent);
                         break;
                     case 11:
