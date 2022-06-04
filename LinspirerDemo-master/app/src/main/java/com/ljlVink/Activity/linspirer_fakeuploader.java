@@ -66,9 +66,6 @@ public class linspirer_fakeuploader extends AppCompatActivity {
             tv_macaddr.setEnabled(true);
             tv_devicesn.setEnabled(true);
         }
-        //if(DataUtils.readStringValue(this,"lcmdm_version","").equals("")){
-        //    tv_version.setText(lcmdm_version);
-        //}
         tv_version.setText(DataUtils.readStringValue(this,"lcmdm_version",lcmdm_version));
         tv_swdid.setText(DataUtils.readStringValue(this,"lcmdm_swdid",""));
         tv_account.setText(DataUtils.readStringValue(this,"lcmdm_account",""));

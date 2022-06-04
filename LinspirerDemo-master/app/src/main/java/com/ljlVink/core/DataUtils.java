@@ -2,6 +2,7 @@ package com.ljlVink.core;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +34,20 @@ public class DataUtils {
     }
     public static int readint(Context context,String tag,int defval){
         SharedPreferences spf =context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE);
-        return spf.getInt(tag,defval);
+        int x=defval;
+        try{
+            x=spf.getInt(tag,defval);
+        }catch (Exception e){
+            Log.e("removed","removed conflicting val");
+            removeintvalue(context,tag);
+            x=spf.getInt(tag,defval);
+        }
+        return x;
+    }
+    public static void removeintvalue(Context context,String tag){
+        SharedPreferences.Editor editor = context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE).edit();
+        editor.remove(tag);
+        editor.apply();
     }
     public static void saveintvalue(Context context,String tag,int value){
         SharedPreferences.Editor editor = context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE).edit();
