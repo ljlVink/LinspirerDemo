@@ -1587,8 +1587,7 @@ public class NewUI extends AppCompatActivity {
             list.add(appInfo);
         }
         return cleanlist(list);
-    }
-
+    }//111111
     protected List<AppInfo> getsysAppInfos() {
         List<AppInfo> list = new ArrayList<AppInfo>();
         PackageManager pm = getPackageManager();
