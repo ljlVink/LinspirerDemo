@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 59000
-        versionName "V5.8.5Release_20220528"
+        versionCode 59500
+        versionName "V5.9.0Release_20220605"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -75,7 +75,7 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled false
+    enabled true
     // 混淆深度
     depth 2
     // 需要混淆的包或者类(匹配前面一段)
