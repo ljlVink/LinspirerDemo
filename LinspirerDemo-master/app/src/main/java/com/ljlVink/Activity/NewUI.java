@@ -545,7 +545,7 @@ public class NewUI extends AppCompatActivity {
                         builder3.create().show();
                         break;
                     case 8:
-                        final String[] applicationsettings = new String[]{"vpn始终开启", "vpn始终关闭", "vpn临时关闭", "隐藏程序", "不隐藏程序", "SN设置", "设置程序进入密码", "清除程序进入密码", "设置恢复出厂密码", "清除恢复出厂密码","(app隐藏)设置语音助手","(app隐藏)设置输入法"};
+                        final String[] applicationsettings = new String[]{"vpn始终开启", "vpn始终关闭", "vpn临时关闭", "隐藏程序", "不隐藏程序", "SN设置", "设置程序进入密码", "清除程序进入密码", "设置恢复出厂密码", "清除恢复出厂密码","(app隐藏)设置输入法","(app隐藏)设置语音助手"};
                         MaterialAlertDialogBuilder builder4 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder4.setIcon(R.drawable.app_settings);
                         builder4.setTitle("程序设置");
