@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 59500
-        versionName "V5.9.0Release_20220605"
+        versionCode 59550
+        versionName "V5.9.2Release_20220611"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -34,6 +34,11 @@ android {
             resValue "string", "app_name", "开启截屏"
             applicationId "com.linspirer.enablescreen"
         }
+        lspdemo_transparent{
+            resValue "string", "app_name", "　"
+            applicationId "cn.lspdemo_transparent"
+        }
+
         wps {
             resValue "string", "app_name", "WPS Office"
             applicationId "cn.wps.moffice_eng"

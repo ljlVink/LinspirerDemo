@@ -68,12 +68,14 @@
         <activity
             android:name="com.ljlVink.Activity.linspirer_fakeuploader"
             android:excludeFromRecents="true"
+            android:screenOrientation="landscape"
             android:label="领创应用列表上传"
             android:exported="false" />
         <activity
             android:name="com.ljlVink.Activity.linspirer_pwdcalc"
             android:excludeFromRecents="true"
             android:exported="false"
+            android:screenOrientation="landscape"
             android:icon="@mipmap/icon"
             android:label="领创密码计算" />
         <activity
@@ -93,6 +95,8 @@
         <activity
             android:name="com.ljlVink.Activity.NewUI"
             android:exported="true"
+            android:screenOrientation="landscape"
+
             android:label="LinspirerDemo"
             android:icon="@mipmap/icon" >
             <intent-filter >
@@ -109,11 +113,10 @@
         </activity>
         <meta-data
             android:name="design_width_in_dp"
-            android:value="1280" />
+            android:value="1280"/>
         <meta-data
             android:name="design_height_in_dp"
-            android:value="800" />
-
+            android:value="800"/>
         <service
             android:name="com.ljlVink.services.BeepMainService"
             android:exported="true"
@@ -122,7 +125,6 @@
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
-
             <meta-data
                 android:name="android.view.im"
                 android:resource="@xml/method" />
@@ -250,7 +252,6 @@
             android:icon="@mipmap/icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

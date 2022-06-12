@@ -21,12 +21,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical">
-
-
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="25dp" />
-
                 <TextView
                     android:id="@+id/textView26"
                     android:layout_width="match_parent"
@@ -34,7 +31,6 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="20sp"
                     android:text="      Linspirer Demo" />
-
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/materialCardView"
                     android:layout_width="match_parent"
@@ -87,13 +83,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="537dp"
                     android:numColumns="3" />
-
-
             </LinearLayout>
 
         </ScrollView>
-
-
         <LinearLayout
             android:id="@+id/right"
             android:layout_width="0dp"

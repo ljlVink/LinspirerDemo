@@ -92,7 +92,6 @@ public class NewUI extends AppCompatActivity {
     private GridView grid_photo;
     private Postutil postutil;
     private TextView refresh;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final String pubkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
@@ -116,20 +115,8 @@ public class NewUI extends AppCompatActivity {
         }
         postutil.CloudAuthorize();
         hackMdm.initHack(0);
-        if (!isActiveime()) {
-            Toast.makeText(this, "请先配置输入法", Toast.LENGTH_SHORT).show();
-            Intent intent111 = new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS);
-            startActivity(intent111);
-        }
+
         if (!isAssistantApp()) {
-            Intent intent111111 = new Intent(Settings.ACTION_VOICE_INPUT_SETTINGS);
-            PackageManager packageManager = getPackageManager();
-            if (intent111111.resolveActivity(packageManager) != null) {
-                Toast.makeText(this, "请将本程序注册成语音助手", Toast.LENGTH_LONG).show();
-                startActivity(intent111111);
-            } else {
-                Toast.makeText(this, "这个rom不能设置语音助手", Toast.LENGTH_LONG).show();
-            }
         }
         /*if(DataUtils.readint(NewUI.this,"broadcastDebug")==1){
             IntentFilter intentFilter=new IntentFilter();
@@ -558,7 +545,7 @@ public class NewUI extends AppCompatActivity {
                         builder3.create().show();
                         break;
                     case 8:
-                        final String[] applicationsettings = new String[]{"vpn始终开启", "vpn始终关闭", "vpn临时关闭", "隐藏程序", "不隐藏程序", "SN设置", "设置程序进入密码", "清除程序进入密码", "设置恢复出厂密码", "清除恢复出厂密码"};
+                        final String[] applicationsettings = new String[]{"vpn始终开启", "vpn始终关闭", "vpn临时关闭", "隐藏程序", "不隐藏程序", "SN设置", "设置程序进入密码", "清除程序进入密码", "设置恢复出厂密码", "清除恢复出厂密码","(app隐藏)设置语音助手","(app隐藏)设置输入法"};
                         MaterialAlertDialogBuilder builder4 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder4.setIcon(R.drawable.app_settings);
                         builder4.setTitle("程序设置");
@@ -623,6 +610,18 @@ public class NewUI extends AppCompatActivity {
                                             }).setNegativeButton("取消", null).show();
                                 } else if (i == 10) {
                                     DataUtils.saveStringValue(getApplicationContext(), "factory_password", "");
+                                }else if(i==11){
+                                    Intent intent111 = new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS);
+                                    startActivity(intent111);
+                                }
+                                else if(i==12){
+                                    Intent intent111111 = new Intent(Settings.ACTION_VOICE_INPUT_SETTINGS);
+                                    PackageManager packageManager = getPackageManager();
+                                    if (intent111111.resolveActivity(packageManager) != null) {
+                                        startActivity(intent111111);
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "这个rom不能设置语音助手", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             }
                         });
@@ -1042,6 +1041,7 @@ public class NewUI extends AppCompatActivity {
         }
         TextView tv = findViewById(R.id.text_home);
         tv.setText(modex);
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
