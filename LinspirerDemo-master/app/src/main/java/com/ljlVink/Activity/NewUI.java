@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
 
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -538,7 +537,7 @@ public class NewUI extends AppCompatActivity {
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     String[] x=et.getText().toString().split("/");
                                                     try{
-                                                        Log.e(x[0],x[1]);
+                                                        android.util.Log.e(x[0],x[1]);
                                                         hackMdm.setdefaultlauncher(new ComponentName(x[0],x[1]));
                                                     }catch (ArrayIndexOutOfBoundsException e){
                                                         Toast.makeText(NewUI.this, "失败", Toast.LENGTH_SHORT).show();

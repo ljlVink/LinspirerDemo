@@ -2,7 +2,6 @@ package com.huosoft.wisdomclass.linspirerdemo;
 import android.app.Application;
 import android.content.Context;
 import android.net.VpnService;
-import android.util.Log;
 
 import com.ljlVink.Activity.NewUI;
 import com.ljlVink.Activity.autostart;
@@ -47,12 +46,5 @@ public class lspdemoApplication extends Application {
     }
     public int getMMDM(){
         return MMDM;
-    }
-    public void exit(String str){
-        try{
-            Log.e("lspdemo","https://gitee.com/ljlvink/huovink_-mdm_catch_for_-lenovo");
-        }catch (Error e){
-            e.printStackTrace();
-        }
     }
 }
