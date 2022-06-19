@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.DataUtils;
 import com.ljlVink.linspirerfake.ICallback;
@@ -32,6 +33,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linspirer_fakeuploader);
+
         TextView tv_version=findViewById(R.id.launcher_version);
         TextView tv_swdid=findViewById(R.id.linspirer_swdid);
         TextView tv_account=findViewById(R.id.launcher_email);

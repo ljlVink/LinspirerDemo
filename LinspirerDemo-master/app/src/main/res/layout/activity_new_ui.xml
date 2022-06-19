@@ -86,6 +86,31 @@
             </LinearLayout>
 
         </ScrollView>
+
+        <ScrollView
+            android:id="@+id/scrollvew_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="127">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+                <Space
+                    android:layout_width="1dp"
+                    android:layout_height="25dp" />
+
+
+                <TextView
+                    android:id="@+id/devicetips"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </TextView>
+            </LinearLayout>
+        </ScrollView>
+        <!--
         <LinearLayout
             android:id="@+id/right"
             android:layout_width="0dp"
@@ -152,7 +177,8 @@
             </LinearLayout>
 
         </LinearLayout>
-
+-->
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.linspirerfake.ICallback;
 import com.ljlVink.linspirerfake.PostUtils;
@@ -32,7 +33,7 @@ public class linspirer_pwdcalc extends AppCompatActivity {
                     String pass500 = calc(swdid,key500);
                     String pass501 = calc(swdid,key501);
                     TextView tvs = (TextView) findViewById(R.id.tv);
-                    tvs.setText("5.0.***:"+pass500+"\n5.01.***:"+pass501);
+                    tvs.setText("5.0.***:"+pass500+"\n5.01.***:"+pass501+"\n孩子端(5.05):"+hzd(swdid));
                     JSONObject jsonObject=new JSONObject();
                     jsonObject.put("id","1");
                     jsonObject.put("!version","1");
@@ -74,6 +75,7 @@ public class linspirer_pwdcalc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_linspirer_pwdcalc);
+
     }
     public static String calc(String str,String key) {
         String str2 = new SimpleDateFormat("yyyyMMdd").format(new Date()) + str + key;
@@ -83,6 +85,39 @@ public class linspirer_pwdcalc extends AppCompatActivity {
         }
         return "";
     }
+    public String hzd(String str) {
+        String format = new SimpleDateFormat("yyyyMMddHH").format(new Date());
+        String a = m2a(format + str + "1191ADF1-8489-D8DA-5E9B-755A8B674394-485SDEWQ-QWYHK586");
+        return a.length() > 8 ? m1b(a.substring(a.length() - 8)) : "";
+    }
+    public static String m1b(String str) {
+        String str2 = "00000000" + String.valueOf(Long.parseLong(str, 16));
+        return str2.length() > 8 ? str2.substring(str2.length() - 8) : str2;
+    }
+
+    /* renamed from: a */
+    public String m2a(String str) {
+        try {
+            byte[] bytes = str.getBytes();
+            MessageDigest messageDigest = MessageDigest.getInstance("md5");
+            messageDigest.reset();
+            messageDigest.update(bytes);
+            byte[] digest = messageDigest.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                String hexString = Integer.toHexString(b & 255);
+                if (hexString.length() == 1) {
+                    hexString = "0" + hexString;
+                }
+                sb.append(hexString);
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public static String m3759b(String str) {
         try {
             byte[] bytes = str.getBytes();

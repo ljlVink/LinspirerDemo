@@ -8,6 +8,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 
 public class webview extends AppCompatActivity {
@@ -15,6 +16,9 @@ public class webview extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getSupportActionBar().hide();
+        ImmersionBar.with(this).transparentStatusBar().init();
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
          webView = (WebView) findViewById(R.id.webview);
