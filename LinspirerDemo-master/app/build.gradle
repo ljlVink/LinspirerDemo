@@ -12,7 +12,6 @@ android {
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
         versionCode 59910
-
         versionName "V5.9.10Release_20220626"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
