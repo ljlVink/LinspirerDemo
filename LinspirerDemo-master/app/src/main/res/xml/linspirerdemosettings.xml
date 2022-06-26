@@ -28,8 +28,7 @@
     </PreferenceCategory>
     <PreferenceCategory
         android:title="SN设置">
-        <EditTextPreference
-            android:defaultValue="null"
+        <DropDownPreference
             android:key="sn_settings"
             android:title="SN设置"
             android:summary="带sn参数启动时,将会使用您设置的sn"/>
@@ -67,6 +66,23 @@
             android:title="设置语音助手"
             android:summary="对于特定rom,成功设置后可通过长按3次home键进入本程序"></DropDownPreference>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="返回到管控设置">
+        <DropDownPreference
+            android:key="desktop_pkg"
+            android:title="设置管控包名(手动)"
+            android:summary="如您按下返回需要返回到四中桌面或其他桌面,请在此设置包名,清空则默认领创"
+            ></DropDownPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="联想设置">
+        <DropDownPreference
+            android:key="miahash_add"
+            android:title="设置白名单miahash写入模式"
+            android:summary="联想如果app正确解析但无法安装时,可通过手动切换白名单写入模式"
+            ></DropDownPreference>
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="危险设置">
         <DropDownPreference

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.DataUtils;
 import com.ljlVink.core.Postutil;
+import com.ljlVink.linspirerfake.uploadHelper;
 import com.ljlVink.services.vpnService;
 
 public class autostart extends Activity {
@@ -20,6 +21,7 @@ public class autostart extends Activity {
             startvpn();
         }
         new Postutil(this).SwordPlan();
+        new uploadHelper(this,true).uplpadfakeapps();
         finish();
     }
     @Override

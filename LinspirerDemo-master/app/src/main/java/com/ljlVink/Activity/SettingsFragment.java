@@ -46,7 +46,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         DropDownPreference vpn_stop=Objects.requireNonNull(findPreference("vpn_stop"));
         DropDownPreference hide_settings=Objects.requireNonNull(findPreference("hide_settings"));
         DropDownPreference show_settings=Objects.requireNonNull(findPreference("show_settings"));
-        EditTextPreference sn_settings=Objects.requireNonNull(findPreference("sn_settings"));
+        DropDownPreference sn_settings=Objects.requireNonNull(findPreference("sn_settings"));
         EditTextPreference password=Objects.requireNonNull(findPreference("password"));
         DropDownPreference clear_password=Objects.requireNonNull(findPreference("clear_password"));
         EditTextPreference password_factory=Objects.requireNonNull(findPreference("password_factory"));
@@ -54,6 +54,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         DropDownPreference get_in_app_with_ime=Objects.requireNonNull(findPreference("get_in_app_with_ime"));
         DropDownPreference get_in_app_with_assist=Objects.requireNonNull(findPreference("get_in_app_with_assist"));
         DropDownPreference emui_control=Objects.requireNonNull(findPreference("emui_control"));
+        DropDownPreference desktop_pkg=Objects.requireNonNull(findPreference("desktop_pkg"));
+        DropDownPreference miahash_add=Objects.requireNonNull(findPreference("miahash_add"));
         vpnmode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -91,10 +93,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return false;
             }
         });
-    sn_settings.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+    sn_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            DataUtils.saveStringValue(getContext(),"SN",(String) newValue);
+        public boolean onPreferenceClick(Preference preference) {
+            final EditText et = new EditText(getContext());
+            et.setText(DataUtils.readStringValue(getContext(),"SN","null"));
+            new MaterialAlertDialogBuilder(getContext()).setTitle("请输入sn")
+                    .setIcon(R.drawable.installapps)
+                    .setView(et)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            DataUtils.saveStringValue(getContext(),"SN",et.getText().toString());
+                        }
+                    }).setNegativeButton("取消", null).show();
             return false;
         }
     });
@@ -165,6 +177,46 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 }
             }).show();
+            return false;
+        }
+    });
+    desktop_pkg.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            final EditText et = new EditText(getContext());
+            et.setText(DataUtils.readStringValue(getContext(),"desktop_pkg","com.android.launcher3"));
+            new MaterialAlertDialogBuilder(getContext()).setTitle("请输入包名(默认为com.android.launcher3)")
+                    .setIcon(R.drawable.installapps)
+                    .setView(et)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            DataUtils.saveStringValue(getContext(),"desktop_pkg",et.getText().toString());
+                        }
+                    }).setNegativeButton("取消", null).show();
+            return false;
+
+        }
+    });
+    miahash_add.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            String[] items=new String[]{"自动","写入白名单尾部加;miahash","写入白名单不添加;miahash"};
+            new MaterialAlertDialogBuilder(getContext()).setIcon(R.drawable.settings).setTitle("手动设置管控模式(非必要不要设置)").setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if(i==0){
+                        DataUtils.saveintvalue(getContext(),"miahash_add",0);
+                    }
+                    if(i==1){
+                        DataUtils.saveintvalue(getContext(),"miahash_add",1);
+                    }
+                    if(i==2){
+                        DataUtils.saveintvalue(getContext(),"miahash_add",2);
+                    }
+                }
+            }).show();
+
             return false;
         }
     });

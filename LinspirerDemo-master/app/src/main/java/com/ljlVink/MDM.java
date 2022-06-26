@@ -35,7 +35,7 @@ public class MDM {
         if(LENOVO_CSDK==false&&LENOVO_MIAMDM==true){
             return 3;
         }
-        //原来低下没有这几句话
+        //针对x605fc这个奇葩设备
         if(LENOVO_CSDK==true&&LENOVO_MIAMDM==true){
             return 3;
         }

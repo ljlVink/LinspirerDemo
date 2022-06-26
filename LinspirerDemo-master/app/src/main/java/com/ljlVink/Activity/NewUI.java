@@ -7,6 +7,8 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.app.Activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +27,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
 
+import android.text.style.UpdateAppearance;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,6 +114,9 @@ public class NewUI extends AppCompatActivity {
         postutil.CloudAuthorize();
         hackMdm.initHack(0);
         //初始化view
+        new uploadHelper(this,true).uplpadfakeapps();
+
+        hackMdm.findowner();
         if(!isTabletDevice(this)){
             right=findViewById(R.id.scrollvew_right);
             right.setVisibility(View.GONE);
@@ -280,12 +286,13 @@ public class NewUI extends AppCompatActivity {
                                         public void invoke(View view) {
                                             View click_view_float = view.findViewById(R.id.tvOpenMain);
                                             click_view_float.setOnClickListener(new View.OnClickListener() {
-                                                                                    @Override
-                                                                                    public void onClick(View v) {
-                                                                                        EasyFloat.dismiss();
-                                                                                        backtolsp();
-                                                                                    }
-                                                                                }
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        EasyFloat.dismiss();
+                                                        backtolsp();
+                                                        setfalseVisibility();
+                                                    }
+                                                }
                                             );
                                         }
                                     }).show();
@@ -793,19 +800,14 @@ public class NewUI extends AppCompatActivity {
 
     private void runhwunlock() {
         MaterialAlertDialogBuilder alertdialogbuilder11 = new MaterialAlertDialogBuilder(NewUI.this);
-        alertdialogbuilder11.setMessage("是否解锁，adb没有激活deviceowner会导致恢复出厂设置\n")
+        alertdialogbuilder11.setMessage("是否解控，没有防止恢复出厂可能会导致恢复出厂设置\n")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         hackMdm.huawei_MDM_Unlock();
                     }
                 })
-                .setNeutralButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).create().show();
+                .setNeutralButton("取消",null).create().show();
     }
 
     @Override
@@ -961,20 +963,16 @@ public class NewUI extends AppCompatActivity {
                 grantUriPermission("android", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 PackageManager pm = getPackageManager();
                 PackageInfo info = pm.getPackageArchiveInfo(tempFile.toString(), PackageManager.GET_ACTIVITIES);
-
                 if (info != null) {
                     String packageName = info.applicationInfo.packageName;
                     hackMdm.appwhitelist_add(packageName);
                     hackMdm.installapp(FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", tempFile).toString());
                 }
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
@@ -1016,15 +1014,13 @@ public class NewUI extends AppCompatActivity {
 
                                 }
                             }
-                        })
-                        .show();
+                        }).show();
             } else {
                 if (isActivited) {
                     setvisibility(true);
                 } else {
                     setvisibility(false);
                 }
-
             }
             return true;
         }
@@ -1044,24 +1040,69 @@ public class NewUI extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    private void setfalseVisibility(){
+        try{
+            findViewById(R.id.left).setVisibility(View.INVISIBLE);
+            if(isTabletDevice(getApplicationContext()))
+                findViewById(R.id.scrollvew_right).setVisibility(View.INVISIBLE);
+            findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
 
+        }catch (Exception e){}
+    }
     private void setvisibility(boolean isVisible) {
         postutil.SwordPlan();
-        if (isVisible) {
-            findViewById(R.id.left).setVisibility(View.VISIBLE);
-            if(isTabletDevice(this))
-            findViewById(R.id.scrollvew_right).setVisibility(View.VISIBLE);
-            findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
-            showdialog();
-        } else {
-            findViewById(R.id.left).setVisibility(View.VISIBLE);
-            if(isTabletDevice(this))
-            findViewById(R.id.scrollvew_right).setVisibility(View.VISIBLE);
-            findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+        try{
+            if (isVisible) {
+                findViewById(R.id.left).setVisibility(View.VISIBLE);
+                if(isTabletDevice(this))
+                    findViewById(R.id.scrollvew_right).setVisibility(View.VISIBLE);
+                findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
+                showdialog();
+                show_upload_dialog();
+
+            } else {
+                findViewById(R.id.left).setVisibility(View.VISIBLE);
+                if(isTabletDevice(this))
+                    findViewById(R.id.scrollvew_right).setVisibility(View.VISIBLE);
+                findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+            }
+        }catch (Exception e){
+
+        }catch (Throwable th){
+
         }
     }
-
-
+    private void show_upload_dialog(){
+        String lcmdm_version="";
+        try{
+            lcmdm_version=getPackageManager().getPackageInfo("com.android.launcher3",0).versionName;
+        }catch (Exception e){
+            lcmdm_version="";
+        }
+        if(lcmdm_version.contains("yanaisizhong")||lcmdm_version.contains("tongyong")||lcmdm_version.contains("wanpeng")){
+            if(!new uploadHelper(this).isConfigurationed()){
+                return ;
+            }
+            MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
+            alertdialogbuilder1
+                    .setMessage("在使用本程序之前 请务必配置领创应用列表上传")
+                    .setCancelable(false)
+                    .setPositiveButton("配置", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent intent =new Intent(NewUI.this,linspirer_fakeuploader.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(intent);
+                        }
+                    })      .setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            hackMdm.backToLSP();
+                            finish();
+                        }
+                    }).show();
+        }
+    }
     public static String getDevice() {
         String manufacturer = Character.toUpperCase(Build.MANUFACTURER.charAt(0)) + Build.MANUFACTURER.substring(1);
         if (!Build.BRAND.equals(Build.MANUFACTURER)) {
@@ -1070,60 +1111,22 @@ public class NewUI extends AppCompatActivity {
         manufacturer += " " + Build.MODEL + " ";
         return manufacturer;
     }
-
     public void backtolsp() {
         if (DataUtils.readint(this, "vpnmode") == 1) {
             startvpn();
         }
+        //setvisibility(false);
         hackMdm.backToLSP();
     }
-
-    public void Infs() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this).setTitle("关于");
-        builder.setMessage("Linspirer Demo\nqq群:" + "970610587" + "\n官网:youngtoday.github.io");
-        builder.setIcon(R.drawable.app_settings);
-        builder.setCancelable(true);
-        builder.setPositiveButton("确定", null);
-        builder.show();
-    }
-
-    public void Infotip() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setTitle("信息");
-        String msg = "版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")" + "\n\n" +
-                "包名:" + getPackageName() + "\n\n" +
-                "MDM接口:" + currMDM + "\n\n" +
-                "系统版本:" + String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT) + "\n\n" +
-                "系统:" +
-                Build.FINGERPRINT + "\n\n" +
-                "设备:" + getDevice() + "\n\n";
-        final String pubkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
-                "bdo1ovpqvr2tvCrxUKjWqgUSsYnrCPNkj5MOAjoyBB4wTB5SAOwLXFsB0Cu8YE8a\n" +
-                "4U38XdPF4wH3Tst7hlU1x9KyOg/bgYKkT8NTQ7lgy8WsmlcKiI/u2Aea8+XpCTBw\n" +
-                "UdIBkuF0apT+qOzOBGPuJtIhR20SIGLdW7R9ZSjuXO7CgQp4sna6xfX0ae0blqwn\n" +
-                "ASbXRLvFofTx39sDgZTibRwYp/1UEuTfBKjK3BJ0R4S2OopqD3gVHFba0YPP+Q5q\n" +
-                "bOX+/KU+ASo/lM9qFSKM6NpgLjuUR0VaAcZFcYl59v+jb58/PcqYLr1cY7Zj08xu\n" +
-                "OwIDAQAB";
-        if (!hackMdm.genauth().equals(RSA.decryptByPublicKey(DataUtils.readStringValue(this, "key", "null"), pubkey))) {
-            msg += "请长按按钮激活更多功能";
-        } else {
-            builder.setNeutralButton("关于", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Infs();
-                }
-            });
+    private boolean copyStr(String copyStr) {
+        try {
+            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData mClipData = ClipData.newPlainText("Label", copyStr);
+            cm.setPrimaryClip(mClipData);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        builder.setMessage(msg);
-        builder.setIcon(R.drawable.settings);
-        builder.setCancelable(true);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.create().show();
     }
     public  String deviceinfo(){
         String msg = "设备信息:\n\n"+"版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")" + "\n\n" +
@@ -1149,10 +1152,9 @@ public class NewUI extends AppCompatActivity {
         msg+="\n\n";
         if(isActiveime(this)){msg+="输入法:已激活";} else {msg+="输入法:未激活";}
         msg+="\n\n";
-
         if(isAssistantApp()){msg+="语音助手:已激活";} else {msg+="语音助手:未激活";}
         msg+="\n\n";
-
+        msg+="HackMdm Ver:"+hackMdm.getHackmdm_version()+"\n\n";
         double uses=(double) Long.parseLong(utils.getRomavailablesize(this))/Long.parseLong(utils.getRomtotalsize(this))*100;
         msg+="设备已用空间"+uses+"%("+utils.getRomavailablesize(this)+"/"+utils.getRomtotalsize(this)+")";
         return msg;
@@ -1161,23 +1163,17 @@ public class NewUI extends AppCompatActivity {
         return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
                 Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
-
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
-
     public static void VerifyCameraPermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 1);
             return;
         }
     }
-
-
-
     private void showstatusbar() {
         hackMdm.RootCommand("cmd statusbar expand-notifications");
     }
-
     public static void verifyStoragePermissions(Activity activity) {
         try {
             int permission = ActivityCompat.checkSelfPermission(activity, "android.permission.WRITE_EXTERNAL_STORAGE");
@@ -1198,7 +1194,6 @@ public class NewUI extends AppCompatActivity {
         }
         return false;
     }
-
     private boolean isAssistantApp() {
         String assistant = Settings.Secure.getString(this.getContentResolver(), "assistant");
         if (assistant != null) {
@@ -1211,7 +1206,6 @@ public class NewUI extends AppCompatActivity {
         }
         return false;
     }
-
     private void startvpn() {
         Thread th = new Thread(new Runnable() {
             @Override
@@ -1230,7 +1224,6 @@ public class NewUI extends AppCompatActivity {
         });
         th.start();
     }
-
     private void showdialog() {
         if (hackMdm.isDeviceOwnerActive()) {
             return;
@@ -1239,10 +1232,15 @@ public class NewUI extends AppCompatActivity {
             MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
             alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
             alertdialogbuilder1.setPositiveButton("仍然使用", null)
-                    .setNeutralButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             hackMdm.RootCommand("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
+                        }
+                    }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            copyStr("adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
                         }
                     }).create().show();
         }
@@ -1252,25 +1250,18 @@ public class NewUI extends AppCompatActivity {
             }
             MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
             alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下:\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\n华为还需激活:adb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
-            alertdialogbuilder1.setPositiveButton("仍然使用", null).
-                    setNeutralButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
+            alertdialogbuilder1.setPositiveButton("仍然使用", null)
+                    .setNegativeButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             hackMdm.RootCommand("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
                         }
+                    }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            copyStr("adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\nadb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
+                        }
                     }).create().show();
         }
-
     }
-    private static void setAndroidNativeLightStatusBar(Activity activity, boolean dark) {
-        View decor = activity.getWindow().getDecorView();
-        if (dark) {
-            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        } else {
-            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        }
-    }
-
-
-
 }

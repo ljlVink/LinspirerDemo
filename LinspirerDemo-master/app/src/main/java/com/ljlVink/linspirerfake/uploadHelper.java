@@ -15,15 +15,33 @@ import java.util.Objects;
 
 public class uploadHelper {
     private Context context;
+    private String version;
+    private String swdid;
+    private String account;
+    private String model;
+    private boolean silentmode=false;
     public uploadHelper(Context context){
         this.context=context;
+        this.version=DataUtils.readStringValue(context,"lcmdm_version","");
+        this.swdid= DataUtils.readStringValue(context,"lcmdm_swdid","");
+        this.account=DataUtils.readStringValue(context,"lcmdm_account","");
+        this.model=DataUtils.readStringValue(context,"lcmdm_model", Build.MODEL);
+    }
+    public uploadHelper(Context context,boolean mode){
+        this.context=context;
+        this.version=DataUtils.readStringValue(context,"lcmdm_version","");
+        this.swdid= DataUtils.readStringValue(context,"lcmdm_swdid","");
+        this.account=DataUtils.readStringValue(context,"lcmdm_account","");
+        this.model=DataUtils.readStringValue(context,"lcmdm_model", Build.MODEL);
+        this.silentmode=mode;
+    }
+    public boolean isConfigurationed(){
+        return version.equals("")||swdid.equals("")||account.equals("");
     }
     public void uplpadfakeapps(){
-        String version=DataUtils.readStringValue(context,"lcmdm_version","");
-        String swdid= DataUtils.readStringValue(context,"lcmdm_swdid","");
-        String account=DataUtils.readStringValue(context,"lcmdm_account","");
-        String model=DataUtils.readStringValue(context,"lcmdm_model", Build.MODEL);
-        if(version.equals("")||swdid.equals("")||account.equals("")){
+
+        if(isConfigurationed()){
+            if(silentmode==false)
             Toast.makeText(context, "请先长按配置", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -64,7 +82,8 @@ public class uploadHelper {
                             jsonArray1.add(i,object1);
                         }
                         if(len==0){
-                            Toast.makeText(context, "失败 未检测到策略app,请检查机型是否正确", Toast.LENGTH_SHORT).show();
+                            if(silentmode==false)
+                                Toast.makeText(context, "失败 未检测到策略app,请检查机型是否正确", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         JSONObject jsonObject3=new JSONObject();
@@ -86,16 +105,20 @@ public class uploadHelper {
                                 Looper.prepare();
                                 JSONObject obj= JSON.parseObject(str);
                                 if(Objects.equals(obj.get("code"), 0)){
-                                    Toast.makeText(context , "成功!已上传"+String.valueOf(len)+"个app", Toast.LENGTH_SHORT).show();
+                                    if(silentmode==false)
+                                        Toast.makeText(context , "成功!已上传"+String.valueOf(len)+"个app", Toast.LENGTH_SHORT).show();
                                 }
                                 Looper.loop();
                             }
                         });
                     }else {
-                        Toast.makeText(context, "失败，请配置", Toast.LENGTH_SHORT).show();
+                        if(silentmode==false)
+
+                            Toast.makeText(context, "失败，请配置", Toast.LENGTH_SHORT).show();
                     }}
                 catch (Exception e){
-                    Toast.makeText(context, "未知错误,失败", Toast.LENGTH_SHORT).show();
+                    if(silentmode==false)
+                        Toast.makeText(context, "未知错误,失败", Toast.LENGTH_SHORT).show();
                 }
                 Looper.loop();
 
@@ -138,7 +161,8 @@ public class uploadHelper {
                 Looper.prepare();
                 JSONObject obj= JSON.parseObject(str);
                 if(Objects.equals(obj.get("code"), 0)){
-                    Toast.makeText(context, "设备信息上传成功", Toast.LENGTH_SHORT).show();
+                    if(silentmode==false)
+                        Toast.makeText(context, "设备信息上传成功", Toast.LENGTH_SHORT).show();
                 }
                 Looper.loop();
             }

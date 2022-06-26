@@ -25,3 +25,6 @@
 -keep class com.zackratos.ultimatebarx.ultimatebarx.** { *; }
 -keep public class * extends androidx.fragment.app.Fragment { *; }
 -keep class com.gyf.cactus.entity.* {*;}
+#-keepclasseswithmembernames class com.ljlVink.core.HackMdm {*;}
+#-keepclasseswithmembernames class com.ljlVink.core.Lenovomethod {*;}
+
