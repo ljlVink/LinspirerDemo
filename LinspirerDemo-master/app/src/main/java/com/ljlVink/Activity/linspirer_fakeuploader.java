@@ -75,7 +75,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
         tv_rom_ver.setText(DataUtils.readStringValue(this,"lcmdm_rom_ver",Build.DISPLAY));
         tv_brand.setText(DataUtils.readStringValue(this,"lcmdm_brand",Build.BRAND));
         tv_devicesn.setText(DataUtils.readStringValue(this,"lcmdm_sn",""));
-        tv_androidver.setText(String.valueOf(DataUtils.readint(this,"android_ver",utils.getsystemversion())));
+        tv_androidver.setText((DataUtils.readStringValue(this,"android_ver",utils.getsystemversion_str())));
         tv_macaddr.setText(DataUtils.readStringValue(this,"device_mac",utils.getMacaddress(this)));
         btn_gettastics.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +177,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                 String sn=tv_devicesn.getText().toString().toUpperCase(Locale.ROOT);
                 String brand=tv_brand.getText().toString();
                 String device_mac=tv_macaddr.getText().toString();
-                int android_ver=Integer.parseInt(tv_androidver.getText().toString());
+                String android_ver=(tv_androidver.getText().toString());
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_version",version);
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_swdid",swdid.toLowerCase(Locale.ROOT));
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_account",account);
@@ -185,8 +185,8 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_rom_ver",rom_ver);
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_sn",sn.toUpperCase(Locale.ROOT));
                 DataUtils.saveStringValue(getApplicationContext(),"lcmdm_brand",brand);
-                DataUtils.saveintvalue(getApplicationContext(),"android_ver",android_ver);
-                if(android_ver>=10){
+                DataUtils.saveStringValue(getApplicationContext(),"android_ver",android_ver);
+                if(android_ver.contains("10")||android_ver.contains("11")||android_ver.contains("12")||android_ver.contains("13")){
                     DataUtils.saveStringValue(getApplicationContext(),"device_mac",sn.toUpperCase(Locale.ROOT));
                 }
                 else DataUtils.saveStringValue(getApplicationContext(),"device_mac",device_mac.toUpperCase(Locale.ROOT));

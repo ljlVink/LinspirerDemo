@@ -63,6 +63,9 @@ public class utils {
     public static int getsystemversion() {
         return Integer.valueOf(Build.VERSION.RELEASE);
     }
+    public static String  getsystemversion_str(){
+        return  Build.VERSION.RELEASE;
+    }
     public static String getBrand() {
         return Build.BRAND;
     }

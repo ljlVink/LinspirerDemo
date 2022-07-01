@@ -39,12 +39,12 @@ public class DataUtils {
             x=spf.getInt(tag,defval);
         }catch (Exception e){
             Log.e("removed","removed conflicting val");
-            removeintvalue(context,tag);
+            removevalue(context,tag);
             x=spf.getInt(tag,defval);
         }
         return x;
     }
-    public static void removeintvalue(Context context,String tag){
+    public static void removevalue(Context context,String tag){
         SharedPreferences.Editor editor = context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE).edit();
         editor.remove(tag);
         editor.apply();
@@ -62,7 +62,14 @@ public class DataUtils {
 
     public static String readStringValue(Context context,String tag,String defVal){
         SharedPreferences spf = context.getApplicationContext().getSharedPreferences("data",Context.MODE_PRIVATE);
-        return spf.getString(tag,defVal);
+        String x;
+        try{
+            x= spf.getString(tag,defVal);
+        }catch (Exception e){
+            removevalue(context,tag);
+            x=spf.getString(tag,defVal);
+        }
+        return x;
     }
 
 }
