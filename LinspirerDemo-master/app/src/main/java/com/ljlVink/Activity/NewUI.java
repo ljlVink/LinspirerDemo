@@ -1155,8 +1155,8 @@ public class NewUI extends AppCompatActivity {
         if(isAssistantApp()){msg+="语音助手:已激活";} else {msg+="语音助手:未激活";}
         msg+="\n\n";
         msg+="HackMdm Ver:"+hackMdm.getHackmdm_version()+"\n\n";
-        double uses=(double) Long.parseLong(utils.getRomavailablesize(this))/Long.parseLong(utils.getRomtotalsize(this))*100;
-        msg+="设备已用空间"+uses+"%("+utils.getRomavailablesize(this)+"/"+utils.getRomtotalsize(this)+")";
+        double used=(double) Long.parseLong(utils.getRomavailablesize(this))/Long.parseLong(utils.getRomtotalsize(this))*100;
+        msg+="设备已用空间"+(100.00000000-used)+"%("+utils.getRomavailablesize(this)+"/"+utils.getRomtotalsize(this)+")";
         return msg;
     }
     private boolean isTabletDevice(Context context) {
