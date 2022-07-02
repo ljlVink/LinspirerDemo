@@ -2,7 +2,7 @@ package com.huosoft.wisdomclass.linspirerdemo;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.ljlVink.core.HackMdm;
+import com.ljlVink.core.core.HackMdm;
 import com.ljlVink.core.ToastUtils;
 
 public class ddpm extends AppCompatActivity {

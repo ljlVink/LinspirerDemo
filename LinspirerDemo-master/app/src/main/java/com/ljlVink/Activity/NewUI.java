@@ -19,26 +19,20 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.method.ScrollingMovementMethod;
 
-import android.text.style.UpdateAppearance;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,15 +41,14 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gyf.immersionbar.ImmersionBar;
 import com.king.zxing.CameraScan;
-import com.ljlVink.core.Postutil;
+import com.ljlVink.core.core.Postutil;
 import com.ljlVink.core.DataUtils;
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
 import com.huosoft.wisdomclass.linspirerdemo.ContentUriUtil;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.core.HackMdm;
+import com.ljlVink.core.core.HackMdm;
 import com.ljlVink.core.RSA;
 
-import com.ljlVink.core.ToastUtils;
 import com.ljlVink.core.security.envcheck;
 import com.ljlVink.linspirerfake.uploadHelper;
 import com.ljlVink.linspirerfake.utils;
@@ -142,7 +135,7 @@ public class NewUI extends AppCompatActivity {
         mData.add(new icon(R.drawable.linspirer, "密码计算"));
         mData.add(new icon(R.drawable.linspirer, "应用上传(长按配置)"));
         mData.add(new icon(R.drawable.linspirer, "三方教育桌面app隐藏"));
-
+        mData.add(new icon(R.drawable.settings,"面具模块禁用"));
         mAdapter = new MyAdapter<icon>(mData, R.layout.item_grid_icon) {
             @Override
             public void bindView(ViewHolder holder, icon obj) {
@@ -637,6 +630,29 @@ public class NewUI extends AppCompatActivity {
                             }
                         });
                         appbuilder.show();
+                        break;
+                    case 17:
+                        final EditText et3 = new EditText(NewUI.this);
+                        et3.setHint("模块id");
+                        new MaterialAlertDialogBuilder(NewUI.this)
+                                .setIcon(R.drawable.app_settings)
+                                .setView(et3).setTitle("输入面具模块名")
+                                .setPositiveButton("禁用", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        String ans=et3.getText().toString();
+                                        hackMdm.RootCommand("touch /data/adb/modules/"+ans+"/disable");
+                                    }
+                                }).setNegativeButton("启用", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        String ans=et3.getText().toString();
+                                        hackMdm.RootCommand("rm /data/adb/modules/"+ans+"/disable");
+                                    }
+                                })
+                                .show();
+
+                        break;
                 }
             }
         });

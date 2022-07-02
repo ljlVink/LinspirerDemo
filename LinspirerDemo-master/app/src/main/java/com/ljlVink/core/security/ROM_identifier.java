@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Build;
 
 import com.ljlVink.Activity.NewUI;
-import com.ljlVink.core.HackMdm;
+import com.ljlVink.core.core.HackMdm;
 
 public class ROM_identifier {
     private Context mContext;

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.ljlVink.Activity.autostart;
-import com.ljlVink.core.Postutil;
+import com.ljlVink.core.core.Postutil;
 
 public class MyReceiver extends BroadcastReceiver {
 

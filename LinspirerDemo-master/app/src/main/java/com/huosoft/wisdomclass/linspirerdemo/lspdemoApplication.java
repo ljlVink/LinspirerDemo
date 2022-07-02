@@ -1,21 +1,13 @@
 package com.huosoft.wisdomclass.linspirerdemo;
 import android.app.Application;
-import android.content.Context;
-import android.net.VpnService;
 
-import com.ljlVink.Activity.NewUI;
-import com.ljlVink.Activity.autostart;
 import com.ljlVink.MDM;
-import com.ljlVink.Receiver.MyReceiver;
-import com.ljlVink.core.CrashHandler;
 import com.ljlVink.core.DataCleanManager;
 import com.ljlVink.core.FileUtils;
-import com.ljlVink.core.HackMdm;
 import com.ljlVink.core.security.ROM_identifier;
 import com.ljlVink.core.security.Signutil;
 import com.tencent.bugly.Bugly;
 import com.zy.devicelibrary.UtilsApp;
-import com.zy.devicelibrary.utils.CpuUtils;
 
 public class lspdemoApplication extends Application {
     int MMDM=0;

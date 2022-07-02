@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -27,7 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.DataUtils;
-import com.ljlVink.core.HackMdm;
+import com.ljlVink.core.core.HackMdm;
 import com.ljlVink.core.ToastUtils;
 
 import java.util.ArrayList;

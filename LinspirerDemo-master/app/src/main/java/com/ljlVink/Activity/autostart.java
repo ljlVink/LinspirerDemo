@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.DataUtils;
-import com.ljlVink.core.Postutil;
+import com.ljlVink.core.core.Postutil;
 import com.ljlVink.linspirerfake.uploadHelper;
 import com.ljlVink.services.vpnService;
 
