@@ -112,5 +112,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
     compileOnly files('libs/framework_new.jar')
+    compileOnly files('libs/XposedBridgeApi-82.jar')
     compileOnly files('libs/framework.jar')
 }
