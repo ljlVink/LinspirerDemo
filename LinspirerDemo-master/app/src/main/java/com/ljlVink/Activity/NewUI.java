@@ -651,7 +651,6 @@ public class NewUI extends AppCompatActivity {
                                     }
                                 })
                                 .show();
-
                         break;
                 }
             }
