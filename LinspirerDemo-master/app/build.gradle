@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 59910
-        versionName "V5.9.10Release_20220626"
+        versionCode 59930
+        versionName "V5.10Release_20220703"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -104,6 +104,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:latest.release'
     implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.alibaba:fastjson:1.2.79'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+    implementation 'com.github.getActivity:XXPermissions:15.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:+'

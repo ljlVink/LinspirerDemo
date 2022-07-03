@@ -34,7 +34,7 @@
             <action android:name="android.intent.action.MAIN" />
         </intent>
     </queries>
-
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -66,6 +66,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinspirerDemo"
         android:usesCleartextTraffic="true">
+        <meta-data
+            android:name="ScopedStorage"
+            android:value="true" />
+
+
         <activity
             android:name="com.ljlVink.Activity.AppManageActivity"
             android:exported="false" />

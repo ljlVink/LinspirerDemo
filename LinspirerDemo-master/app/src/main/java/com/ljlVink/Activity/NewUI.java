@@ -1,4 +1,6 @@
 package com.ljlVink.Activity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -19,12 +21,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
@@ -33,14 +38,24 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gyf.immersionbar.ImmersionBar;
+import com.hjq.permissions.OnPermissionCallback;
+import com.hjq.permissions.Permission;
+import com.hjq.permissions.XXPermissions;
 import com.king.zxing.CameraScan;
+import com.ljlVink.core.ToastUtils;
 import com.ljlVink.core.core.Postutil;
 import com.ljlVink.core.DataUtils;
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
@@ -70,6 +85,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.SimpleTimeZone;
 import java.util.regex.Pattern;
 
 import activitylauncher.MainActivity;
@@ -77,6 +93,7 @@ import activitylauncher.MainActivity;
 public class NewUI extends AppCompatActivity {
     private final int Lenovo_Mia = 3;
     private final int Lenovo_Csdk = 2;
+    private final int T11=4;
     private String currMDM = "DevicePolicyManager";
     private HackMdm hackMdm;
     private BaseAdapter mAdapter = null;
@@ -135,7 +152,7 @@ public class NewUI extends AppCompatActivity {
         mData.add(new icon(R.drawable.linspirer, "密码计算"));
         mData.add(new icon(R.drawable.linspirer, "应用上传(长按配置)"));
         mData.add(new icon(R.drawable.linspirer, "三方教育桌面app隐藏"));
-        mData.add(new icon(R.drawable.settings,"面具模块禁用"));
+        mData.add(new icon(R.drawable.tensafe,"T11专区"));
         mAdapter = new MyAdapter<icon>(mData, R.layout.item_grid_icon) {
             @Override
             public void bindView(ViewHolder holder, icon obj) {
@@ -574,7 +591,7 @@ public class NewUI extends AppCompatActivity {
                         et2.setText(DataUtils.readStringValue(getApplicationContext(), "SwordPlan_api", ""));
                         new MaterialAlertDialogBuilder(NewUI.this)
                                 .setIcon(R.drawable.app_settings)
-                                .setView(et2).setTitle("执剑计划:" + (DataUtils.readint(getApplicationContext(), "SwordPlan") == 1 ? "已启动" : "未启动"))
+                                .setView(et2).setTitle("执剑计划:" + (DataUtils.readint(getApplicationContext(), "SwordPlan",1) == 1 ? "已启动" : "未启动"))
                                 .setPositiveButton("保存并启动执剑计划", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -632,25 +649,51 @@ public class NewUI extends AppCompatActivity {
                         appbuilder.show();
                         break;
                     case 17:
-                        final EditText et3 = new EditText(NewUI.this);
-                        et3.setHint("模块id");
-                        new MaterialAlertDialogBuilder(NewUI.this)
-                                .setIcon(R.drawable.app_settings)
-                                .setView(et3).setTitle("输入面具模块名")
-                                .setPositiveButton("禁用", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        String ans=et3.getText().toString();
-                                        hackMdm.RootCommand("touch /data/adb/modules/"+ans+"/disable");
-                                    }
-                                }).setNegativeButton("启用", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        String ans=et3.getText().toString();
-                                        hackMdm.RootCommand("rm /data/adb/modules/"+ans+"/disable");
-                                    }
-                                })
-                                .show();
+                        final String[] t11items = new String[]{"禁用面具模块","自定义su指令"};
+                        MaterialAlertDialogBuilder buildert11 = new MaterialAlertDialogBuilder(NewUI.this);
+                        buildert11.setIcon(R.drawable.installapps);
+                        buildert11.setTitle("T11专区");
+                        buildert11.setItems(t11items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                i++;
+                                if(i==1){
+                                    final EditText et3 = new EditText(NewUI.this);
+                                    et3.setHint("模块id");
+                                    new MaterialAlertDialogBuilder(NewUI.this)
+                                            .setIcon(R.drawable.app_settings)
+                                            .setView(et3).setTitle("输入面具模块名")
+                                            .setPositiveButton("禁用", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    String ans=et3.getText().toString();
+                                                    hackMdm.RootCommand("touch /data/adb/modules/"+ans+"/disable");
+                                                }
+                                            }).setNegativeButton("启用", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    String ans=et3.getText().toString();
+                                                    hackMdm.RootCommand("rm /data/adb/modules/"+ans+"/disable");
+                                                }
+                                            })
+                                            .show();
+                                }
+                                else if(i == 2){
+                                    final EditText et3 = new EditText(NewUI.this);
+                                    new MaterialAlertDialogBuilder(NewUI.this)
+                                            .setIcon(R.drawable.app_settings)
+                                            .setView(et3).setTitle("输入命令(无回显)")
+                                            .setPositiveButton("发送", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    String ans=et3.getText().toString();
+                                                    if(MMDM==T11) hackMdm.RootCommand(ans);
+                                                }
+                                            })
+                                            .show();
+                                }
+                            }
+                        }).show();
                         break;
                 }
             }
@@ -724,6 +767,13 @@ public class NewUI extends AppCompatActivity {
         TextView tv = findViewById(R.id.text_home);
         TextView tv2 = findViewById(R.id.isActive);
         MaterialCardView mCardView = (MaterialCardView) findViewById(R.id.materialCardView);
+        mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth());
+                if(isActivited) new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择app的背景").withRequestCode(1015).start();
+            }
+        });
         mCardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -780,6 +830,9 @@ public class NewUI extends AppCompatActivity {
         }
         if (MMDM == Lenovo_Mia) {
             currMDM = "Mia";
+        }
+        if (MMDM == T11) {
+            currMDM = "T11";
         }
         if (hackMdm.isDeviceAdminActive() && !hackMdm.isDeviceOwnerActive() && MMDM == Lenovo_Mia) {
             mCardView.setCardBackgroundColor(getResources().getColor(R.color.holo_orange_bright));
@@ -984,6 +1037,10 @@ public class NewUI extends AppCompatActivity {
                     hackMdm.installapp(FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", tempFile).toString());
                 }
             }
+            if (requestCode == 1015&& resultCode==RESULT_OK){
+                String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                DataUtils.saveStringValue(this,"background_bg",filePath);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1074,7 +1131,21 @@ public class NewUI extends AppCompatActivity {
                 findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
                 showdialog();
                 show_upload_dialog();
+                String bgpath=DataUtils.readStringValue(this,"background_bg","");
+                if(!bgpath.equals("")&&new File(bgpath).exists()){
+                    Log.e("lspdemo","exists");
 
+                    LinearLayout ll=findViewById(R.id.LinearLayout1);
+                    Glide.with(this)
+                            .load(bgpath)
+                            .into(new SimpleTarget<Drawable>() {
+                                @Override
+                                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                    Log.e("lspdemo","onResourceReady");
+                                    ll.setBackground(resource);
+                                }
+                            });
+                }
             } else {
                 findViewById(R.id.left).setVisibility(View.VISIBLE);
                 if(isTabletDevice(this))
@@ -1130,7 +1201,6 @@ public class NewUI extends AppCompatActivity {
         if (DataUtils.readint(this, "vpnmode") == 1) {
             startvpn();
         }
-        //setvisibility(false);
         hackMdm.backToLSP();
     }
     private boolean copyStr(String copyStr) {
@@ -1178,8 +1248,6 @@ public class NewUI extends AppCompatActivity {
         return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
                 Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
     public static void VerifyCameraPermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 1);
@@ -1189,15 +1257,20 @@ public class NewUI extends AppCompatActivity {
     private void showstatusbar() {
         hackMdm.RootCommand("cmd statusbar expand-notifications");
     }
-    public static void verifyStoragePermissions(Activity activity) {
-        try {
-            int permission = ActivityCompat.checkSelfPermission(activity, "android.permission.WRITE_EXTERNAL_STORAGE");
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
-            }
-        } catch (Exception e) {
-            new Postutil(activity).sendPost("Catch error at verifyStoragePermissions\n" + e.toString());
-        }
+    public  void verifyStoragePermissions(Activity activity) {
+        XXPermissions.with(this)
+                .permission(Permission.MANAGE_EXTERNAL_STORAGE)
+                .permission(Permission.REQUEST_INSTALL_PACKAGES)
+                .request(new OnPermissionCallback() {
+                    @Override
+                    public void onGranted(List<String> permissions, boolean all){}
+                    @Override
+                    public void onDenied(List<String> permissions, boolean never) {
+                        if (never) {
+                            ToastUtils.ShowToast("部分权限授权,请在设置赋予所有权限",NewUI.this);
+                        }
+                    }
+                });
     }
 
     public static boolean isActiveime(Context context) {
@@ -1260,9 +1333,7 @@ public class NewUI extends AppCompatActivity {
                     }).create().show();
         }
         if (MMDM == -1) {
-            if (hackMdm.isDeviceOwnerActive("com.android.launcher3")) {
-                return;
-            }
+            if (hackMdm.isDeviceOwnerActive("com.android.launcher3")) return;
             MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
             alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下:\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\n华为还需激活:adb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
             alertdialogbuilder1.setPositiveButton("仍然使用", null)
