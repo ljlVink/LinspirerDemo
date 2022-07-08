@@ -36,6 +36,7 @@
 -keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
   *** rewind();
 }
+-keep class com.ljlVink.xposed.**{*;}
 
 #-keepclasseswithmembernames class com.ljlVink.core.core.HackMdm {*;}
 #-keepclasseswithmembernames class com.ljlVink.core.core.Lenovomethod {*;}

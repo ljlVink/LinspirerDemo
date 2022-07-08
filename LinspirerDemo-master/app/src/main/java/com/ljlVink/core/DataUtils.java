@@ -66,6 +66,7 @@ public class DataUtils {
         try{
             x= spf.getString(tag,defVal);
         }catch (Exception e){
+            Log.e("removed","removed conflicting val");
             removevalue(context,tag);
             x=spf.getString(tag,defVal);
         }

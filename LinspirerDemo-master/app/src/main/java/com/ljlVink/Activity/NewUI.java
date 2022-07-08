@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 
 import android.util.Log;
@@ -38,14 +37,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.card.MaterialCardView;
@@ -651,7 +648,7 @@ public class NewUI extends AppCompatActivity {
                     case 17:
                         final String[] t11items = new String[]{"禁用面具模块","自定义su指令"};
                         MaterialAlertDialogBuilder buildert11 = new MaterialAlertDialogBuilder(NewUI.this);
-                        buildert11.setIcon(R.drawable.installapps);
+                        buildert11.setIcon(R.drawable.tensafe);
                         buildert11.setTitle("T11专区");
                         buildert11.setItems(t11items, new DialogInterface.OnClickListener() {
                             @Override
