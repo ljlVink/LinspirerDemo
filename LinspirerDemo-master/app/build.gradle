@@ -85,7 +85,6 @@ BlackObfuscator {
     depth 3
     obfClass=["com.ljlVink"]
     // 需要混淆的包或者类(匹配前面一段)
-
     blackClass = ["com.ljlVink.Activity","com.ljlVink.xposed"]
     // blackClass中的包或者类不会进行混淆(匹配前面一段)
 }
