@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 59930
-        versionName "V5.10Release_20220703"
+        versionCode 59931
+        versionName "V5.11Release_20220709"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -85,7 +85,7 @@ BlackObfuscator {
     depth 3
     obfClass=["com.ljlVink"]
     // 需要混淆的包或者类(匹配前面一段)
-    blackClass = ["com.ljlVink.Activity"]
+    blackClass = ["com.ljlVink.Activity","com.ljlVink.xposed"]
     // blackClass中的包或者类不会进行混淆(匹配前面一段)
 }
 stringfog {
@@ -115,6 +115,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
     compileOnly files('libs/framework_new.jar')
+    compileOnly files('libs/CSDK_Framework_new.jar')
+
     compileOnly files('libs/XposedBridgeApi-82.jar')
     compileOnly files('libs/framework.jar')
 }

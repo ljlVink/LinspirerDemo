@@ -41,7 +41,7 @@ public class MDM {
             return 3;
         }
         if(Build.BRAND.equals("T11")){
-            return 4;
+            return -1;//bug太多了 暂时入口点改成通用
         }
         return -1;
     }

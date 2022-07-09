@@ -17,7 +17,7 @@ public class MainUtils {
         this.context=context;
     }
     public String getversion(){
-        return "20220703";
+        return "不可用";
     }
     public void InitHack(){
         if(iUidSystemService==null){
