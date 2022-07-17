@@ -6,9 +6,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.widget.Toast;
 
-import com.ljlVink.core.ToastUtils;
+import com.ljlVink.ToastUtils.Toast;
 
 public class MainUtils {
     private Context context;
@@ -40,7 +39,7 @@ public class MainUtils {
                 },Context.BIND_AUTO_CREATE);
 
             }catch (Throwable th){
-                ToastUtils.ShowToast("onerun服务绑定异常",context);
+                Toast.ShowErr(context,"onerun服务绑定异常");
             }
         }
     }
@@ -62,7 +61,7 @@ public class MainUtils {
             },Context.BIND_AUTO_CREATE);
 
         }catch (Throwable th){
-            ToastUtils.ShowToast("onerun服务绑定异常",context);
+            Toast.ShowErr(context,"onerun服务绑定异常");
         }
     }
     public void InstallApp(String abspath){
@@ -95,12 +94,11 @@ public class MainUtils {
             },Context.BIND_AUTO_CREATE);
 
         }catch (Throwable th){
-            ToastUtils.ShowToast("onerun服务绑定异常",context);
+            Toast.ShowErr(context,"onerun服务绑定异常");
         }
 
     }
     public void FirstHack(){
-        ToastUtils.ShowToast("T11设备 加载",context);
         InitHack();
 
     }

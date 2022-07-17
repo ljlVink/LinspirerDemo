@@ -25,6 +25,7 @@ public class PostUtils {
                     response.close();
                 }
                 catch (Exception e){
+                    callback.onFailure();
                     e.printStackTrace();
                 }
             }

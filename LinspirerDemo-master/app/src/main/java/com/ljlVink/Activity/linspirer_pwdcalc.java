@@ -57,12 +57,22 @@ public class linspirer_pwdcalc extends AppCompatActivity {
                             }catch (Exception e){
                                 passwd="未查询到设备密码,请检查设备是否合法";
                             }
-                            final String psw2=passwd;
+                            final String psw2="领创设备密码:"+passwd;
                             tv3.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     tv3.setText(psw2);
                                 }});
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            tv3.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tv3.setText("网络异常");
+                                }});
+
                         }
                     });
                     break;

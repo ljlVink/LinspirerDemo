@@ -17,7 +17,7 @@ public class SoChecker {
     }
     public boolean socheck(){
         List<String> so=readlibs();
-        if(so.size()==4&&so.contains("libnmmvm.so")&&so.contains("libnmmp.so")&&so.contains("libantitrace.so")&&so.contains("libBugly.so")){
+        if(so.size()==1){
             return true;
         }
         return false;

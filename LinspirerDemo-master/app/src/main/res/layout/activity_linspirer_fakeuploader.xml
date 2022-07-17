@@ -78,6 +78,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
+            android:id="@+id/checkBox_absorb_command"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="接收命令(不建议在临近解控时使用)" />
+
+        <CheckBox
             android:id="@+id/checkBox_upload_device"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

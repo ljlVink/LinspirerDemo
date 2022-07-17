@@ -34,6 +34,7 @@
             <action android:name="android.intent.action.MAIN" />
         </intent>
     </queries>
+
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -66,10 +67,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinspirerDemo"
         android:usesCleartextTraffic="true">
+
         <meta-data
             android:name="ScopedStorage"
             android:value="true" />
-
 
         <activity
             android:name="com.ljlVink.Activity.AppManageActivity"
@@ -112,16 +113,21 @@
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="*/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="lspdemo" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="design_width_in_dp"
             android:value="1280" />
@@ -196,7 +202,9 @@
             android:excludeFromRecents="true"
             android:exported="true"
             android:icon="@mipmap/icon"
-            android:label="后门解除lspdemo控制" />
+            android:label="后门解除lspdemo控制"
+            android:theme="@style/TranslucentTheme" />
+
 
         <receiver
             android:name=".AR"
@@ -266,7 +274,6 @@
             android:icon="@mipmap/icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -290,6 +297,7 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="xposedmodule"
             android:value="true" />
@@ -302,7 +310,6 @@
         <meta-data
             android:name="xposedminversion"
             android:value="82" />
-
     </application>
 
 </manifest>

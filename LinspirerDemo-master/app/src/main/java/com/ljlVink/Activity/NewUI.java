@@ -40,7 +40,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -52,7 +52,7 @@ import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.king.zxing.CameraScan;
-import com.ljlVink.core.ToastUtils;
+import com.ljlVink.ToastUtils.Toast;
 import com.ljlVink.core.core.Postutil;
 import com.ljlVink.core.DataUtils;
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
@@ -82,7 +82,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.SimpleTimeZone;
 import java.util.regex.Pattern;
 
 import activitylauncher.MainActivity;
@@ -217,7 +216,7 @@ public class NewUI extends AppCompatActivity {
                                     }
 
                                 } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(), "该设置对你无效" + e.toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.ShowErr(NewUI.this,"该设置对你无效");
                                 }
                             }
                         });
@@ -418,7 +417,7 @@ public class NewUI extends AppCompatActivity {
                                     }
 
                                 } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(), "该设置对你无效" + e.toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.ShowErr(NewUI.this,"该设置对你无效");          
                                 }
                             }
                         });
@@ -518,10 +517,10 @@ public class NewUI extends AppCompatActivity {
                                     DataUtils.saveStringValue(getApplicationContext(), "wallpaper", "");
                                 } else if (i == 11) {
                                     DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 1);
-                                    Toast.makeText(NewUI.this, "重启app生效", Toast.LENGTH_SHORT).show();
+                                    Toast.ShowSuccess(NewUI.this, "重启app生效");
                                 } else if (i == 12) {
                                     DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 0);
-                                    Toast.makeText(NewUI.this, "重启app生效", Toast.LENGTH_SHORT).show();
+                                    Toast.ShowSuccess(NewUI.this, "重启app生效");
                                 } else if (i == 13) {
                                     try {
                                         startActivity(new Intent("android.settings.USER_SETTINGS"));
@@ -554,7 +553,7 @@ public class NewUI extends AppCompatActivity {
                                                         android.util.Log.e(x[0],x[1]);
                                                         hackMdm.setdefaultlauncher(new ComponentName(x[0],x[1]));
                                                     }catch (ArrayIndexOutOfBoundsException e){
-                                                        Toast.makeText(NewUI.this, "失败", Toast.LENGTH_SHORT).show();
+                                                        Toast.ShowErr(NewUI.this, "失败");
                                                     }
                                                 }
                                             }).setNegativeButton("取消", null).show();
@@ -664,13 +663,13 @@ public class NewUI extends AppCompatActivity {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     String ans=et3.getText().toString();
-                                                    hackMdm.RootCommand("touch /data/adb/modules/"+ans+"/disable");
+                                                    hackMdm.T11Cmd("touch /data/adb/modules/"+ans+"/disable");
                                                 }
                                             }).setNegativeButton("启用", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     String ans=et3.getText().toString();
-                                                    hackMdm.RootCommand("rm /data/adb/modules/"+ans+"/disable");
+                                                    hackMdm.T11Cmd("rm /data/adb/modules/"+ans+"/disable");
                                                 }
                                             })
                                             .show();
@@ -792,7 +791,7 @@ public class NewUI extends AppCompatActivity {
                                 }
                                 DataUtils.saveStringValue(getApplicationContext(), "key", ed.getText().toString());
                                 if (RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth())) {
-                                    Toast.makeText(getApplicationContext(), "校验成功", Toast.LENGTH_SHORT).show();
+                                    Toast.ShowSuccess(getApplicationContext(), "校验成功");
                                     setvisibility(true);
                                 } else {
                                     setvisibility(false);
@@ -913,7 +912,7 @@ public class NewUI extends AppCompatActivity {
                 String apkSourcePath = ContentUriUtil.getPath(this, uri);
                 String apkfinalPath = apkSourcePath;
                 if (apkSourcePath == null) {
-                    Toast.makeText(this, "外部储存:解析apk到本地...请稍等....", Toast.LENGTH_SHORT).show();
+                    Toast.ShowInfo(this, "外部储存:解析apk到本地...请稍等....");
                     File tempFile = new File(getExternalCacheDir(), System.currentTimeMillis() + ".apk");
                     try {
                         InputStream is = getContentResolver().openInputStream(uri);
@@ -929,10 +928,10 @@ public class NewUI extends AppCompatActivity {
                             is.close();
                         }
                     } catch (IOException e) {
-                        Toast.makeText(this, "解析异常:原因可能app过大或被断开了链接", Toast.LENGTH_SHORT).show();
+                        Toast.ShowErr(this, "解析异常:原因可能app过大或被断开了链接");
                         postutil.sendPost("Catch Exception onActivityResult() IOExpection\n" + e.toString());
                     }
-                    Toast.makeText(this, "解析完成", Toast.LENGTH_SHORT).show();
+                    Toast.ShowSuccess(this, "解析完成");
                     apkfinalPath = tempFile.toString();
                 } else {
                     apkfinalPath = apkSourcePath;
@@ -940,7 +939,7 @@ public class NewUI extends AppCompatActivity {
                 PackageManager pm = getPackageManager();
                 PackageInfo info = pm.getPackageArchiveInfo(apkfinalPath, PackageManager.GET_ACTIVITIES);
                 if (info == null) {
-                    Toast.makeText(this, "Invalid apk:请选择一个正常的应用", Toast.LENGTH_SHORT).show();
+                    Toast.ShowErr(this, "Invalid apk:请选择一个正常的应用");
                 }
                 if (info != null) {
                     String packageName = info.applicationInfo.packageName;
@@ -957,7 +956,7 @@ public class NewUI extends AppCompatActivity {
                 PackageInfo info1 = pm1.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
                 String appname = info1.packageName;
                 hackMdm.appwhitelist_add(appname);
-                Toast.makeText(this, "静默安装" + appname, Toast.LENGTH_SHORT).show();
+                Toast.ShowErr(this, "静默安装" + appname);
                 hackMdm.installapp(filePath);
             }
             if (requestCode == 1011) {
@@ -985,12 +984,12 @@ public class NewUI extends AppCompatActivity {
                     for (int i = 0; i <= cmd.length; i++) {
                         if (cmd[i].equals("Toast")) {
                             i++;
-                            Toast.makeText(this, cmd[i], Toast.LENGTH_SHORT).show();
+                            Toast.ShowInfo(this, cmd[i]);
                             continue;
                         }
                         if (cmd[i].equals("addwhite")) {
                             i++;
-                            Toast.makeText(this, "addwhite:" + cmd[i], Toast.LENGTH_SHORT).show();
+                            Toast.ShowInfo(this, "addwhite:" + cmd[i]);
                             hackMdm.appwhitelist_add(cmd[i]);
                             continue;
                         }
@@ -1022,7 +1021,7 @@ public class NewUI extends AppCompatActivity {
                         is.close();
                     }
                 } catch (IOException e) {
-                    Toast.makeText(this, "解析异常:原因可能app过大或被断开了链接", Toast.LENGTH_SHORT).show();
+                    Toast.ShowErr(this, "解析异常:原因可能app过大或被断开了链接");
                     postutil.sendPost("Catch Exception onActivityResult() IOExpection\n" + e.toString());
                 }
                 grantUriPermission("android", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -1264,7 +1263,7 @@ public class NewUI extends AppCompatActivity {
                     @Override
                     public void onDenied(List<String> permissions, boolean never) {
                         if (never) {
-                            ToastUtils.ShowToast("部分权限授权,请在设置赋予所有权限",NewUI.this);
+                            com.ljlVink.ToastUtils.Toast.ShowWarn(NewUI.this,"部分权限授权,请在设置赋予所有权限");
                         }
                     }
                 });

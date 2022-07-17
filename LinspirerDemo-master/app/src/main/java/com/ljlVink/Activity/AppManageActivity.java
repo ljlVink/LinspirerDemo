@@ -20,14 +20,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
+import com.ljlVink.ToastUtils.Toast;
 import com.ljlVink.core.DataUtils;
 import com.ljlVink.core.core.HackMdm;
-import com.ljlVink.core.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class AppManageActivity extends AppCompatActivity {
         ImmersionBar.with(this).transparentStatusBar().init();
 
         TextView tv3 = findViewById(R.id.applist);
-        lspdemopkgname = FindLspDemoPkgName();
+        lspdemopkgname = FindLspDemoPkgName(this,"linspirerdemo");
 
         tv3.post(new Runnable() {
             @Override
@@ -89,7 +88,7 @@ public class AppManageActivity extends AppCompatActivity {
                                     try {
                                         startActivity(getPackageManager().getLaunchIntentForPackage(pkgname));
                                     } catch (Exception e) {
-                                        Toast.makeText(getApplicationContext(), "出现错误", Toast.LENGTH_SHORT).show();
+                                        Toast.ShowErr(getApplicationContext(), "出现错误");
                                     }
                                 });
                         builder.setIcon(getAppIcon(AppManageActivity.this, pkgname));
@@ -131,7 +130,7 @@ public class AppManageActivity extends AppCompatActivity {
                                     });
                                     thread.start();
                                 } catch (Exception e) {
-                                    ToastUtils.ShowToast("启动失败", getApplicationContext());
+                                    Toast.ShowErr(getApplicationContext(),"启动失败");
                                 }
                             });
                         }
@@ -192,7 +191,7 @@ public class AppManageActivity extends AppCompatActivity {
                                     try {
                                         startActivity(getPackageManager().getLaunchIntentForPackage(pkgname));
                                     } catch (Exception e) {
-                                        Toast.makeText(getApplicationContext(), "出现错误", Toast.LENGTH_SHORT).show();
+                                        Toast.ShowErr(getApplicationContext(), "出现错误");
                                     }
                                 });
 
@@ -386,20 +385,20 @@ public class AppManageActivity extends AppCompatActivity {
         }
         return null;
     }
-    public ArrayList<String> FindLspDemoPkgName() {
+    public static ArrayList<String> FindLspDemoPkgName(Context context,String meta) {
         ArrayList<String> lst = new ArrayList<String>();
-        PackageManager pm = getPackageManager();
+        PackageManager pm = context.getPackageManager();
         List<PackageInfo> packages = pm.getInstalledPackages(0);
         for (PackageInfo packageInfo : packages) {
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packageInfo.packageName.equals(getPackageName())) {
-                if (getMetaDataValue(this, "HackMdm", packageInfo.packageName).equals("linspirerdemo")) {
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packageInfo.packageName.equals(context.getPackageName())) {
+                if (getMetaDataValue(context, "HackMdm", packageInfo.packageName).equals(meta)) {
                     lst.add(packageInfo.packageName);
                 }
             }
         }
         return lst;
     }
-    public String getMetaDataValue(Context context, String meatName, String pkgname) {
+    public static String getMetaDataValue(Context context, String meatName, String pkgname) {
         String value = "null";
         PackageManager packageManager = context.getPackageManager();
         ApplicationInfo applicationInfo;

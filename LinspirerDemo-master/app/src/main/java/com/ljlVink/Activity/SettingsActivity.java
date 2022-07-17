@@ -4,12 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 
 import java.util.Objects;
 
-import com.ljlVink.Activity.SettingsFragment;
 public class SettingsActivity extends AppCompatActivity {
 
     @Override

@@ -4,15 +4,15 @@ plugins {
     id 'stringfog'
 }
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "vizpower.imeeting"
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 59931
-        versionName "V5.11Release_20220709"
+        versionCode 60000
+        versionName "V6.0Release_20220715"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -80,10 +80,10 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled true
+    enabled false
     // 混淆深度
     depth 3
-    obfClass=["com.ljlVink"]
+    obfClass=["com.ljlVink","com.huosoft"]
     // 需要混淆的包或者类(匹配前面一段)
     blackClass = ["com.ljlVink.Activity","com.ljlVink.xposed"]
     // blackClass中的包或者类不会进行混淆(匹配前面一段)
@@ -91,7 +91,7 @@ BlackObfuscator {
 stringfog {
     enable true
     implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
-    fogPackages = ["com.ljlVink"]
+    fogPackages = ["com.ljlVink","com.huosoft"]
 }
 dependencies {
     implementation 'com.github.z244370114:DeviceLibray:1.0.0'
@@ -107,6 +107,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
     implementation 'com.github.getActivity:XXPermissions:15.0'
+    implementation 'com.github.GrenderG:Toasty:1.5.2'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:+'
@@ -114,9 +115,10 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
+
+
     compileOnly files('libs/framework_new.jar')
     compileOnly files('libs/CSDK_Framework_new.jar')
-
     compileOnly files('libs/XposedBridgeApi-82.jar')
     compileOnly files('libs/framework.jar')
 }

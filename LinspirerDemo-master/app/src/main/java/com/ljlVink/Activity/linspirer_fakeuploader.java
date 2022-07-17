@@ -5,21 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.provider.ContactsContract;
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
+import com.ljlVink.ToastUtils.Toast;
 import com.ljlVink.core.DataUtils;
+import com.ljlVink.linspirerfake.AesUtil;
 import com.ljlVink.linspirerfake.ICallback;
 import com.ljlVink.linspirerfake.PostUtils;
 import com.ljlVink.linspirerfake.utils;
@@ -47,6 +47,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
         Button btn_gettastics=findViewById(R.id.btn_gettastics);
         Button btn_save=findViewById(R.id.btn_save);
         CheckBox cb=findViewById(R.id.checkBox_upload_device);
+        CheckBox cb2=findViewById(R.id.checkBox_absorb_command);
         String lcmdm_version="";
         try{
             lcmdm_version=getPackageManager().getPackageInfo("com.android.launcher3",0).versionName;
@@ -68,6 +69,9 @@ public class linspirer_fakeuploader extends AppCompatActivity {
             tv_macaddr.setEnabled(true);
             tv_devicesn.setEnabled(true);
         }
+        if(DataUtils.readint(this,"absorb_cmd",1)==1){
+            cb2.setChecked(true);
+        }
         tv_version.setText(DataUtils.readStringValue(this,"lcmdm_version",lcmdm_version));
         tv_swdid.setText(DataUtils.readStringValue(this,"lcmdm_swdid",""));
         tv_account.setText(DataUtils.readStringValue(this,"lcmdm_account",""));
@@ -86,22 +90,25 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                 String model=tv_model.getText().toString();
                 JSONObject jsonObject=new JSONObject();
                 jsonObject.put("id","1");
-                jsonObject.put("!version",2);
+                jsonObject.put("!version",6);
                 jsonObject.put("jsonrpc","2.0");
                 jsonObject.put("is_encrypt",false);
-                jsonObject.put("client_version","vtongyongshengchan_4.6.8");
+                if(version.equals("")){
+                    version="tongyongshengchan_5.03.012.0";
+                }
+                jsonObject.put("client_version",version);
                 JSONObject jsonObject1=new JSONObject();
                 jsonObject1.put("swdid",swdid);
                 jsonObject1.put("email",account);
                 jsonObject1.put("model",model);
                 jsonObject1.put("launcher_version",version);
                 jsonObject.put("method","com.linspirer.tactics.gettactics");
-                jsonObject.put("params",jsonObject1);
+                jsonObject.put("params", AesUtil.encrypt(jsonObject1.toString()));
                 new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
                     @Override
                     public void callback(String str) {
                         try{
-                        JSONObject obj= JSON.parseObject(str);
+                        JSONObject obj= JSON.parseObject(AesUtil.decrypt(str));
                         if(Objects.equals(obj.get("code"), 0)){
                             String result="";
                             JSONObject obj1=obj.getJSONObject("data");
@@ -129,7 +136,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                             textview_information.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    textview_information.setText("失败，请检查账号或者swdid是否正常，通常第三方sso登录时账号与sso账号不同\n"+str);
+                                    textview_information.setText("失败，请检查账号或者swdid是否正常，通常第三方sso登录时账号与sso账号不同\n"+AesUtil.decrypt(str));
                                     scrolldown();
                                 }});
                         }}
@@ -141,6 +148,16 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                                     scrolldown();
                                 }});
                         }
+                    }
+                    @Override
+                    public void onFailure(){
+                        textview_information.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                textview_information.setText("网路异常\n");
+                                scrolldown();
+                            }});
+
                     }
                 });
             }
@@ -164,6 +181,15 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                     tv_androidver.setEnabled(false);
                     tv_devicesn.setEnabled(false);
                 }
+            }
+        });
+        cb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(cb2.isChecked()){
+                    DataUtils.saveintvalue(getApplicationContext(),"absorb_cmd",1);
+                }else DataUtils.saveintvalue(getApplicationContext(),"absorb_cmd",0);
+
             }
         });
         btn_save.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +216,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                     DataUtils.saveStringValue(getApplicationContext(),"device_mac",sn.toUpperCase(Locale.ROOT));
                 }
                 else DataUtils.saveStringValue(getApplicationContext(),"device_mac",device_mac.toUpperCase(Locale.ROOT));
-                Toast.makeText(linspirer_fakeuploader.this, "已保存", Toast.LENGTH_SHORT).show();
+                Toast.ShowSuccess(linspirer_fakeuploader.this, "已保存");
             }
         });
     }

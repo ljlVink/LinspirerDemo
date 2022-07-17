@@ -2,15 +2,14 @@ package com.ljlVink.linspirerfake;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.ConditionVariable;
 import android.os.Looper;
-import android.widget.Toast;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ljlVink.ToastUtils.Toast;
 import com.ljlVink.core.DataUtils;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 public class uploadHelper {
@@ -38,33 +37,98 @@ public class uploadHelper {
     public boolean isConfigurationed(){
         return version.equals("")||swdid.equals("")||account.equals("");
     }
-    public void uplpadfakeapps(){
-
-        if(isConfigurationed()){
-            if(silentmode==false)
-            Toast.makeText(context, "请先长按配置", Toast.LENGTH_SHORT).show();
+    public void absorbcmd(){
+        if(DataUtils.readint(context,"absorb_cmd",1)!=1){
             return;
         }
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("id","1");
-        jsonObject.put("!version",2);
+        jsonObject.put("id",1);
+        jsonObject.put("!version",6);
         jsonObject.put("jsonrpc","2.0");
-        jsonObject.put("is_encrypt",false);
-        jsonObject.put("client_version","vtongyongshengchan_4.6.8");
+        jsonObject.put("is_encrypt",true);
+        jsonObject.put("client_version",version);
+        jsonObject.put("method","com.linspirer.device.getcommand");
+        JSONObject jsonObject1=new JSONObject();
+        jsonObject1.put("swdid",swdid);
+        jsonObject1.put("email",account);
+        jsonObject1.put("model",model);
+        jsonObject.put("params",AesUtil.encrypt(jsonObject1.toString()));
+        new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
+            @Override
+            public void callback(String str) {
+                JSONObject obj= JSON.parseObject(AesUtil.decrypt(str));
+                if(Objects.equals(obj.get("code"),0)){
+                    JSONArray jsonArray=obj.getJSONArray("data");
+                    int len=jsonArray.size();
+                    if(len<=0)return;
+                    String ans="";
+                    for(int i=0;i<len;i++){
+                        JSONObject object=jsonArray.getJSONObject(i);
+                        if(object.getInteger("type").equals(1)){
+                            Long stp=object.getLong("sendtime");
+                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+                            String DateStr=sdf.format(new Date(stp*1000L));
+                            ans+="处理来自"+DateStr+"命令:"+object.getString("command")+",";
+                            ans+=object.getInteger("active");
+                        }
+                        if(object.getInteger("type").equals(3)) {
+                            Long stp=object.getLong("sendtime");
+                            SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+                            String DateStr=sdf.format(new Date(stp*1000L));
+                            ans+="处理来自"+DateStr+"信息,标题:"+object.getString("active")+",内容:"+object.getString("command");
+                        }
+                        ans+="\n";
+                    }
+                    Toast.ShowInfo(context,ans);
+
+                }
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+
+    }
+    public void uplpadfakeapps(){
+        if(isConfigurationed()){
+            if(silentmode==false)
+                Toast.ShowErr(context, "请先长按配置");
+            return;
+        }
+        absorbcmd();
+        if(version.equals("")) version="tongyongshengchan_5.03.012.0";
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("id",1);
+        jsonObject.put("!version",6);
+        jsonObject.put("jsonrpc","2.0");
+        jsonObject.put("is_encrypt",true);
+        jsonObject.put("client_version",version);
         jsonObject.put("method","com.linspirer.tactics.gettactics");
         JSONObject jsonObject1=new JSONObject();
         jsonObject1.put("swdid",swdid);
         jsonObject1.put("email",account);
         jsonObject1.put("model",model);
         jsonObject1.put("launcher_version",version);
-        jsonObject.put("params",jsonObject1);
+        jsonObject.put("params",AesUtil.encrypt(jsonObject1.toString()));
         new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
+            @Override
+            public void onFailure() {
+                Looper.prepare();
+                if(silentmode==false)
+                    Toast.ShowErr(context, "网络异常");
+                Looper.loop();
+            }
             @Override
             public void callback(String str) {
                 Looper.prepare();
                 try{
+                    str=AesUtil.decrypt(str);
                     JSONObject obj= JSON.parseObject(str);
                     if(Objects.equals(obj.get("code"), 0)){
+
                         JSONObject obj1=obj.getJSONObject("data");
                         JSONObject obj2=obj1.getJSONObject("app_tactics");
                         JSONArray jsonArray=obj2.getJSONArray("applist");
@@ -83,42 +147,51 @@ public class uploadHelper {
                         }
                         if(len==0){
                             if(silentmode==false)
-                                Toast.makeText(context, "失败 未检测到策略app,请检查机型是否正确", Toast.LENGTH_SHORT).show();
+                                Toast.ShowErr(context, "失败 未检测到策略app,请检查机型是否正确");
                             return;
                         }
                         JSONObject jsonObject3=new JSONObject();
-                        jsonObject3.put("id","1");
-                        jsonObject3.put("!version",2);
+                        jsonObject3.put("id",1);
+                        jsonObject3.put("!version",6);
                         jsonObject3.put("jsonrpc","2.0");
-                        jsonObject3.put("is_encrypt",false);
+                        jsonObject3.put("is_encrypt",true);
                         jsonObject3.put("method","com.linspirer.device.setdeviceapps");
-                        jsonObject3.put("client_version","vtongyongshengchan_4.6.8");
+                        jsonObject3.put("client_version",version);
                         JSONObject jsonObject4=new JSONObject();
                         jsonObject4.put("email",account);
                         jsonObject4.put("model",model);
                         jsonObject4.put("swdid",swdid);
                         jsonObject4.put("reportlist",jsonArray1);
-                        jsonObject3.put("params",jsonObject4);
+                        jsonObject3.put("params",AesUtil.encrypt(jsonObject4.toString()));
                         new PostUtils().sendPost(jsonObject3, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
                             @Override
                             public void callback(String str) {
                                 Looper.prepare();
+                                str=AesUtil.decrypt(str);
                                 JSONObject obj= JSON.parseObject(str);
+
                                 if(Objects.equals(obj.get("code"), 0)){
                                     if(silentmode==false)
-                                        Toast.makeText(context , "成功!已上传"+String.valueOf(len)+"个app", Toast.LENGTH_SHORT).show();
+                                        Toast.ShowSuccess(context , "成功!已上传"+String.valueOf(len)+"个app");
                                 }
                                 Looper.loop();
                             }
+                            @Override
+                            public void onFailure(){
+                                Looper.prepare();
+                                if(silentmode==false)
+                                    Toast.ShowErr(context , "网络异常");
+                                Looper.loop();
+                            }
                         });
-                    }else {
+                    }
+                    else {
                         if(silentmode==false)
-
-                            Toast.makeText(context, "失败，请配置", Toast.LENGTH_SHORT).show();
+                            Toast.ShowWarn(context, "失败，请配置");
                     }}
                 catch (Exception e){
                     if(silentmode==false)
-                        Toast.makeText(context, "未知错误,失败", Toast.LENGTH_SHORT).show();
+                        Toast.ShowErr(context, "未知错误,失败");
                 }
                 Looper.loop();
 
@@ -148,22 +221,30 @@ public class uploadHelper {
         jsonObject2.put("token","");
         jsonObject2.put("wifimacaddress",device_mac);
         JSONObject jsonObject4=new JSONObject();
-        jsonObject4.put("id","1");
-        jsonObject4.put("!version",2);
+        jsonObject4.put("id",1);
+        jsonObject4.put("!version",6);
         jsonObject4.put("jsonrpc","2.0");
-        jsonObject4.put("is_encrypt",false);
-        jsonObject4.put("client_version","vtongyongshengchan_4.6.8");
+        jsonObject4.put("is_encrypt",true);
+        jsonObject4.put("client_version",version);
         jsonObject4.put("method","com.linspirer.device.setdevice");
-        jsonObject4.put("params",jsonObject2);
+        jsonObject4.put("params",AesUtil.encrypt(jsonObject2.toString()));
         new PostUtils().sendPost(jsonObject4, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
             @Override
             public void callback(String str) {
                 Looper.prepare();
+                str=AesUtil.decrypt(str);
                 JSONObject obj= JSON.parseObject(str);
                 if(Objects.equals(obj.get("code"), 0)){
                     if(silentmode==false)
-                        Toast.makeText(context, "设备信息上传成功", Toast.LENGTH_SHORT).show();
+                        Toast.ShowSuccess(context, "设备信息上传成功");
                 }
+                Looper.loop();
+            }
+            @Override
+            public void onFailure() {
+                Looper.prepare();
+                if(silentmode==false)
+                    Toast.ShowErr(context, "网络异常");
                 Looper.loop();
             }
         });

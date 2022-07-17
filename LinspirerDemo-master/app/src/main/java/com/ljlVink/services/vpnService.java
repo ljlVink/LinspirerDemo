@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.Activity.NewUI;
+import com.ljlVink.core.DataUtils;
 
 import java.io.IOException;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class vpnService extends VpnService {
     private ParcelFileDescriptor vpnStart() {
         // Build VPN service
         final Builder builder = new Builder();
-        builder.setSession(getString(R.string.app_name));
+        builder.setSession("LinspirerDemo");
         builder.addAddress("10.1.10.1", 32);
         builder.addAddress("fd00:1:fd00:1:fd00:1:fd00:1", 128);
         builder.addRoute("0.0.0.0", 0);
@@ -65,6 +66,9 @@ public class vpnService extends VpnService {
         // Add list of allowed applications
         try {
             builder.addAllowedApplication("com.android.launcher3");
+            if(DataUtils.readint(this,"disallow_appstore_internet",1)==1){
+                builder.addAllowedApplication("com.ndwill.swd.appstore");
+            }
         } catch (PackageManager.NameNotFoundException ex) {
         }
         // Build configure intent

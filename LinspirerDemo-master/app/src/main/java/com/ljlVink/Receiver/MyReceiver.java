@@ -3,9 +3,9 @@ package com.ljlVink.Receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import com.ljlVink.Activity.autostart;
+import com.ljlVink.ToastUtils.Toast;
 import com.ljlVink.core.core.Postutil;
 
 public class MyReceiver extends BroadcastReceiver {
@@ -25,22 +25,22 @@ public class MyReceiver extends BroadcastReceiver {
             String nickName=intent.getStringExtra("nickName");
             String className=intent.getStringExtra("className");
             String schoolName=intent.getStringExtra("schoolName");
-            Toast.makeText(context,"acc:"+account+",nickname"+nickName+",classname"+className+",schoolname"+schoolName,Toast.LENGTH_SHORT).show();
+            Toast.ShowInfo(context, "acc:" + account + ",nickname" + nickName + ",classname" + className + ",schoolname" + schoolName);
         }
         if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")) {
             String packageName = intent.getDataString();
-            Toast.makeText(context, "安装了应用"+packageName, Toast.LENGTH_SHORT).show();
+            Toast.ShowInfo(context, "安装了应用"+packageName);
             new Postutil(context).sendPost("安装了应用："+packageName);
         }
         if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {
             String packageName = intent.getDataString();
-            Toast.makeText(context, "卸载了应用："+packageName, Toast.LENGTH_SHORT).show();
+            Toast.ShowInfo(context, "卸载了应用："+packageName);
 
             new Postutil(context).sendPost("卸载了应用："+packageName);
         }
         if (intent.getAction().equals("android.intent.action.PACKAGE_REPLACED")) {
             String packageName = intent.getDataString();
-            Toast.makeText(context, "覆盖安装应用："+packageName, Toast.LENGTH_SHORT).show();
+            Toast.ShowInfo(context, "覆盖安装应用："+packageName);
             new Postutil(context).sendPost("覆盖安装应用："+packageName);
         }
     }

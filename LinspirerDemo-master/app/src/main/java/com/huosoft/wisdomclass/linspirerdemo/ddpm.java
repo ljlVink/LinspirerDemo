@@ -1,22 +1,42 @@
 package com.huosoft.wisdomclass.linspirerdemo;
-import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.ljlVink.core.core.HackMdm;
-import com.ljlVink.core.ToastUtils;
 
-public class ddpm extends AppCompatActivity {
+public class ddpm extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ddpm);
-        try{
-            new HackMdm(this).RemoveOwner_admin();
-        }catch (Exception e){
-            ToastUtils.ShowToast("失败",this);
-        }
-        ToastUtils.ShowToast("成功",this);
-        finish();
+        new AlertDialog.Builder(ddpm.this)
+                .setIcon(R.drawable.app_settings)
+                .setTitle("确定要解除LinspirerDemo的DeviceOwner吗")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try{
+                            new HackMdm(ddpm.this).RemoveOwner_admin();
+                        }catch (Exception e){
+                        }
+                        ddpm.this.finish();
+                    }
+                })
+                .setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ddpm.this.finish();
+                    }
+                }).setNeutralButton("no", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ddpm.this.finish();
+                    }
+                })
+                .show();
     }
 }

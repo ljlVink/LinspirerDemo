@@ -2,8 +2,8 @@ package com.ljlVink.Receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
+import com.ljlVink.ToastUtils.Toast;
 import com.ljlVink.core.CommandUtils;
 import com.ljlVink.core.DataUtils;
 
@@ -15,7 +15,7 @@ public class thirdpartyreceiver extends BroadcastReceiver {
             if (intent.getAction().equals("ljlVink.thirdparty.app.calldeviceowner")){
                 String cmd= intent.getStringExtra("method");
                 cmdutils.ThirdParty_Exec(cmd);
-                Toast.makeText(context,"执行完成",Toast.LENGTH_SHORT).show();
+                Toast.ShowInfo(context, "执行完成");
             }
             if (intent.getAction().equals("ljlVink.thirdparty.app.pullrsa")){
                 String pkg= intent.getStringExtra("pkgname");

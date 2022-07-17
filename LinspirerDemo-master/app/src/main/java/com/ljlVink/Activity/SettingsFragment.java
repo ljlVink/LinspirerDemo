@@ -13,12 +13,8 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.preference.DropDownPreference;
 import androidx.preference.EditTextPreference;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -27,6 +23,7 @@ import androidx.preference.SwitchPreference;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.huosoft.wisdomclass.linspirerdemo.DataBinderMapperImpl;
 import com.huosoft.wisdomclass.linspirerdemo.R;
+import com.ljlVink.ToastUtils.Toast;
 import com.ljlVink.core.DataUtils;
 import com.ljlVink.services.vpnService;
 
@@ -43,19 +40,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.linspirerdemosettings, rootKey);
         this.prefs = PreferenceManager.getDefaultSharedPreferences(requireActivity().getBaseContext());
         SwitchPreference vpnmode=Objects.requireNonNull(findPreference("vpnmode"));
-        DropDownPreference vpn_stop=Objects.requireNonNull(findPreference("vpn_stop"));
-        DropDownPreference hide_settings=Objects.requireNonNull(findPreference("hide_settings"));
-        DropDownPreference show_settings=Objects.requireNonNull(findPreference("show_settings"));
-        DropDownPreference sn_settings=Objects.requireNonNull(findPreference("sn_settings"));
+        SwitchPreference appstore_internet=Objects.requireNonNull(findPreference("appstore_internet"));
+        Preference vpn_stop=Objects.requireNonNull(findPreference("vpn_stop"));
+        Preference hide_settings=Objects.requireNonNull(findPreference("hide_settings"));
+        Preference show_settings=Objects.requireNonNull(findPreference("show_settings"));
+        Preference sn_settings=Objects.requireNonNull(findPreference("sn_settings"));
         EditTextPreference password=Objects.requireNonNull(findPreference("password"));
-        DropDownPreference clear_password=Objects.requireNonNull(findPreference("clear_password"));
+        Preference clear_password=Objects.requireNonNull(findPreference("clear_password"));
         EditTextPreference password_factory=Objects.requireNonNull(findPreference("password_factory"));
-        DropDownPreference clear_password_factory=Objects.requireNonNull(findPreference("clear_password_factory"));
-        DropDownPreference get_in_app_with_ime=Objects.requireNonNull(findPreference("get_in_app_with_ime"));
-        DropDownPreference get_in_app_with_assist=Objects.requireNonNull(findPreference("get_in_app_with_assist"));
-        DropDownPreference emui_control=Objects.requireNonNull(findPreference("emui_control"));
-        DropDownPreference desktop_pkg=Objects.requireNonNull(findPreference("desktop_pkg"));
-        DropDownPreference miahash_add=Objects.requireNonNull(findPreference("miahash_add"));
+        Preference clear_password_factory=Objects.requireNonNull(findPreference("clear_password_factory"));
+        Preference get_in_app_with_ime=Objects.requireNonNull(findPreference("get_in_app_with_ime"));
+        Preference get_in_app_with_assist=Objects.requireNonNull(findPreference("get_in_app_with_assist"));
+        Preference emui_control=Objects.requireNonNull(findPreference("emui_control"));
+        Preference desktop_pkg=Objects.requireNonNull(findPreference("desktop_pkg"));
+        Preference miahash_add=Objects.requireNonNull(findPreference("miahash_add"));
+        SwitchPreference bjszmode=Objects.requireNonNull(findPreference("bjsz_mode"));
+
         vpnmode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -68,11 +68,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
+        appstore_internet.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if((boolean) newValue==true){
+                    DataUtils.saveintvalue(getContext(),"disallow_appstore_internet",1);
+                }else {
+                    DataUtils.saveintvalue(getContext(),"disallow_appstore_internet",0);
+
+                }
+                return true;
+            }
+            public void reload(){
+                vpnService.reload("",getContext());
+            }
+        });
         vpn_stop.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 vpnService.stop(getContext());
-                return false;
+                return true;
             }
         });
         hide_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -81,16 +96,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (NewUI.isActiveime(getContext()) && DataUtils.readint(getContext(), "ime") == 1) {
                     getContext().getPackageManager().setComponentEnabledSetting(new ComponentName(getContext().getPackageName(), "com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 } else {
-                    Toast.makeText(getContext(), "失败,请成功通过输入法或者语音助手打开后设置", Toast.LENGTH_SHORT).show();
+                    Toast.ShowErr(getContext(), "失败,请成功通过输入法或者语音助手打开后设置");
                 }
-                return false;
+                return true;
             }
         });
         show_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 getContext().getPackageManager().setComponentEnabledSetting(new ComponentName(getContext().getPackageName(), "com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-                return false;
+                return true;
             }
         });
     sn_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -107,21 +122,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             DataUtils.saveStringValue(getContext(),"SN",et.getText().toString());
                         }
                     }).setNegativeButton("取消", null).show();
-            return false;
+            return true;
         }
     });
     password.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             DataUtils.saveStringValue(getContext(), "password", (String) newValue);
-            return false;
+            return true;
         }
     });
     clear_password.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
             DataUtils.saveStringValue(getContext(), "password", "");
-            return false;
+            return true;
         }
     });
     password_factory.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -135,7 +150,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public boolean onPreferenceClick(Preference preference) {
             DataUtils.saveStringValue(getContext(), "factory_password", "");
-            return false;
+            return true;
         }
     });
     get_in_app_with_ime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -143,7 +158,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         public boolean onPreferenceClick(Preference preference) {
             Intent intent111 = new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS);
             startActivity(intent111);
-            return false;
+            return true;
         }
     });
     get_in_app_with_assist.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -153,10 +168,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             PackageManager packageManager = getContext().getPackageManager();
             if (intent111111.resolveActivity(packageManager) != null) {
                 startActivity(intent111111);
-            } else {
-                Toast.makeText(getContext(), "这个rom不能设置语音助手", Toast.LENGTH_LONG).show();
             }
-            return false;
+            return true;
         }
     });
     emui_control.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -177,7 +190,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                 }
             }).show();
-            return false;
+            return true;
         }
     });
     desktop_pkg.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -194,7 +207,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             DataUtils.saveStringValue(getContext(),"desktop_pkg",et.getText().toString());
                         }
                     }).setNegativeButton("取消", null).show();
-            return false;
+            return true;
 
         }
     });
@@ -217,9 +230,30 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }
             }).show();
 
-            return false;
+            return true;
         }
     });
+        bjszmode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if((boolean)newValue==true){
+                    DataUtils.saveintvalue(getContext(),"bjsz_mode",1);
+                    ArrayList<String> pkgname=AppManageActivity.FindLspDemoPkgName(getContext(),"assistlauncher");
+                    if(pkgname.size()>0){
+                        Toast.ShowInfo(getContext(),"已修改管控包名为"+pkgname.get(0)+",请不要再修改管控包名");
+                        DataUtils.saveStringValue(getContext(),"desktop_pkg",pkgname.get(0));
+                    }
+                    else{
+                        Toast.ShowWarn(getContext(),"请安装Assist Launcher");
+                        DataUtils.saveStringValue(getContext(),"desktop_pkg","");
+                    }
+                }else{
+                    Toast.ShowInfo(getContext(),"已清空管控包名");
+                    DataUtils.saveStringValue(getContext(),"desktop_pkg","");
+                }
+                return true;
+            }
+        });
     //  SwitchPreference hidePrivate = Objects.requireNonNull(findPreference("hide_private"));
        // SwitchPreference allowRoot = Objects.requireNonNull(findPreference("allow_root"));
 

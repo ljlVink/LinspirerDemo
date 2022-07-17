@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
+import com.ljlVink.ToastUtils.Toast;
 
 public class webview extends AppCompatActivity {
     WebView webView;
@@ -24,7 +24,7 @@ public class webview extends AppCompatActivity {
          webView = (WebView) findViewById(R.id.webview);
         String url=getIntent().getStringExtra("url");
         if(url.contains("github")){
-            Toast.makeText(this, "github可能要打开较长时间,请稍等...", Toast.LENGTH_SHORT).show();
+            Toast.ShowInfo(this, "github可能要打开较长时间,请稍等...");
         }
         webView.loadUrl(url);
         WebSettings webSettings = webView.getSettings();
