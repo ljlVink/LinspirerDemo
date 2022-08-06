@@ -1129,15 +1129,12 @@ public class NewUI extends AppCompatActivity {
                 show_upload_dialog();
                 String bgpath=DataUtils.readStringValue(this,"background_bg","");
                 if(!bgpath.equals("")&&new File(bgpath).exists()){
-                    Log.e("lspdemo","exists");
-
                     LinearLayout ll=findViewById(R.id.LinearLayout1);
                     Glide.with(this)
                             .load(bgpath)
                             .into(new SimpleTarget<Drawable>() {
                                 @Override
                                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                                    Log.e("lspdemo","onResourceReady");
                                     ll.setBackground(resource);
                                 }
                             });

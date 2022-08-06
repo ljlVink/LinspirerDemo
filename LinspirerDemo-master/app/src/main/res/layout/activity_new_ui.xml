@@ -84,7 +84,7 @@
                 <GridView
                     android:id="@+id/grid_photo"
                     android:layout_width="match_parent"
-                    android:layout_height="537dp"
+                    android:layout_height="537sp"
                     android:numColumns="3" />
             </LinearLayout>
 

@@ -80,7 +80,7 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled false
+    enabled true
     // 混淆深度
     depth 3
     obfClass=["com.ljlVink","com.huosoft"]
@@ -115,7 +115,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
-
+   // implementation files('libs/MDMAPI_test_d2j.jar')
 
     compileOnly files('libs/framework_new.jar')
     compileOnly files('libs/CSDK_Framework_new.jar')

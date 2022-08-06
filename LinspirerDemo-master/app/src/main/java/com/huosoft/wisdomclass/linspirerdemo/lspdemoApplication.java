@@ -29,7 +29,7 @@ public class lspdemoApplication extends Application {
         new ROM_identifier(this).checkrom();
         int keystatus = new Signutil(this, "97:8D:89:23:F9:F3:AF:C9:A3:79:37:2C:C8:A6:FF:A8:26:CC:DE:EF").f();
         if ( 666 == keystatus) {
-            Bugly.init(getApplicationContext(), "50a36059a3", false);
+            Bugly.init(this, "50a36059a3", false);
         }
         MMDM=new MDM(this).MDM();
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
