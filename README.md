@@ -27,9 +27,9 @@ qq群:970610587
 ### 贡献
 **XXPermissions** [XXPermissions](https://github.com/getActivity/XXPermissions)
 
-**glide** [glide](https://github.com/bumptech/glide)
+**TitleBar** [TitleBar](https://github.com/getActivity/TitleBar)
 
-**DeviceLibray** [DeviceLibray](https://github.com/z244370114/DeviceLibray)
+**glide** [glide](https://github.com/bumptech/glide)
 
 **fastjson** [fastjson](https://github.com/alibaba/fastjson)
 

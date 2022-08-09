@@ -167,7 +167,10 @@ public class NewUI extends AppCompatActivity {
                     case 0:
                         if (getLauncherPackageName(getApplicationContext()) != null) {
                             try {
-                                startActivity(getPackageManager().getLaunchIntentForPackage(getLauncherPackageName(getApplicationContext())));
+                                Toast.ShowWarn(NewUI.this,getLauncherPackageName(NewUI.this));
+                                Intent home=new Intent(Intent.ACTION_MAIN);
+                                home.addCategory(Intent.CATEGORY_HOME);
+                                startActivity(home);                                //startActivity(intent);
                             } catch (Exception e) {
                                 startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
                             }
