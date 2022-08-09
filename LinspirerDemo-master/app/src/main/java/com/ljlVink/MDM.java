@@ -45,4 +45,10 @@ public class MDM {
         }
         return -1;
     }
+    public int t11_rootmode(){
+        if(Build.BRAND.equals("T11")){
+            return 4;//bug太多了 暂时入口点改成通用
+        }
+        return MDM();
+    }
 }

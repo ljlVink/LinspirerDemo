@@ -9,178 +9,61 @@
 
 
     <LinearLayout
-        android:id="@+id/LinearLayout1"
+        android:id="@+id/background_newui"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+        <com.hjq.bar.TitleBar
+            android:id="@+id/titlebar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:leftHorizontalPadding="10dp"
+            app:leftIcon="@null"
+            app:rightIcon="@drawable/reboot"
+            app:lineVisible="false"
+            app:barStyle="transparent"
+            app:rightHorizontalPadding="10dp"
+            app:title="Linspirer Demo"
+            app:titleSize="20sp"
+            app:titleHorizontalPadding="0dp" />
 
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="127"
-            >
+        <LinearLayout
+            android:id="@+id/right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
             <LinearLayout
                 android:id="@+id/left"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp" />
-                <TextView
-                    android:id="@+id/textView26"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="20sp"
-                    android:text="      Linspirer Demo" />
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/materialCardView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:clickable="true"
-                    app:cardBackgroundColor="#8BC34A"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="8dp"
-                    app:checkedIcon="@drawable/ic_launcher_foreground"
-                    app:rippleColor="#87CEFA"
-                    app:state_dragged="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/text_home"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
-                                android:text="Linspirer Demo"
-                                android:textSize="20sp" />
-
-                            <TextView
-                                android:id="@+id/isActive"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="16dp"
-                                android:text="激活状态"
-                                android:textSize="15sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                </com.google.android.material.card.MaterialCardView>
-
 
                 <GridView
                     android:id="@+id/grid_photo"
                     android:layout_width="match_parent"
-                    android:layout_height="537sp"
+                    android:layout_height="match_parent"
                     android:numColumns="3" />
             </LinearLayout>
 
-        </ScrollView>
-
-        <ScrollView
-            android:id="@+id/scrollvew_right"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="127">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
-                <Space
-                    android:layout_width="1dp"
-                    android:layout_height="25dp" />
-
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/devicetips"
-                    android:textSize="20sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </TextView>
-            </LinearLayout>
-        </ScrollView>
-        <!--
-        <LinearLayout
-            android:id="@+id/right"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="215"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <Space
-                    android:layout_width="1dp"
-                    android:layout_height="25dp" />
-
-
-                <TextView
-                    android:id="@+id/refresh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="   已经安装的应用列表(长按配置冻结,点我刷新)"
-                    android:textSize="20sp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ListView
-                        android:id="@+id/listview"
-                        android:layout_width="match_parent"
-                        android:layout_height="500sp"
-                        android:layout_weight="50"
-                        android:clickable="true">
-
-                    </ListView>
-                    <Space
-                        android:layout_width="3dp"
-                        android:layout_height="wrap_content" />
-
-                    <ListView
-                        android:id="@+id/listview2"
-                        android:layout_width="match_parent"
-                        android:layout_height="500sp"
-                        android:layout_weight="50"
-                        android:clickable="true">
-
-                    </ListView>
-                </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="应用白名单"
-                    android:textSize="20sp"/>
-                <TextView
-                    android:id="@+id/applist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="null"
-                    android:scrollbars="vertical"
-                    android:textSize="20sp"/>
-
-
+                    android:textSize="20sp"></TextView>
             </LinearLayout>
 
         </LinearLayout>
--->
     </LinearLayout>
 
 

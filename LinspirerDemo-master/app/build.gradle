@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 60000
-        versionName "V6.0Release_20220715"
+        versionCode 61000
+        versionName "V6.1Test_20220809"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -80,7 +80,7 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled true
+    enabled false
     // 混淆深度
     depth 3
     obfClass=["com.ljlVink","com.huosoft"]
@@ -93,9 +93,13 @@ stringfog {
     implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
     fogPackages = ["com.ljlVink","com.huosoft"]
 }
-dependencies {
-    implementation 'com.github.z244370114:DeviceLibray:1.0.0'
+
+dependencies{
+    implementation 'com.github.getActivity:TitleBar:9.5'
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+}
+dependencies {
+
     implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.github.megatronking.stringfog:xor:3.0.0'
@@ -116,7 +120,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
    // implementation files('libs/MDMAPI_test_d2j.jar')
-
     compileOnly files('libs/framework_new.jar')
     compileOnly files('libs/CSDK_Framework_new.jar')
     compileOnly files('libs/XposedBridgeApi-82.jar')

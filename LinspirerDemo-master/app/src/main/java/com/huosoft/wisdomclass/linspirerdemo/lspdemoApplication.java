@@ -7,7 +7,6 @@ import com.ljlVink.core.FileUtils;
 import com.ljlVink.core.security.ROM_identifier;
 import com.ljlVink.core.security.Signutil;
 import com.tencent.bugly.Bugly;
-import com.zy.devicelibrary.UtilsApp;
 
 public class lspdemoApplication extends Application {
     int MMDM=0;
@@ -33,8 +32,6 @@ public class lspdemoApplication extends Application {
         }
         MMDM=new MDM(this).MDM();
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
-        UtilsApp.init(this);
-
     }
     public int getMMDM(){
         return MMDM;
