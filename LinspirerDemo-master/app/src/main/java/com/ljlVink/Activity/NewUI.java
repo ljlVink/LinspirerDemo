@@ -778,10 +778,9 @@ public class NewUI extends AppCompatActivity {
                 boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth());
                 final String[] items = new String[]{"扫码授权","手动输入授权码","解除设备管理器(危险)"};
                 final String[] item1 = new String[]{"设置app背景","扫码授权","手动输入授权码","解除设备管理器(危险)"};
-
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewUI.this);
                 builder.setIcon(R.mipmap.icon);
-                builder.setTitle("Linspirer Demo");
+                builder.setTitle("Linspirer Demo(" + Sysutils.getDeviceid(getApplicationContext()).toLowerCase()+")");
                 if(!isActivited)
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                        @Override
@@ -802,7 +801,7 @@ public class NewUI extends AppCompatActivity {
                         }else if(i==2){
                             final EditText ed = new EditText(NewUI.this);
                             ed.setText(DataUtils.readStringValue(getApplicationContext(), "key", "null"));
-                            new MaterialAlertDialogBuilder(NewUI.this).setTitle("手动输入授权码(" + Postutil.getWifiMacAddress(getApplicationContext()).toLowerCase() + ")").setIcon(R.drawable.qrscan).setView(ed).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            new MaterialAlertDialogBuilder(NewUI.this).setTitle("手动输入授权码(" + Sysutils.getDeviceid(getApplicationContext()).toLowerCase() + ")").setIcon(R.drawable.qrscan).setView(ed).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             if (ed.getText().toString().equals("null")) {
@@ -847,7 +846,7 @@ public class NewUI extends AppCompatActivity {
                             }else if(i==2){
                                 final EditText ed = new EditText(NewUI.this);
                                 ed.setText(DataUtils.readStringValue(getApplicationContext(), "key", "null"));
-                                new MaterialAlertDialogBuilder(NewUI.this).setTitle("手动输入授权码(" + Postutil.getWifiMacAddress(getApplicationContext()).toLowerCase() + ")").setIcon(R.drawable.qrscan).setView(ed).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                new MaterialAlertDialogBuilder(NewUI.this).setTitle("手动输入授权码(" + Sysutils.getDeviceid(getApplicationContext()).toLowerCase() + ")").setIcon(R.drawable.qrscan).setView(ed).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 if (ed.getText().toString().equals("null")) {
