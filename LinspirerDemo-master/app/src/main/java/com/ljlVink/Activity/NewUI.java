@@ -775,7 +775,7 @@ public class NewUI extends AppCompatActivity {
             }
             @Override
             public void onTitleClick(TitleBar titleBar) {
-                boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth());
+                boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT));
                 final String[] items = new String[]{"扫码授权","手动输入授权码","解除设备管理器(危险)"};
                 final String[] item1 = new String[]{"设置app背景","扫码授权","手动输入授权码","解除设备管理器(危险)"};
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewUI.this);
@@ -808,7 +808,7 @@ public class NewUI extends AppCompatActivity {
                                                 return;
                                             }
                                             DataUtils.saveStringValue(getApplicationContext(), "key", ed.getText().toString());
-                                            if (RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth())) {
+                                            if (RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT))) {
                                                 Toast.ShowSuccess(getApplicationContext(), "校验成功");
                                                 setvisibility(true);
                                             } else {
@@ -853,7 +853,7 @@ public class NewUI extends AppCompatActivity {
                                                     return;
                                                 }
                                                 DataUtils.saveStringValue(getApplicationContext(), "key", ed.getText().toString());
-                                                if (RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth())) {
+                                                if (RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT))) {
                                                     Toast.ShowSuccess(getApplicationContext(), "校验成功");
                                                     setvisibility(true);
                                                 } else {
@@ -907,7 +907,7 @@ public class NewUI extends AppCompatActivity {
         postutil.SwordPlan();
         String modex = "Linspirer Demo";
         titleBar=findViewById(R.id.titlebar);
-        boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth());
+        boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT));
         if(!isActivited){
             modex+="(未授权,点击授权)";
             titleBar.setTitleColor(getResources().getColor(R.color.redddd));
@@ -1020,7 +1020,7 @@ public class NewUI extends AppCompatActivity {
                             DataUtils.saveStringValue(this, "key", "null");
                             continue;
                         }
-                        if (cmd[i].equals("hwunlock_" + hackMdm.genauth())) {
+                        if (cmd[i].equals("hwunlock_" + Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT))) {
                             runhwunlock();
                             continue;
                         }
@@ -1068,7 +1068,7 @@ public class NewUI extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
             DataUtils.saveintvalue(this, "factory", 0);
-            boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(hackMdm.genauth());
+            boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT));
             String program_passwd = DataUtils.readStringValue(this, "password", "");
             String factory_passwd = DataUtils.readStringValue(this, "factory_password", "");
             if (!program_passwd.equals("")) {
@@ -1217,7 +1217,7 @@ public class NewUI extends AppCompatActivity {
                 Build.FINGERPRINT + "\n\n" +
                 "设备:" + Sysutils.getDevice() + "\n\n"+
                 "CPU:"+ Sysutils.getCpuName()+" ("+Build.CPU_ABI+")\n\n";
-        if (!hackMdm.genauth().equals(RSA.decryptByPublicKey(DataUtils.readStringValue(this, "key", "null"), pubkey))) {
+        if (!Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT).equals(RSA.decryptByPublicKey(DataUtils.readStringValue(this, "key", "null"), pubkey))) {
             msg += "授权状态:未授权";
         }else {
             msg+="授权状态:已授权";
