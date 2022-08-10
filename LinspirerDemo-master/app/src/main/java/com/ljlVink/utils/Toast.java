@@ -1,4 +1,4 @@
-package com.ljlVink.ToastUtils;
+package com.ljlVink.utils;
 
 import android.content.Context;
 import android.os.Looper;

@@ -5,13 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.net.VpnService;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.EditText;
 
 import androidx.preference.EditTextPreference;
@@ -21,17 +16,14 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.huosoft.wisdomclass.linspirerdemo.DataBinderMapperImpl;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.ToastUtils.Toast;
-import com.ljlVink.core.DataUtils;
+import com.ljlVink.utils.Sysutils;
+import com.ljlVink.utils.Toast;
+import com.ljlVink.utils.DataUtils;
 import com.ljlVink.services.vpnService;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import activitylauncher.RootDetection;
-import activitylauncher.SettingsUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences prefs;
@@ -93,7 +85,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         hide_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (NewUI.isActiveime(getContext()) && DataUtils.readint(getContext(), "ime") == 1) {
+                if (Sysutils.isActiveime(getContext()) && DataUtils.readint(getContext(), "ime") == 1) {
                     getContext().getPackageManager().setComponentEnabledSetting(new ComponentName(getContext().getPackageName(), "com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 } else {
                     Toast.ShowErr(getContext(), "失败,请成功通过输入法或者语音助手打开后设置");
@@ -238,7 +230,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if((boolean)newValue==true){
                     DataUtils.saveintvalue(getContext(),"bjsz_mode",1);
-                    ArrayList<String> pkgname=AppManageActivity.FindLspDemoPkgName(getContext(),"assistlauncher");
+                    ArrayList<String> pkgname=Sysutils.FindLspDemoPkgName(getContext(),"assistlauncher");
                     if(pkgname.size()>0){
                         Toast.ShowInfo(getContext(),"已修改管控包名为"+pkgname.get(0)+",请不要再修改管控包名");
                         DataUtils.saveStringValue(getContext(),"desktop_pkg",pkgname.get(0));

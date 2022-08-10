@@ -9,18 +9,13 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.app.Activity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.VpnService;
@@ -29,10 +24,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -53,18 +46,17 @@ import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.king.zxing.CameraScan;
-import com.ljlVink.ToastUtils.Toast;
+import com.ljlVink.utils.Toast;
 import com.ljlVink.core.core.Postutil;
-import com.ljlVink.core.DataUtils;
+import com.ljlVink.utils.DataUtils;
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
-import com.huosoft.wisdomclass.linspirerdemo.ContentUriUtil;
+import com.ljlVink.utils.ContentUriUtil;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.core.HackMdm;
-import com.ljlVink.core.RSA;
+import com.ljlVink.utils.appsecurity.RSA;
 
-import com.ljlVink.core.security.envcheck;
 import com.ljlVink.linspirerfake.uploadHelper;
-import com.ljlVink.linspirerfake.utils;
+import com.ljlVink.utils.Sysutils;
 import com.ljlVink.services.vpnService;
 import com.lzf.easyfloat.EasyFloat;
 import com.lzf.easyfloat.enums.ShowPattern;
@@ -73,11 +65,8 @@ import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -126,7 +115,7 @@ public class NewUI extends AppCompatActivity {
         hackMdm.initHack(0);
         //初始化view
         new uploadHelper(this,true).uplpadfakeapps();
-        if(!isTabletDevice(this)){
+        if(!Sysutils.isTabletDevice(this)){
             right=findViewById(R.id.right);
             right.setVisibility(View.GONE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -165,9 +154,8 @@ public class NewUI extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        if (getLauncherPackageName(getApplicationContext()) != null) {
+                        if (Sysutils.getLauncherPackageName(getApplicationContext()) != null) {
                             try {
-                                Toast.ShowWarn(NewUI.this,getLauncherPackageName(NewUI.this));
                                 Intent home=new Intent(Intent.ACTION_MAIN);
                                 home.addCategory(Intent.CATEGORY_HOME);
                                 startActivity(home);                                //startActivity(intent);
@@ -756,7 +744,7 @@ public class NewUI extends AppCompatActivity {
             }
         });
         findViewById(R.id.left).setVisibility(View.INVISIBLE);
-        if(isTabletDevice(this))
+        if(Sysutils.isTabletDevice(this))
         findViewById(R.id.right).setVisibility(View.INVISIBLE);
         findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
         titleBar.setVisibility(View.INVISIBLE);
@@ -884,6 +872,11 @@ public class NewUI extends AppCompatActivity {
                     }).show();
                 }
             }
+            @Override
+            public  void onLeftClick(TitleBar titleBar){
+                setfalseVisibility();
+                hackMdm.backToLSP();
+            }
         });
         verifyStoragePermissions(this);
         TextView devicetips=findViewById(R.id.devicetips);
@@ -896,21 +889,6 @@ public class NewUI extends AppCompatActivity {
         });
 
     }
-
-    public static String getLauncherPackageName(Context context) {
-        final Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        final ResolveInfo res = context.getPackageManager().resolveActivity(intent, 0);
-        if (res.activityInfo == null) {
-            return null;
-        }
-        if (res.activityInfo.packageName.equals("android") || res.activityInfo.packageName.equals("com.android.settings")) {
-            return null;
-        } else {
-            return res.activityInfo.packageName;
-        }
-    }
-
     private void runhwunlock() {
         MaterialAlertDialogBuilder alertdialogbuilder11 = new MaterialAlertDialogBuilder(NewUI.this);
         alertdialogbuilder11.setMessage("是否解控，没有防止恢复出厂可能会导致恢复出厂设置\n")
@@ -922,7 +900,6 @@ public class NewUI extends AppCompatActivity {
                 })
                 .setNeutralButton("取消",null).create().show();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -957,7 +934,7 @@ public class NewUI extends AppCompatActivity {
         }
         titleBar.setTitle(modex);
     }
-
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
@@ -1152,7 +1129,7 @@ public class NewUI extends AppCompatActivity {
         try{
             titleBar.setVisibility(View.INVISIBLE);
             findViewById(R.id.left).setVisibility(View.INVISIBLE);
-            if(isTabletDevice(getApplicationContext()))
+            if(Sysutils.isTabletDevice(getApplicationContext()))
                 findViewById(R.id.right).setVisibility(View.INVISIBLE);
             findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
 
@@ -1164,7 +1141,7 @@ public class NewUI extends AppCompatActivity {
         try{
             if (isVisible) {
                 findViewById(R.id.left).setVisibility(View.VISIBLE);
-                if(isTabletDevice(this))
+                if(Sysutils.isTabletDevice(this))
                     findViewById(R.id.right).setVisibility(View.VISIBLE);
                 findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
                 showdialog();
@@ -1184,7 +1161,7 @@ public class NewUI extends AppCompatActivity {
                 onResume();
             } else {
                 findViewById(R.id.left).setVisibility(View.VISIBLE);
-                if(isTabletDevice(this))
+                if(Sysutils.isTabletDevice(this))
                     findViewById(R.id.right).setVisibility(View.VISIBLE);
                 findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
                 onResume();
@@ -1226,57 +1203,35 @@ public class NewUI extends AppCompatActivity {
                     }).show();
         }
     }
-    public static String getDevice() {
-        String manufacturer = Character.toUpperCase(Build.MANUFACTURER.charAt(0)) + Build.MANUFACTURER.substring(1);
-        if (!Build.BRAND.equals(Build.MANUFACTURER)) {
-            manufacturer += " " + Character.toUpperCase(Build.BRAND.charAt(0)) + Build.BRAND.substring(1);
-        }
-        manufacturer += " " + Build.MODEL + " ";
-        return manufacturer;
-    }
     public void backtolsp() {
         if (DataUtils.readint(this, "vpnmode") == 1) {
             startvpn();
         }
         hackMdm.backToLSP();
     }
-    private boolean copyStr(String copyStr) {
-        try {
-            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData mClipData = ClipData.newPlainText("Label", copyStr);
-            cm.setPrimaryClip(mClipData);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    public  String deviceinfo(){
+    private  String deviceinfo(){
         String msg = "设备信息:\n\n"+"版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")" + "\n\n" +
                 "包名:" + getPackageName() + "\n\n" +
                 "MDM接口:" + currMDM + "\n\n" +
                 "系统版本:" + String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT) + "\n\n" +
                 "系统:" +
                 Build.FINGERPRINT + "\n\n" +
-                "设备:" + getDevice() + "\n\n"+
-                "CPU:"+ getCpuName()+" ("+Build.CPU_ABI+")\n\n";
+                "设备:" + Sysutils.getDevice() + "\n\n"+
+                "CPU:"+ Sysutils.getCpuName()+" ("+Build.CPU_ABI+")\n\n";
         if (!hackMdm.genauth().equals(RSA.decryptByPublicKey(DataUtils.readStringValue(this, "key", "null"), pubkey))) {
             msg += "授权状态:未授权";
         }else {
             msg+="授权状态:已授权";
         }
         msg+="\n\n";
-        if(isActiveime(this)){msg+="输入法:已激活";} else {msg+="输入法:未激活";}
+        if(Sysutils.isActiveime(this)){msg+="输入法:已激活";} else {msg+="输入法:未激活";}
         msg+="\n\n";
-        if(isAssistantApp()){msg+="语音助手:已激活";} else {msg+="语音助手:未激活";}
+        if(Sysutils.isAssistantApp(this)){msg+="语音助手:已激活";} else {msg+="语音助手:未激活";}
         msg+="\n\n";
         msg+="HackMdm Ver:"+hackMdm.getHackmdm_version()+"\n\n";
-        double used=(double) Long.parseLong(utils.getRomavailablesize(this))/Long.parseLong(utils.getRomtotalsize(this))*100;
-        msg+="设备已用空间"+(100.00000000-used)+"%("+utils.getRomavailablesize(this)+"/"+utils.getRomtotalsize(this)+")";
+        double used=(double) Long.parseLong(Sysutils.getRomavailablesize(this))/Long.parseLong(Sysutils.getRomtotalsize(this))*100;
+        msg+="设备已用空间"+(100.00000000-used)+"%("+ Sysutils.getRomavailablesize(this)+"/"+ Sysutils.getRomtotalsize(this)+")";
         return msg;
-    }
-    private boolean isTabletDevice(Context context) {
-        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
     public static void VerifyCameraPermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -1284,23 +1239,6 @@ public class NewUI extends AppCompatActivity {
             return;
         }
     }
-    public static String getCpuName() {
-        try {
-            FileReader fr = new FileReader("/proc/cpuinfo");
-            BufferedReader br = new BufferedReader(fr);
-            String text = br.readLine();
-            String[] array = text.split(":\\s+", 2);
-            for (int i = 0; i < array.length; i++) {
-            }
-            return array[1];
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     private void showstatusbar() {
         hackMdm.RootCommand("cmd statusbar expand-notifications");
     }
@@ -1314,32 +1252,10 @@ public class NewUI extends AppCompatActivity {
                     @Override
                     public void onDenied(List<String> permissions, boolean never) {
                         if (never) {
-                            com.ljlVink.ToastUtils.Toast.ShowWarn(NewUI.this,"部分权限授权,请在设置赋予所有权限");
+                            Toast.ShowWarn(NewUI.this,"部分权限授权,请在设置赋予所有权限");
                         }
                     }
                 });
-    }
-
-    public static boolean isActiveime(Context context) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        for (InputMethodInfo imi : imm.getEnabledInputMethodList()) {
-            if (context.getPackageName().equals(imi.getPackageName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private boolean isAssistantApp() {
-        String assistant = Settings.Secure.getString(this.getContentResolver(), "assistant");
-        if (assistant != null) {
-            ComponentName cn = ComponentName.unflattenFromString(assistant);
-            if (cn != null) {
-                if (cn.getPackageName().equals(getPackageName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
     private void startvpn() {
         Thread th = new Thread(new Runnable() {
@@ -1375,7 +1291,7 @@ public class NewUI extends AppCompatActivity {
                     }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            copyStr("adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
+                            Sysutils.copyStr(NewUI.this,"adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
                         }
                     }).create().show();
         }
@@ -1392,7 +1308,7 @@ public class NewUI extends AppCompatActivity {
                     }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            copyStr("adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\nadb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
+                            Sysutils.copyStr(NewUI.this,"adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\nadb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
                         }
                     }).create().show();
         }

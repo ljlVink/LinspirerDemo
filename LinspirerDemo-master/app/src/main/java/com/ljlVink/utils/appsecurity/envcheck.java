@@ -1,4 +1,4 @@
-package com.ljlVink.core.security;
+package com.ljlVink.utils.appsecurity;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

@@ -145,7 +145,6 @@ public class LauncherIconCreator {
                 startRootActivity(context, activity);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             Toast.makeText(context, context.getText(R.string.error).toString() + ": " + e, Toast.LENGTH_LONG).show();
         }
     }

@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputConnection;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.Activity.NewUI;
-import com.ljlVink.core.DataUtils;
+import com.ljlVink.utils.DataUtils;
 
 public class BeepMainService extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
     @Override

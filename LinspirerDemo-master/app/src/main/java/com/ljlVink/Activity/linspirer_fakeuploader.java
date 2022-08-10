@@ -17,12 +17,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.ToastUtils.Toast;
-import com.ljlVink.core.DataUtils;
-import com.ljlVink.linspirerfake.AesUtil;
+import com.ljlVink.utils.Toast;
+import com.ljlVink.utils.DataUtils;
+import com.ljlVink.utils.enc.AES;
 import com.ljlVink.linspirerfake.ICallback;
 import com.ljlVink.linspirerfake.PostUtils;
-import com.ljlVink.linspirerfake.utils;
+import com.ljlVink.utils.Sysutils;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -79,8 +79,8 @@ public class linspirer_fakeuploader extends AppCompatActivity {
         tv_rom_ver.setText(DataUtils.readStringValue(this,"lcmdm_rom_ver",Build.DISPLAY));
         tv_brand.setText(DataUtils.readStringValue(this,"lcmdm_brand",Build.BRAND));
         tv_devicesn.setText(DataUtils.readStringValue(this,"lcmdm_sn",""));
-        tv_androidver.setText((DataUtils.readStringValue(this,"android_ver",utils.getsystemversion_str())));
-        tv_macaddr.setText(DataUtils.readStringValue(this,"device_mac",utils.getMacaddress(this)));
+        tv_androidver.setText((DataUtils.readStringValue(this,"android_ver", Sysutils.getsystemversion_str())));
+        tv_macaddr.setText(DataUtils.readStringValue(this,"device_mac", Sysutils.getMacaddress(this)));
         btn_gettastics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,12 +103,12 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                 jsonObject1.put("model",model);
                 jsonObject1.put("launcher_version",version);
                 jsonObject.put("method","com.linspirer.tactics.gettactics");
-                jsonObject.put("params", AesUtil.encrypt(jsonObject1.toString()));
+                jsonObject.put("params", AES.encrypt(jsonObject1.toString()));
                 new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
                     @Override
                     public void callback(String str) {
                         try{
-                        JSONObject obj= JSON.parseObject(AesUtil.decrypt(str));
+                        JSONObject obj= JSON.parseObject(AES.decrypt(str));
                         if(Objects.equals(obj.get("code"), 0)){
                             String result="";
                             JSONObject obj1=obj.getJSONObject("data");
@@ -136,7 +136,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                             textview_information.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    textview_information.setText("失败，请检查账号或者swdid是否正常，通常第三方sso登录时账号与sso账号不同，或者输入设置里的设备mac地址\n"+AesUtil.decrypt(str));
+                                    textview_information.setText("失败，请检查账号或者swdid是否正常，通常第三方sso登录时账号与sso账号不同，或者输入设置里的设备mac地址\n"+ AES.decrypt(str));
                                     scrolldown();
                                 }});
                         }}

@@ -3,9 +3,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.ljlVink.ToastUtils.Toast;
-import com.ljlVink.core.CommandUtils;
-import com.ljlVink.core.DataUtils;
+import com.ljlVink.utils.Toast;
+import com.ljlVink.utils.CommandUtils;
+import com.ljlVink.utils.DataUtils;
 
 public class thirdpartyreceiver extends BroadcastReceiver {
     @Override

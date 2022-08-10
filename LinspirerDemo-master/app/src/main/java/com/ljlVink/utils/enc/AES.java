@@ -1,4 +1,4 @@
-package com.ljlVink.linspirerfake;
+package com.ljlVink.utils.enc;
 
 import android.text.TextUtils;
 import android.util.Base64;
@@ -7,7 +7,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class AesUtil {
+public class AES {
     private static final String key="1191ADF18489D8DA";
     public static final String VIPARA = "5E9B755A8B674394";
     private static final String CBC_PKCS5_PADDING = "AES/CBC/PKCS5Padding";

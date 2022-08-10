@@ -1,9 +1,9 @@
 package com.ljlVink.Activity;
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-public class PreMainActivity extends AppCompatActivity {
+public class PreMainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

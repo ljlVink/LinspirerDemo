@@ -7,7 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.ljlVink.ToastUtils.Toast;
+import com.ljlVink.utils.Toast;
 
 public class MainUtils {
     private Context context;

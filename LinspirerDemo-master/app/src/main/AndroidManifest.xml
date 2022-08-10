@@ -271,6 +271,7 @@
             android:name="com.ljlVink.Activity.PreMainActivity"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:theme="@style/TranslucentTheme"
             android:icon="@mipmap/icon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

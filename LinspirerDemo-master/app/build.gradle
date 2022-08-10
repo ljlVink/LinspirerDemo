@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 61001
-        versionName "V6.1Release_20220809"
+        versionCode 61010
+        versionName "V6.1Release_20220810"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -120,8 +120,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
    // implementation files('libs/MDMAPI_test_d2j.jar')
+    implementation files('lib-thirdparty/zfile_1_4_1.aar')
     compileOnly files('libs/framework_new.jar')
     compileOnly files('libs/CSDK_Framework_new.jar')
-    compileOnly files('libs/XposedBridgeApi-82.jar')
+    compileOnly files('lib-thirdparty/XposedBridgeApi-82.jar')
     compileOnly files('libs/framework.jar')
 }

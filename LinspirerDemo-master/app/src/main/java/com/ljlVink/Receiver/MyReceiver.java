@@ -5,8 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.ljlVink.Activity.autostart;
-import com.ljlVink.ToastUtils.Toast;
-import com.ljlVink.core.core.Postutil;
+import com.ljlVink.utils.Toast;
 
 public class MyReceiver extends BroadcastReceiver {
 

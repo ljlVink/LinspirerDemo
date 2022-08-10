@@ -2,7 +2,6 @@ package com.ljlVink.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
@@ -11,7 +10,7 @@ import android.webkit.WebViewClient;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.ToastUtils.Toast;
+import com.ljlVink.utils.Toast;
 
 public class webview extends AppCompatActivity {
     WebView webView;

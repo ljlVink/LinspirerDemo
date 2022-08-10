@@ -1,4 +1,4 @@
-package com.ljlVink.core;
+package com.ljlVink.utils;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;

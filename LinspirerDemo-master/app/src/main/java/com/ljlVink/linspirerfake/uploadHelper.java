@@ -6,8 +6,10 @@ import android.os.Looper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.ljlVink.ToastUtils.Toast;
-import com.ljlVink.core.DataUtils;
+import com.ljlVink.utils.Sysutils;
+import com.ljlVink.utils.enc.AES;
+import com.ljlVink.utils.Toast;
+import com.ljlVink.utils.DataUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -52,11 +54,11 @@ public class uploadHelper {
         jsonObject1.put("swdid",swdid);
         jsonObject1.put("email",account);
         jsonObject1.put("model",model);
-        jsonObject.put("params",AesUtil.encrypt(jsonObject1.toString()));
+        jsonObject.put("params", AES.encrypt(jsonObject1.toString()));
         new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
             @Override
             public void callback(String str) {
-                JSONObject obj= JSON.parseObject(AesUtil.decrypt(str));
+                JSONObject obj= JSON.parseObject(AES.decrypt(str));
                 if(Objects.equals(obj.get("code"),0)){
                     JSONArray jsonArray=obj.getJSONArray("data");
                     int len=jsonArray.size();
@@ -112,7 +114,7 @@ public class uploadHelper {
         jsonObject1.put("email",account);
         jsonObject1.put("model",model);
         jsonObject1.put("launcher_version",version);
-        jsonObject.put("params",AesUtil.encrypt(jsonObject1.toString()));
+        jsonObject.put("params", AES.encrypt(jsonObject1.toString()));
         new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
             @Override
             public void onFailure() {
@@ -125,7 +127,7 @@ public class uploadHelper {
             public void callback(String str) {
                 Looper.prepare();
                 try{
-                    str=AesUtil.decrypt(str);
+                    str= AES.decrypt(str);
                     JSONObject obj= JSON.parseObject(str);
                     if(Objects.equals(obj.get("code"), 0)){
 
@@ -162,12 +164,12 @@ public class uploadHelper {
                         jsonObject4.put("model",model);
                         jsonObject4.put("swdid",swdid);
                         jsonObject4.put("reportlist",jsonArray1);
-                        jsonObject3.put("params",AesUtil.encrypt(jsonObject4.toString()));
+                        jsonObject3.put("params", AES.encrypt(jsonObject4.toString()));
                         new PostUtils().sendPost(jsonObject3, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
                             @Override
                             public void callback(String str) {
                                 Looper.prepare();
-                                str=AesUtil.decrypt(str);
+                                str= AES.decrypt(str);
                                 JSONObject obj= JSON.parseObject(str);
 
                                 if(Objects.equals(obj.get("code"), 0)){
@@ -212,8 +214,8 @@ public class uploadHelper {
         jsonObject2.put("email",account);
         jsonObject2.put("isrooted",false);
         jsonObject2.put("model",model);
-        jsonObject2.put("romavailablesize",utils.getRomavailablesize(context));
-        jsonObject2.put("romtotalsize",utils.getRomtotalsize(context));
+        jsonObject2.put("romavailablesize", Sysutils.getRomavailablesize(context));
+        jsonObject2.put("romtotalsize", Sysutils.getRomtotalsize(context));
         jsonObject2.put("romversion",romver);
         jsonObject2.put("simserialnumber","unknown");
         jsonObject2.put("swdid",swdid);
@@ -227,12 +229,12 @@ public class uploadHelper {
         jsonObject4.put("is_encrypt",true);
         jsonObject4.put("client_version",version);
         jsonObject4.put("method","com.linspirer.device.setdevice");
-        jsonObject4.put("params",AesUtil.encrypt(jsonObject2.toString()));
+        jsonObject4.put("params", AES.encrypt(jsonObject2.toString()));
         new PostUtils().sendPost(jsonObject4, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
             @Override
             public void callback(String str) {
                 Looper.prepare();
-                str=AesUtil.decrypt(str);
+                str= AES.decrypt(str);
                 JSONObject obj= JSON.parseObject(str);
                 if(Objects.equals(obj.get("code"), 0)){
                     if(silentmode==false)

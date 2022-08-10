@@ -2,6 +2,7 @@ package com.ljlVink.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.admin.SystemUpdateInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -24,8 +25,9 @@ import android.widget.TextView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.ToastUtils.Toast;
-import com.ljlVink.core.DataUtils;
+import com.ljlVink.utils.Sysutils;
+import com.ljlVink.utils.Toast;
+import com.ljlVink.utils.DataUtils;
 import com.ljlVink.core.core.HackMdm;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class AppManageActivity extends AppCompatActivity {
         ImmersionBar.with(this).transparentStatusBar().init();
 
         TextView tv3 = findViewById(R.id.applist);
-        lspdemopkgname = FindLspDemoPkgName(this,"linspirerdemo");
+        lspdemopkgname = Sysutils.FindLspDemoPkgName(this,"linspirerdemo");
 
         tv3.post(new Runnable() {
             @Override
@@ -91,7 +93,7 @@ public class AppManageActivity extends AppCompatActivity {
                                         Toast.ShowErr(getApplicationContext(), "出现错误");
                                     }
                                 });
-                        builder.setIcon(getAppIcon(AppManageActivity.this, pkgname));
+                        builder.setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
                         builder.setNegativeButton("卸载", (dialog, which) -> {
                             dialog.dismiss();
                             hackMdm.uninstallApp(pkgname);
@@ -147,7 +149,7 @@ public class AppManageActivity extends AppCompatActivity {
                                 .setMessage("包名:" + pkgname + "\n")
                                 .setPositiveButton("冻结", (dialog1, which) -> {
                                     hackMdm.iceApp(pkgname, true);
-                                }).setIcon(getAppIcon(AppManageActivity.this, pkgname));
+                                }).setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
                         builder.setNegativeButton("解冻", (dialog, which) -> {
                             hackMdm.iceApp(pkgname, false);
                         })/*.setNeutralButton("设置为第一启动器", new DialogInterface.OnClickListener() {
@@ -195,7 +197,7 @@ public class AppManageActivity extends AppCompatActivity {
                                     }
                                 });
 
-                        builder.setIcon(getAppIcon(AppManageActivity.this, pkgname));
+                        builder.setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
                         builder.setNegativeButton("卸载", (dialog, which) -> {
                             dialog.dismiss();
                             Intent intent = new Intent(Intent.ACTION_DELETE);
@@ -216,7 +218,7 @@ public class AppManageActivity extends AppCompatActivity {
                                 .setMessage("包名:" + pkgname + "\n")
                                 .setPositiveButton("冻结", (dialog1, which) -> {
                                     hackMdm.iceApp(pkgname, true);
-                                }).setIcon(getAppIcon(AppManageActivity.this, pkgname));
+                                }).setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
                         builder.setNegativeButton("解冻", (dialog, which) -> {
                             hackMdm.iceApp(pkgname, false);
                         });
@@ -338,7 +340,7 @@ public class AppManageActivity extends AppCompatActivity {
         List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
         for (PackageInfo packageInfo : packages) {
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                list.add(new AppInfo(getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
+                list.add(new AppInfo(Sysutils.getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
             }
         }
         Intent intent = new Intent();
@@ -368,52 +370,10 @@ public class AppManageActivity extends AppCompatActivity {
         for (PackageInfo packageInfo : packages) {
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
             } else {
-                list.add(new AppInfo(getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
+                list.add(new AppInfo(Sysutils.getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
             }
         }
         return list;
-    }
-    public static Drawable getAppIcon(Context context, String pkgName) {
-        try {
-            if (null != pkgName) {
-                PackageManager pm = context.getPackageManager();
-                ApplicationInfo info = pm.getApplicationInfo(pkgName, 0);
-                return info.loadIcon(pm);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    public static ArrayList<String> FindLspDemoPkgName(Context context,String meta) {
-        ArrayList<String> lst = new ArrayList<String>();
-        PackageManager pm = context.getPackageManager();
-        List<PackageInfo> packages = pm.getInstalledPackages(0);
-        for (PackageInfo packageInfo : packages) {
-            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !packageInfo.packageName.equals(context.getPackageName())) {
-                if (getMetaDataValue(context, "HackMdm", packageInfo.packageName).equals(meta)) {
-                    lst.add(packageInfo.packageName);
-                }
-            }
-        }
-        return lst;
-    }
-    public static String getMetaDataValue(Context context, String meatName, String pkgname) {
-        String value = "null";
-        PackageManager packageManager = context.getPackageManager();
-        ApplicationInfo applicationInfo;
-        try {
-            applicationInfo = packageManager.getApplicationInfo(pkgname, PackageManager.GET_META_DATA);
-            if (applicationInfo != null && applicationInfo.metaData != null) {
-                Object object = applicationInfo.metaData.get(meatName);
-                if (object != null) {
-                    value = object.toString();
-                }
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        }
-        return value;
     }
 
 }

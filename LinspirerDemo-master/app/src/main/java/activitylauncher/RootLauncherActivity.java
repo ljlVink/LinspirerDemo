@@ -31,7 +31,6 @@ public class RootLauncherActivity extends FragmentActivity {
                 LauncherIconCreator.launchActivity(getApplicationContext(), componentName, true);
             }
         } catch (Exception e) {
-            e.printStackTrace();
             Toast.makeText(getApplicationContext(), getText(R.string.error).toString() + ": " + e, Toast.LENGTH_LONG).show();
         } finally {
             finish();

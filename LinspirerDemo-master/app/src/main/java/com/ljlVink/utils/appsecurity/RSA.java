@@ -1,4 +1,6 @@
-package com.ljlVink.core;
+package com.ljlVink.utils.appsecurity;
+
+import com.ljlVink.utils.DataUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;

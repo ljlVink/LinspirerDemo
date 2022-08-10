@@ -1,4 +1,4 @@
-package com.huosoft.wisdomclass.linspirerdemo;
+package com.ljlVink.utils;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -20,7 +20,6 @@ public class ContentUriUtil {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
-
                 if ("primary".equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }

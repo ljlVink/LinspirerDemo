@@ -1,4 +1,4 @@
-package com.ljlVink.core.security;
+package com.ljlVink.utils.appsecurity;
 import android.content.Context;
 public class AppEntranceChecker {
     Context mContext;

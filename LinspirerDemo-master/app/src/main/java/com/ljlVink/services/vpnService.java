@@ -15,9 +15,8 @@ import android.os.ParcelFileDescriptor;
 
 import androidx.preference.PreferenceManager;
 
-import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.Activity.NewUI;
-import com.ljlVink.core.DataUtils;
+import com.ljlVink.utils.DataUtils;
 
 import java.io.IOException;
 import java.util.Set;
