@@ -1,4 +1,5 @@
 package com.ljlVink;
+import android.annotation.SuppressLint;
 import android.app.csdk.CSDKManager;
 import android.content.Context;
 import android.os.Build;
@@ -10,6 +11,7 @@ public class MDM {
     public MDM(Context context){
         this.context=context;
     }
+    @SuppressLint("NotConstructor")
     public int MDM(){
         try{
             Class.forName("android.app.mia.MiaMdmPolicyManager");
@@ -23,9 +25,11 @@ public class MDM {
         catch (ClassNotFoundException e){
             LENOVO_CSDK=false;
         }
-        if(LENOVO_CSDK==true){
+        if(LENOVO_CSDK){
             try{
-                new CSDKManager(context).SetEnable(false);
+                if(new CSDKManager(context).getDeviceInfo(1).equals("")){
+                    LENOVO_CSDK=false;
+                }
             }catch (Throwable e){
                 LENOVO_CSDK=false;
             }

@@ -30,18 +30,14 @@ public class MyReceiver extends BroadcastReceiver {
         if (intent.getAction().equals("android.intent.action.PACKAGE_ADDED")) {
             String packageName = intent.getDataString();
             Toast.ShowInfo(context, "安装了应用"+packageName);
-            new Postutil(context).sendPost("安装了应用："+packageName);
         }
         if (intent.getAction().equals("android.intent.action.PACKAGE_REMOVED")) {
             String packageName = intent.getDataString();
             Toast.ShowInfo(context, "卸载了应用："+packageName);
-
-            new Postutil(context).sendPost("卸载了应用："+packageName);
         }
         if (intent.getAction().equals("android.intent.action.PACKAGE_REPLACED")) {
             String packageName = intent.getDataString();
             Toast.ShowInfo(context, "覆盖安装应用："+packageName);
-            new Postutil(context).sendPost("覆盖安装应用："+packageName);
         }
     }
 }

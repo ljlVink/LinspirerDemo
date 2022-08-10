@@ -136,7 +136,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                             textview_information.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    textview_information.setText("失败，请检查账号或者swdid是否正常，通常第三方sso登录时账号与sso账号不同\n"+AesUtil.decrypt(str));
+                                    textview_information.setText("失败，请检查账号或者swdid是否正常，通常第三方sso登录时账号与sso账号不同，或者输入设置里的设备mac地址\n"+AesUtil.decrypt(str));
                                     scrolldown();
                                 }});
                         }}

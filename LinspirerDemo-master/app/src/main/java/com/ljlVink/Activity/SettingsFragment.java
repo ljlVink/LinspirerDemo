@@ -55,7 +55,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference desktop_pkg=Objects.requireNonNull(findPreference("desktop_pkg"));
         Preference miahash_add=Objects.requireNonNull(findPreference("miahash_add"));
         SwitchPreference bjszmode=Objects.requireNonNull(findPreference("bjsz_mode"));
-
+        SwitchPreference firewall_ctrl=Objects.requireNonNull(findPreference("firewall_ctrl"));
         vpnmode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -215,7 +215,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         @Override
         public boolean onPreferenceClick(Preference preference) {
             String[] items=new String[]{"自动","写入白名单尾部加;miahash","写入白名单不添加;miahash"};
-            new MaterialAlertDialogBuilder(getContext()).setIcon(R.drawable.settings).setTitle("手动设置管控模式(非必要不要设置)").setItems(items, new DialogInterface.OnClickListener() {
+            new MaterialAlertDialogBuilder(getContext()).setIcon(R.drawable.settings).setTitle("设置白名单miahash写入模式").setItems(items, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     if(i==0){
@@ -250,6 +250,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }else{
                     Toast.ShowInfo(getContext(),"已清空管控包名");
                     DataUtils.saveStringValue(getContext(),"desktop_pkg","");
+                }
+                return true;
+            }
+        });
+        firewall_ctrl.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if((boolean) newValue==true){
+                    DataUtils.saveintvalue(getContext(),"no_firewall_ctrl",1);
                 }
                 return true;
             }
