@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 61010
-        versionName "V6.1Release_20220810"
+        versionCode 66666
+        versionName "V6.1Release_20220811_AnniversaryEdition"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -80,12 +80,12 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled false
+    enabled true
     // 混淆深度
     depth 3
     obfClass=["com.ljlVink","com.huosoft"]
     // 需要混淆的包或者类(匹配前面一段)
-    blackClass = ["com.ljlVink.Activity","com.ljlVink.xposed"]
+    blackClass = ["com.ljlVink.xposed"]
     // blackClass中的包或者类不会进行混淆(匹配前面一段)
 }
 stringfog {

@@ -32,7 +32,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="4dp"
         android:text="AppName"
-        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/id_iv_app_icon"
         app:layout_constraintTop_toTopOf="@id/id_iv_app_icon" />

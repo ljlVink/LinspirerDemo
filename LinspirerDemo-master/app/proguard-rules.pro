@@ -19,6 +19,15 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+#指定外部模糊字典
+-obfuscationdictionary ./proguard-rules.txt
+#指定class模糊字典
+-classobfuscationdictionary ./proguard-rules.txt
+#指定package模糊字典
+-packageobfuscationdictionary ./proguard-rules.txt
+
+
+
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
 -keep class android.support.**{*;}
@@ -37,6 +46,7 @@
   *** rewind();
 }
 -keep class com.ljlVink.xposed.**{*;}
+-keep class com.ljlVink.Activity.BaseActivity{initview();}
 
 #-keepclasseswithmembernames class com.ljlVink.core.core.HackMdm {*;}
 #-keepclasseswithmembernames class com.ljlVink.core.core.Lenovomethod {*;}

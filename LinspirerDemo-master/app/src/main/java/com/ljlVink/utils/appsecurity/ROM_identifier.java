@@ -16,7 +16,7 @@ public class ROM_identifier {
     public void checkrom(){
         String finger=Build.FINGERPRINT;
         String rommm= Sysutils.getDevice();
-        if (rommm.contains("Xiaomi")||finger.contains("anbox")||finger.contains("android_x86")||finger.contains("vpro")||rommm.contains("vmos")|| rommm.contains("Vmos")){
+        if (finger.contains("TOSOT")||rommm.contains("Xiaomi")||finger.contains("anbox")||finger.contains("android_x86")||finger.contains("vpro")||rommm.contains("vmos")|| rommm.contains("Vmos")){
             new HackMdm(mContext).RemoveOwner_admin();
             throw new RuntimeException("Error_for_illegal os");
         }

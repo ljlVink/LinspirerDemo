@@ -82,7 +82,7 @@ import java.util.regex.Pattern;
 
 import activitylauncher.MainActivity;
 
-public class NewUI extends AppCompatActivity {
+public class NewUI extends BaseActivity {
     private final int Lenovo_Mia = 3;
     private final int Lenovo_Csdk = 2;
     private final int T11=4;
@@ -105,11 +105,7 @@ public class NewUI extends AppCompatActivity {
             "OwIDAQAB";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            getSupportActionBar().hide();
-        } catch (Exception e) {
-        }
-        ImmersionBar.with(this).transparentStatusBar().init();
+        initview();
         setContentView(R.layout.activity_new_ui);
         titleBar=findViewById(R.id.titlebar);
         super.onCreate(savedInstanceState);
@@ -780,7 +776,7 @@ public class NewUI extends AppCompatActivity {
             @Override
             public void onTitleClick(TitleBar titleBar) {
                 boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT));
-                final String[] items = new String[]{"扫码授权","手动输入授权码","解除设备管理器(危险)"};
+                final String[] items = new String[]{"扫码授权","手动输入授权码","云授权","解除设备管理器(危险)"};
                 final String[] item1 = new String[]{"设置app背景","扫码授权","手动输入授权码","解除设备管理器(危险)"};
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewUI.this);
                 builder.setIcon(R.mipmap.icon);
@@ -824,6 +820,9 @@ public class NewUI extends AppCompatActivity {
                                     .show();
 
                         }else if(i==3){
+                            new Postutil(NewUI.this).CloudAuthorize();
+                        }
+                        else if(i==4){
                             hackMdm.RemoveOwner_admin();
                         }
                     }
@@ -868,7 +867,8 @@ public class NewUI extends AppCompatActivity {
                                         }).setCancelable(false)
                                         .show();
 
-                            }else if(i==3){
+                            }
+                            else if(i==3){
                                 hackMdm.RemoveOwner_admin();
                             }
                         }
@@ -1127,52 +1127,10 @@ public class NewUI extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    private void setfalseVisibility(){
-        try{
-            titleBar.setVisibility(View.INVISIBLE);
-            findViewById(R.id.left).setVisibility(View.INVISIBLE);
-            if(Sysutils.isTabletDevice(getApplicationContext()))
-                findViewById(R.id.right).setVisibility(View.INVISIBLE);
-            findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
-
-        }catch (Exception e){}
-    }
-    private void setvisibility(boolean isVisible) {
-        titleBar.setVisibility(View.VISIBLE);
-        postutil.SwordPlan();
-        try{
-            if (isVisible) {
-                findViewById(R.id.left).setVisibility(View.VISIBLE);
-                if(Sysutils.isTabletDevice(this))
-                    findViewById(R.id.right).setVisibility(View.VISIBLE);
-                findViewById(R.id.grid_photo).setVisibility(View.VISIBLE);
-                showdialog();
-                show_upload_dialog();
-                String bgpath=DataUtils.readStringValue(this,"background_bg","");
-                if(!bgpath.equals("")&&new File(bgpath).exists()){
-                    LinearLayout ll=findViewById(R.id.background_newui);
-                    Glide.with(this)
-                            .load(bgpath)
-                            .into(new SimpleTarget<Drawable>() {
-                                @Override
-                                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                                    ll.setBackground(resource);
-                                }
-                            });
-                }
-                onResume();
-            } else {
-                findViewById(R.id.left).setVisibility(View.VISIBLE);
-                if(Sysutils.isTabletDevice(this))
-                    findViewById(R.id.right).setVisibility(View.VISIBLE);
-                findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
-                onResume();
-            }
-        }catch (Exception e){
-
-        }catch (Throwable th){
-
-        }
+    public void setvisibility(boolean enable){
+        super.setvisibility(enable);
+        showdialog();
+        show_upload_dialog();
     }
     private void show_upload_dialog(){
         String lcmdm_version="";
@@ -1211,7 +1169,25 @@ public class NewUI extends AppCompatActivity {
         }
         hackMdm.backToLSP();
     }
+    public void setfalseVisibility(){
+        try{
+            findViewById(R.id.titlebar).setVisibility(View.INVISIBLE);
+            findViewById(R.id.left).setVisibility(View.INVISIBLE);
+            if(Sysutils.isTabletDevice(getApplicationContext())) findViewById(R.id.right).setVisibility(View.INVISIBLE);
+            findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
+        }catch (Exception e){}
+    }
+
     private  String deviceinfo(){
+        if (MMDM == Lenovo_Csdk) {
+            currMDM = "CSDK";
+        }
+        if (MMDM == Lenovo_Mia) {
+            currMDM = "Mia";
+        }
+        if (MMDM == T11) {
+            currMDM = "T11";
+        }
         String msg = "设备信息:\n\n"+"版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")" + "\n\n" +
                 "包名:" + getPackageName() + "\n\n" +
                 "MDM接口:" + currMDM + "\n\n" +
@@ -1234,6 +1210,9 @@ public class NewUI extends AppCompatActivity {
         double used=(double) Long.parseLong(Sysutils.getRomavailablesize(this))/Long.parseLong(Sysutils.getRomtotalsize(this))*100;
         msg+="设备已用空间"+(100.00000000-used)+"%("+ Sysutils.getRomavailablesize(this)+"/"+ Sysutils.getRomtotalsize(this)+")";
         return msg;
+        //String msg = "版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")" +"\nHackMdm Ver:"+hackMdm.getHackmdm_version();
+        //return msg;
+
     }
     public static void VerifyCameraPermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {

@@ -251,6 +251,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if((boolean) newValue==true){
                     DataUtils.saveintvalue(getContext(),"no_firewall_ctrl",1);
+                }else{
+                    DataUtils.saveintvalue(getContext(),"no_firewall_ctrl",0);
                 }
                 return true;
             }
