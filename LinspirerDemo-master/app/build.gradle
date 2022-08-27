@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 66666
-        versionName "V6.1Release_20220811_AnniversaryEdition"
+        versionCode 67000
+        versionName "V6.1.1Release_20220827"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
