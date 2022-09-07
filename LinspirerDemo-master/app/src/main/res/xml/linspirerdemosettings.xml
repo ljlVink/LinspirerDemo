@@ -79,11 +79,20 @@
             android:title="设置管控包名(手动)"
             android:summary="如您按下返回需要返回到四中桌面或其他桌面,请在此设置包名,清空则默认领创"
             ></Preference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="四中网校附加选项">
         <SwitchPreference
             android:key="bjsz_mode"
             android:title="四中模式"
             android:defaultValue="false"
             android:summary="开启后 桌面将不会解冻领创，直接进入桌面"/>
+        <SwitchPreference
+            android:key="bjsz_mode_disable_recent"
+            android:title="隐藏recent方块"
+            android:defaultValue="false"
+            android:summary="前提在四中模式开启后，返回到四中桌面时，可隐藏方块键"/>
+
     </PreferenceCategory>
     <PreferenceCategory
         android:title="联想设置">
@@ -96,7 +105,7 @@
             android:key="firewall_ctrl"
             android:title="不操作防火墙"
             android:defaultValue="false"
-            android:summary="部分csdk机型有可能有问题，如无响应，开启后"
+            android:summary="部分csdk机型有可能有问题，如无响应，开启后可能会解决此问题"
             ></SwitchPreference>
     </PreferenceCategory>
 

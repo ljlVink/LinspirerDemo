@@ -48,6 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference miahash_add=Objects.requireNonNull(findPreference("miahash_add"));
         SwitchPreference bjszmode=Objects.requireNonNull(findPreference("bjsz_mode"));
         SwitchPreference firewall_ctrl=Objects.requireNonNull(findPreference("firewall_ctrl"));
+        SwitchPreference bjsz_mode_disable_recent=Objects.requireNonNull(findPreference("bjsz_mode_disable_recent"));
         vpnmode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -253,6 +254,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     DataUtils.saveintvalue(getContext(),"no_firewall_ctrl",1);
                 }else{
                     DataUtils.saveintvalue(getContext(),"no_firewall_ctrl",0);
+                }
+                return true;
+            }
+        });
+        bjsz_mode_disable_recent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if((boolean) newValue==true){
+                    DataUtils.saveintvalue(getContext(),"bjsz_mode_disable_recent",1);
+                }else{
+                    DataUtils.saveintvalue(getContext(),"bjsz_mode_disable_recent",0);
                 }
                 return true;
             }
