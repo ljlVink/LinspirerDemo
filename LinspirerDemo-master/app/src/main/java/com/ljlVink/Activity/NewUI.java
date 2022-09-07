@@ -299,7 +299,7 @@ public class NewUI extends BaseActivity {
                         }
                         break;
                     case 6:
-                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)"};
+                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙"};
                         MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder1.setIcon(R.drawable.huawei);
                         builder1.setTitle("华为专区");
@@ -408,6 +408,10 @@ public class NewUI extends BaseActivity {
                                     }
                                     if (which == 2) {
                                         runhwunlock();
+                                    }if(which==3){
+                                        hackMdm.disablebluetooth();
+                                    }if(which==4){
+                                        hackMdm.enablebluetooth();
                                     }
 
                                 } catch (Exception e) {
@@ -632,7 +636,7 @@ public class NewUI extends BaseActivity {
                         appbuilder.show();
                         break;
                     case 17:
-                        final String[] t11items = new String[]{"禁用面具模块","自定义su指令"};
+                        final String[] t11items = new String[]{"禁用面具模块","自定义su指令","打开t11调试界面","打开edxp","重新执行开网脚本"};
                         MaterialAlertDialogBuilder buildert11 = new MaterialAlertDialogBuilder(NewUI.this);
                         buildert11.setIcon(R.drawable.tensafe);
                         buildert11.setTitle("T11专区");
@@ -674,6 +678,14 @@ public class NewUI extends BaseActivity {
                                                 }
                                             })
                                             .show();
+                                }
+                                else if(i==3){
+                                    hackMdm.T11Cmd("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.DebugActivity");
+                                }
+                                else if(i==4){
+                                    hackMdm.T11Cmd("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.WelcomeActivity");
+                                }else if(i==5){
+                                    hackMdm.T11Cmd("sh /system/tshook/network.sh");
                                 }
                             }
                         }).show();

@@ -1,6 +1,7 @@
 package com.huosoft.wisdomclass.linspirerdemo;
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.ljlVink.MDM;
 import com.ljlVink.utils.DataCleanManager;
@@ -11,7 +12,7 @@ import com.ljlVink.utils.Signutil;
 import com.tencent.bugly.Bugly;
 
 public class lspdemoApplication extends Application {
-    int MMDM=0;
+    private static int MMDM=100;
     private static lspdemoApplication mApplication;
 
     @Override
@@ -27,6 +28,7 @@ public class lspdemoApplication extends Application {
         }
         */
         mApplication = this;
+        MMDM=new MDM(this).MDM();
         new ROM_identifier(this).checkrom();
         int keystatus = new Signutil(this, "97:8D:89:23:F9:F3:AF:C9:A3:79:37:2C:C8:A6:FF:A8:26:CC:DE:EF").f();
         if (!new AppEntranceChecker(this).checkEntrance()){
@@ -36,14 +38,14 @@ public class lspdemoApplication extends Application {
         if ( 666 == keystatus) {
             Bugly.init(this, "50a36059a3", false);
         }
-        MMDM=new MDM(this).MDM();
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
-    }
-    public int getMMDM(){
-        return MMDM;
     }
     public static Context getApplication() {
         return mApplication;
     }
+    public static int getMMDM() {
+        return MMDM;
+    }
+
 
 }
