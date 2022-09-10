@@ -50,6 +50,7 @@ import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.king.zxing.CameraScan;
+import com.ljlVink.core.core.t11_271bay.MainUtils;
 import com.ljlVink.utils.Toast;
 import com.ljlVink.core.core.Postutil;
 import com.ljlVink.utils.DataUtils;
@@ -299,7 +300,7 @@ public class NewUI extends BaseActivity {
                         }
                         break;
                     case 6:
-                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙"};
+                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用用HMS core(设置'华为账号')"};
                         MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder1.setIcon(R.drawable.huawei);
                         builder1.setTitle("华为专区");
@@ -412,6 +413,10 @@ public class NewUI extends BaseActivity {
                                         hackMdm.disablebluetooth();
                                     }if(which==4){
                                         hackMdm.enablebluetooth();
+                                    }if(which==5){
+                                        hackMdm.iceApp("com.huawei.hwid",true);
+                                    }if(which==6){
+                                        hackMdm.iceApp("com.huawei.hwid",false);
                                     }
 
                                 } catch (Exception e) {
@@ -686,6 +691,10 @@ public class NewUI extends BaseActivity {
                                     hackMdm.T11Cmd("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.WelcomeActivity");
                                 }else if(i==5){
                                     hackMdm.T11Cmd("sh /system/tshook/network.sh");
+                                }else if (i==6){
+                                    new MainUtils(NewUI.this).disable_safectrlmn();
+                                }else if(i==7){
+                                    new MainUtils(NewUI.this).enable_safectrlmn();
                                 }
                             }
                         }).show();

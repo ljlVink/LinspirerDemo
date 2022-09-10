@@ -113,7 +113,6 @@ public class AppManageActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        setTitle(String.format("%s (共%s条)", getTitle(), mItems.size()));
         mAdapter =new AppAdapter();
         ListView rc=findViewById(R.id.rv_app_usage);
         rc.setAdapter(mAdapter);

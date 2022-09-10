@@ -1,4 +1,6 @@
 package activitylauncher;
+import com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication;
+
 import java.io.File;
 import java.util.Objects;
 import java.util.Vector;
@@ -13,6 +15,9 @@ public class RootDetection {
             if (path.exists() && path.canExecute() && path.isFile()) {
                 return true;
             }
+        }
+        if(lspdemoApplication.getMMDM()==4){
+            return true;
         }
         return false;
     }

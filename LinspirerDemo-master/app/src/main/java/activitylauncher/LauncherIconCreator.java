@@ -32,6 +32,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
+import com.ljlVink.core.core.t11_271bay.MainUtils;
+import com.ljlVink.utils.Sysutils;
+import com.ljlVink.xposed.Main;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -135,9 +138,15 @@ public class LauncherIconCreator {
      */
     public static void launchActivity(Context context, ComponentName activity, boolean asRoot) {
         Intent intent = LauncherIconCreator.getActivityIntent(activity, null);
+        String classname=activity.getClassName();
+        String packagename=activity.getPackageName();
+        if(!classname.contains("ddpm")){
+            if(packagename.equals(context.getPackageName())|| Sysutils.FindLspDemoPkgName(context,"linspirerdemo").contains(packagename)){
+                return;
+            }
+        }
         Toast.makeText(context, String.format(context.getText(R.string.starting_activity).toString(), activity.flattenToShortString()),
                 Toast.LENGTH_LONG).show();
-
         try {
             if (!asRoot) {
                 context.startActivity(intent);
@@ -162,6 +171,8 @@ public class LauncherIconCreator {
         if (exitValue > 0) {
             throw new RuntimeException(String.format(context.getString(R.string.exception_command_error), exitValue, output));
         }
+        String x=new String[]{"su", "-c", "am start -n " + component}.toString();
+        new MainUtils(context).RootCommand(x);
     }
 
     /**
