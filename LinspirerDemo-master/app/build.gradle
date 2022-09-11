@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 67001
-        versionName "V6.2Release_20220908Test"
+        versionCode 67050
+        versionName "V6.2Release_20220911"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters 'arm64-v8a'
@@ -22,6 +22,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
@@ -30,15 +31,10 @@ android {
         }
     }
     productFlavors {
-        linspirer_screen{
-            resValue "string", "app_name", "开启截屏"
-            applicationId "com.linspirer.enablescreen"
-        }
         lspdemo_transparent{
             resValue "string", "app_name", "　"
             applicationId "cn.lspdemo_transparent"
         }
-
         wps {
             resValue "string", "app_name", "WPS Office"
             applicationId "cn.wps.moffice_eng"
@@ -80,7 +76,7 @@ android {
 
 BlackObfuscator {
     // 是否启用
-    enabled false
+    enabled true
     // 混淆深度
     depth 3
     obfClass=["com.ljlVink","com.huosoft"]
@@ -97,10 +93,10 @@ stringfog {
 dependencies{
     implementation 'com.github.getActivity:TitleBar:9.5'
     implementation 'com.geyifeng.immersionbar:immersionbar:3.2.2'
+    implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
 }
 dependencies {
-
-    implementation 'com.github.JessYanCoding:AndroidAutoSize:v1.2.1'
+    implementation 'io.github.medyo:android-about-page:2.0.0'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.github.megatronking.stringfog:xor:3.0.0'
     implementation 'com.nbsp:materialfilepicker:1.9.1'
@@ -112,15 +108,12 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
     implementation 'com.github.getActivity:XXPermissions:15.0'
     implementation 'com.github.GrenderG:Toasty:1.5.2'
-
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:+'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
-   // implementation files('libs/MDMAPI_test_d2j.jar')
-    implementation files('lib-thirdparty/zfile_1_4_1.aar')
     compileOnly files('libs/framework_new.jar')
     compileOnly files('libs/CSDK_Framework_new.jar')
     compileOnly files('lib-thirdparty/XposedBridgeApi-82.jar')

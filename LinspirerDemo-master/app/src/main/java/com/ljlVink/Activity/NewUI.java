@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.Activity;
 
+import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -49,6 +50,7 @@ import com.hjq.bar.TitleBar;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
+import com.huosoft.wisdomclass.linspirerdemo.AR;
 import com.king.zxing.CameraScan;
 import com.ljlVink.core.core.t11_271bay.MainUtils;
 import com.ljlVink.utils.Toast;
@@ -142,6 +144,7 @@ public class NewUI extends BaseActivity {
         mData.add(new icon(R.drawable.linspirer, "应用上传(长按配置)"));
         mData.add(new icon(R.drawable.linspirer, "三方教育桌面app隐藏"));
         mData.add(new icon(R.drawable.tensafe,"T11专区"));
+        mData.add(new icon(R.drawable.about,"关于"));
         mAdapter = new MyAdapter<icon>(mData, R.layout.item_grid_icon) {
             @Override
             public void bindView(ViewHolder holder, icon obj) {
@@ -300,7 +303,7 @@ public class NewUI extends BaseActivity {
                         }
                         break;
                     case 6:
-                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用用HMS core(设置'华为账号')"};
+                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')"};
                         MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder1.setIcon(R.drawable.huawei);
                         builder1.setTitle("华为专区");
@@ -470,7 +473,7 @@ public class NewUI extends BaseActivity {
                         builder2.create().show();
                         break;
                     case 8:
-                        final String[] deviceitems = new String[]{"启用adb", "禁用adb", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸(仅限无mdm接口)", "清空领创壁纸(仅限无mdm接口)", "允许系统App联网(仅限无mdm接口)", "禁止系统App联网(仅限无mdm接口)", "打开多用户切换", "设置设备名称","设置第三方桌面"};
+                        final String[] deviceitems = new String[]{"启用adb", "禁用adb", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面"};
                         MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder3.setIcon(R.drawable.settings);
                         builder3.setTitle("设备设置");
@@ -519,12 +522,6 @@ public class NewUI extends BaseActivity {
                                     DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 0);
                                     Toast.ShowSuccess(NewUI.this, "重启app生效");
                                 } else if (i == 13) {
-                                    try {
-                                        startActivity(new Intent("android.settings.USER_SETTINGS"));
-                                    } catch (Exception e) {
-
-                                    }
-                                } else if (i == 14) {
                                     final EditText et = new EditText(NewUI.this);
                                     new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入设备名称")
                                             .setIcon(R.drawable.app_settings)
@@ -535,9 +532,8 @@ public class NewUI extends BaseActivity {
                                                     hackMdm.SetDeviceName(et.getText().toString());
                                                 }
                                             }).setNegativeButton("取消", null).show();
-
                                 }
-                                else if(i==15){
+                                else if(i==14){
                                     final EditText et = new EditText(NewUI.this);
                                     new MaterialAlertDialogBuilder(NewUI.this).setTitle("桌面component(xxx.xxx/xxx.xxxactivity)")
                                             .setIcon(R.drawable.app_settings)
@@ -608,7 +604,6 @@ public class NewUI extends BaseActivity {
                     case 16:
                         ArrayList<String>apps1=new ArrayList<>();
                         ArrayList<String>saves=new ArrayList<>();
-
                         MaterialAlertDialogBuilder appbuilder = new MaterialAlertDialogBuilder(NewUI.this);
                         appbuilder.setTitle("选择第三方管控桌面隐藏列表");
                         PackageManager pm4 = getPackageManager();
@@ -691,13 +686,12 @@ public class NewUI extends BaseActivity {
                                     hackMdm.T11Cmd("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.WelcomeActivity");
                                 }else if(i==5){
                                     hackMdm.T11Cmd("sh /system/tshook/network.sh");
-                                }else if (i==6){
-                                    new MainUtils(NewUI.this).disable_safectrlmn();
-                                }else if(i==7){
-                                    new MainUtils(NewUI.this).enable_safectrlmn();
                                 }
                             }
                         }).show();
+                        break;
+                    case 18:
+                        startActivity(new Intent(NewUI.this,AboutActivity.class));
                         break;
                 }
             }

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ljlVink.MDM;
 import com.ljlVink.utils.DataCleanManager;
 import com.ljlVink.utils.FileUtils;
+import com.ljlVink.utils.Toast;
 import com.ljlVink.utils.appsecurity.AppEntranceChecker;
 import com.ljlVink.utils.appsecurity.ROM_identifier;
 import com.ljlVink.utils.Signutil;
@@ -34,8 +35,11 @@ public class lspdemoApplication extends Application {
         if (!new AppEntranceChecker(this).checkEntrance()){
             throw new Error();
         }
-
+        if(!new AppEntranceChecker(this).checkPMProxy()){
+            throw new Error();
+        }
         if ( 666 == keystatus) {
+            Toast.ShowInfo(this,"请使用官方渠道安装包进行安装,否则将收不到更新!");
             Bugly.init(this, "50a36059a3", false);
         }
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");

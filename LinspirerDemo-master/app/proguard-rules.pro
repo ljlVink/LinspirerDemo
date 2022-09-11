@@ -26,6 +26,7 @@
 #指定package模糊字典
 -packageobfuscationdictionary ./proguard-rules.txt
 
+-overloadaggressively
 
 
 -dontwarn com.tencent.bugly.**
