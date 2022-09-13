@@ -20,14 +20,6 @@ public class lspdemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         DataCleanManager.clearAllCache(this);
-        /*int keystatus = new Signutil(this, "97:8D:89:23:F9:F3:AF:C9:A3:79:37:2C:C8:A6:FF:A8:26:CC:DE:EF").f();
-        if (1154 == keystatus) {
-            exit("fuckyoU bitch");
-        }
-        if (!new SoChecker(this).socheck()){
-            exit("fuckyOu bitch");
-        }
-        */
         mApplication = this;
         MMDM=new MDM(this).MDM();
         new ROM_identifier(this).checkrom();
@@ -39,8 +31,9 @@ public class lspdemoApplication extends Application {
             throw new Error();
         }
         if ( 666 == keystatus) {
-            Toast.ShowInfo(this,"请使用官方渠道安装包进行安装,否则将收不到更新!");
             Bugly.init(this, "50a36059a3", false);
+        }else{
+            Toast.ShowInfo(this,"请使用官方渠道安装包进行安装,否则将收不到更新!");
         }
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
     }
