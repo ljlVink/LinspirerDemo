@@ -208,4 +208,10 @@
     <string name="theme_default">系统默认</string>
     <string name="theme_light">浅色</string>
     <string name="theme_dark">深色</string>
+    <string name="waiting_device">等待连接</string>
+    <string name="connecting">正在连接中...</string>
+    <string name="adb_device_not_connected">设备未连接</string>
+    <string name="adb_device_connected">已连接</string>
+    <string name="adb_device_waiting">等待连接</string>
+
 </resources>

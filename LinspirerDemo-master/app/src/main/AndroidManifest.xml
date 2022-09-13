@@ -50,12 +50,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.MANAGE_USERS " />
 
-    <meta-data
-        android:name="BUGLY_APPID"
-        android:value="50a36059a3" />
-    <meta-data
-        android:name="BUGLY_APP_VERSION"
-        android:value="V4.0_release" />
+    <uses-feature android:name="android.hardware.usb.host" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:name=".lspdemoApplication"
@@ -67,6 +63,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinspirerDemo"
         android:usesCleartextTraffic="true">
+        <receiver
+            android:name="adbotg.UsbReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_STATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_STATE"
+                android:resource="@xml/device_filter" />
+        </receiver>
+
         <activity
             android:name="com.ljlVink.Activity.AboutActivity"
             android:exported="false" />
@@ -75,6 +92,17 @@
             android:name="ScopedStorage"
             android:value="true" />
 
+        <activity
+            android:name="adbotg.adbMainActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
         <activity
             android:name="com.ljlVink.Activity.AppManageActivity"
             android:exported="false" />

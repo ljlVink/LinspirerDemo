@@ -84,6 +84,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import activitylauncher.MainActivity;
+import adbotg.adbMainActivity;
 
 public class NewUI extends BaseActivity {
     private final int Lenovo_Mia = 3;
@@ -144,6 +145,7 @@ public class NewUI extends BaseActivity {
         mData.add(new icon(R.drawable.linspirer, "应用上传(长按配置)"));
         mData.add(new icon(R.drawable.linspirer, "三方教育桌面app隐藏"));
         mData.add(new icon(R.drawable.tensafe,"T11专区"));
+        mData.add(new icon(R.drawable.ic_adb,"ADB-OTG"));
         mData.add(new icon(R.drawable.about,"关于"));
         mAdapter = new MyAdapter<icon>(mData, R.layout.item_grid_icon) {
             @Override
@@ -691,6 +693,9 @@ public class NewUI extends BaseActivity {
                         }).show();
                         break;
                     case 18:
+                        startActivity(new Intent(NewUI.this, adbMainActivity.class));
+                        break;
+                    case 19:
                         startActivity(new Intent(NewUI.this,AboutActivity.class));
                         break;
                 }
