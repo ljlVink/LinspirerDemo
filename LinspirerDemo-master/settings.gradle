@@ -1,3 +1,4 @@
 rootProject.name = "Linspirer Demo"
 include ':app'
 include ':adblib'
+include ':hackmdm'

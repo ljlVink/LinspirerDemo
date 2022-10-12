@@ -1,6 +1,7 @@
 package com.ljlVink.utils;
 
 import android.annotation.SuppressLint;
+import android.app.csdk.CSDKManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -19,6 +20,9 @@ import android.os.StatFs;
 import android.provider.Settings;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+
+import com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication;
+import com.ljlVink.core.hackmdm.v2.HackMdm;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -40,6 +44,44 @@ public class Sysutils {
             return "";
         }
     }
+    private static String getprop(String str) {
+        try {
+            Class<?>[] clsArr = {String.class};
+            Object[] objArr = {str};
+            Class<?> cls = Class.forName("android.os.SystemProperties");
+            return (String) cls.getDeclaredMethod("get", clsArr).invoke(cls, objArr);
+        } catch (Throwable th) {
+            return "";
+        }
+    }
+    public static boolean isUsbDebug(Context mContext) {
+        boolean enableAdb = (Settings.Secure.getInt(mContext.getContentResolver(), "adb_enabled", 0) > 0);
+        return enableAdb;
+    }
+    public static String getLcmdm_version(Context context){
+        String lcmdm_version="";
+        try{
+            lcmdm_version=context.getPackageManager().getPackageInfo("com.android.launcher3",0).versionName;
+        }catch (Exception e){
+            lcmdm_version="设备未安装管控";
+        }
+        return lcmdm_version;
+    }
+    public static String getHwemui(){
+        return getprop("ro.build.version.emui");
+    }
+    public static boolean isSystemApplication(Context context){
+        PackageManager mPackageManager = context.getPackageManager();
+        try {
+            final PackageInfo packageInfo = mPackageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+            if((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)!=0){
+                return true;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static String getRomtotalsize(Context context) {
         try {
             StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
@@ -51,6 +93,14 @@ public class Sysutils {
     }
     public static String getMacaddress(Context context){
         String defaultMac = "02:00:00:00:00:00";
+        if(HackMdm.DeviceMDM.getMDMName().equals("CSDK")){
+            try{
+                defaultMac=HackMdm.DeviceMDM.getMacAddr();
+            }catch (Throwable ingore){
+                defaultMac="02:00:00:00:00:00";
+            }
+            return defaultMac;
+        }
         try {
             List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface ntwInterface : interfaces) {
@@ -109,8 +159,9 @@ public class Sysutils {
         return manufacturer;
     }
     public static boolean isTabletDevice(Context context) {
-        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                Configuration.SCREENLAYOUT_SIZE_LARGE;
+        /*return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
+                Configuration.SCREENLAYOUT_SIZE_LARGE;*/
+        return true;
     }
     public static boolean copyStr(Context c,String copyStr) {
         try {
@@ -186,7 +237,7 @@ public class Sysutils {
         for (PackageInfo packageInfo : packages) {
             String pkgname=packageInfo.packageName;
             if (!pkgname.equals(context.getPackageName())) {
-                if (getMetaDataValue(context, "HackMdm", pkgname).equals(meta)) {
+                if (getMetaDataValue(context, "HackMdm_oldif", pkgname).equals(meta)) {
                     lst.add(packageInfo.packageName);
                 }
             }

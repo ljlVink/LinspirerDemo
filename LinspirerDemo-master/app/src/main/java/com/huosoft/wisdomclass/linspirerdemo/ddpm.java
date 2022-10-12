@@ -5,7 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.ljlVink.core.core.HackMdm;
+import com.ljlVink.core.hackmdm.v2.HackMdm;
 
 public class ddpm extends Activity {
 
@@ -20,7 +20,7 @@ public class ddpm extends Activity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try{
-                            new HackMdm(ddpm.this).RemoveOwner_admin();
+                            HackMdm.DeviceMDM.RemoveDeviceOwner_admin();
                         }catch (Exception e){
                         }
                         ddpm.this.finish();

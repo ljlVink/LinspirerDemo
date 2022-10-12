@@ -94,6 +94,7 @@
 
         <activity
             android:name="adbotg.adbMainActivity"
+            android:label="ADB-OTG"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
@@ -236,22 +237,6 @@
             android:label="后门解除lspdemo控制"
             android:theme="@style/TranslucentTheme" />
 
-        <receiver
-            android:name=".AR"
-            android:enabled="true"
-            android:exported="true"
-            android:icon="@mipmap/icon"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data
-                android:name="android.app.device_admin"
-                android:resource="@xml/myadmin" />
-
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-                <action android:name="android.app.action.DEVICE_ADMIN_DISABLE_REQUESTED" />
-                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
-            </intent-filter>
-        </receiver>
         <receiver
             android:name="com.ljlVink.Receiver.MyReceiver"
             android:enabled="true"

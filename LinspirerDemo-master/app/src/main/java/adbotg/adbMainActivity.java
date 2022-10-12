@@ -150,15 +150,20 @@ public class adbMainActivity extends AppCompatActivity implements TextView.OnEdi
         if (device!=null) {
             asyncRefreshAdbConnection(device);
         }else {
-            for (String k : mManager.getDeviceList().keySet()) {
-                UsbDevice usbDevice = mManager.getDeviceList().get(k);
-                handler.sendEmptyMessage(CONNECTING);
-                if (mManager.hasPermission(usbDevice)) { ;
-                    asyncRefreshAdbConnection(usbDevice);
-                } else {
-                    mManager.requestPermission(usbDevice, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"), 0));
+            try{
+                for (String k : mManager.getDeviceList().keySet()) {
+                    UsbDevice usbDevice = mManager.getDeviceList().get(k);
+                    handler.sendEmptyMessage(CONNECTING);
+                    if (mManager.hasPermission(usbDevice)) { ;
+                        asyncRefreshAdbConnection(usbDevice);
+                    } else {
+                        mManager.requestPermission(usbDevice, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"), 0));
+                    }
                 }
+            }catch (Exception ignore){
+
             }
+
         }
         edCommand.setImeActionLabel("Run", EditorInfo.IME_ACTION_DONE);
         edCommand.setOnEditorActionListener(this);

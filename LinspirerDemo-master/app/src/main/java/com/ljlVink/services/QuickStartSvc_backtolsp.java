@@ -2,11 +2,11 @@ package com.ljlVink.services;
 
 import android.service.quicksettings.TileService;
 
-import com.ljlVink.core.core.HackMdm;
+import com.ljlVink.core.hackmdm.v2.HackMdm;
 
 public class QuickStartSvc_backtolsp extends TileService {
     @Override
     public void onClick() {
-        new HackMdm(this).backToLSP();
+        HackMdm.DeviceMDM.backToLSPDesktop();
     }
 }

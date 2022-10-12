@@ -32,9 +32,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.core.core.t11_271bay.MainUtils;
+import com.ljlVink.core.hackmdm.v2.HackMdm;
 import com.ljlVink.utils.Sysutils;
-import com.ljlVink.xposed.Main;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -172,7 +171,7 @@ public class LauncherIconCreator {
             throw new RuntimeException(String.format(context.getString(R.string.exception_command_error), exitValue, output));
         }
         String x=new String[]{"su", "-c", "am start -n " + component}.toString();
-        new MainUtils(context).RootCommand(x);
+        HackMdm.DeviceMDM.RootCMD(x);
     }
 
     /**

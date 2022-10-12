@@ -1,17 +1,11 @@
 package com.ljlVink.Activity;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
 
-import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,57 +13,55 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
+import android.text.format.DateUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
-import com.huosoft.wisdomclass.linspirerdemo.AR;
+import com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication;
 import com.king.zxing.CameraScan;
-import com.ljlVink.core.core.t11_271bay.MainUtils;
+import com.ljlVink.core.core.IPostcallback;
+import com.ljlVink.core.hackmdm.v2.HackMdm;
+import com.ljlVink.utils.TimeUtils;
 import com.ljlVink.utils.Toast;
 import com.ljlVink.core.core.Postutil;
 import com.ljlVink.utils.DataUtils;
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
 import com.ljlVink.utils.ContentUriUtil;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.core.core.HackMdm;
 import com.ljlVink.utils.appsecurity.RSA;
 
 import com.ljlVink.linspirerfake.uploadHelper;
 import com.ljlVink.utils.Sysutils;
 import com.ljlVink.services.vpnService;
+import com.ljlVink.utils.appsecurity.envcheck;
 import com.lzf.easyfloat.EasyFloat;
 import com.lzf.easyfloat.enums.ShowPattern;
 import com.lzf.easyfloat.interfaces.OnInvokeView;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+import com.xuexiang.xui.widget.textview.LoggerTextView;
 
 
 import java.io.File;
@@ -77,6 +69,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -87,17 +80,12 @@ import activitylauncher.MainActivity;
 import adbotg.adbMainActivity;
 
 public class NewUI extends BaseActivity {
-    private final int Lenovo_Mia = 3;
-    private final int Lenovo_Csdk = 2;
-    private final int T11=4;
-    private String currMDM = "DevicePolicyManager";
-    private HackMdm hackMdm;
     private BaseAdapter mAdapter = null;
     private ArrayList<String> superlist = new ArrayList<>();
     private ArrayList<icon> mData = null;
-    private int MMDM;
     private GridView grid_photo;
     private Postutil postutil;
+    private LoggerTextView logger;
     private LinearLayout right;
     private TitleBar titleBar;
     final String pubkey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy7Zi/oJPPPsomYWcP2lB\n" +
@@ -113,10 +101,12 @@ public class NewUI extends BaseActivity {
         setContentView(R.layout.activity_new_ui);
         titleBar=findViewById(R.id.titlebar);
         super.onCreate(savedInstanceState);
-        hackMdm = new HackMdm(this);
+        new HackMdm(this).initMDM();
+        if(Boolean.parseBoolean(lspdemoApplication.geta())){
+            HackMdm.DeviceMDM.initHack(0);
+        }
         postutil = new Postutil(this);
         postutil.CloudAuthorize();
-        hackMdm.initHack(0);
         //初始化view
         new uploadHelper(this,true).uplpadfakeapps();
         if(!Sysutils.isTabletDevice(this)){
@@ -124,7 +114,6 @@ public class NewUI extends BaseActivity {
             right.setVisibility(View.GONE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        MMDM = hackMdm.getMMDM();
         grid_photo = (GridView) findViewById(R.id.grid_photo);
         mData = new ArrayList<icon>();
         mData.add(new icon(R.drawable.backtodesktop, "返回桌面"));
@@ -183,7 +172,7 @@ public class NewUI extends BaseActivity {
                                 which++;
                                 try {
                                     if (which == 1) {
-                                        if (MMDM != Lenovo_Mia) {
+                                        if (HackMdm.DeviceMDM.getMDMName().equals("Mia")) {
                                             Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
                                             FS.setType("application/vnd.android.package-archive");
                                             startActivityForResult(FS, 1);
@@ -197,7 +186,7 @@ public class NewUI extends BaseActivity {
                                     } else if (which == 3) {
                                         new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
                                     } else if (which == 4) {
-                                        if (hackMdm.isEMUI10Device()) {
+                                        if (HackMdm.DeviceMDM.isEMUI10Device()) {
                                             Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
                                             FS.setType("application/vnd.android.package-archive");
                                             startActivityForResult(FS, 2);
@@ -210,7 +199,7 @@ public class NewUI extends BaseActivity {
                                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        hackMdm.appwhitelist_add(et.getText().toString());
+                                                        HackMdm.DeviceMDM.AppWhiteList_add(et.getText().toString());
                                                     }
                                                 }).setNegativeButton("取消", null).show();
                                     }
@@ -269,14 +258,14 @@ public class NewUI extends BaseActivity {
                         superbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                hackMdm.savesuperapps(superlist);
+                                DataUtils.saveStringArrayList(NewUI.this,"superapp",superlist);
                             }
                         });
                         superbuilder.show();
 
                         break;
                     case 4:
-                        hackMdm.killApplicationProcess(DataUtils.ReadStringArraylist(getApplicationContext(), "notkillapp"));
+                        HackMdm.DeviceMDM.killApplicationProcess(DataUtils.ReadStringArraylist(getApplicationContext(), "notkillapp"));
                         break;
                     case 5:
                         if (EasyFloat.isShow()) {
@@ -407,7 +396,7 @@ public class NewUI extends BaseActivity {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 String s = lst.toString();
                                                 String ss = s.substring(1, s.length() - 1).replace(" ", "");
-                                                hackMdm.hw_hidesettings(ss);
+                                                HackMdm.DeviceMDM.hw_hidesettings(ss);
                                             }
                                         });
                                         hwsettings.show();
@@ -415,13 +404,13 @@ public class NewUI extends BaseActivity {
                                     if (which == 2) {
                                         runhwunlock();
                                     }if(which==3){
-                                        hackMdm.disablebluetooth();
+                                        HackMdm.DeviceMDM.disableBluetooth();
                                     }if(which==4){
-                                        hackMdm.enablebluetooth();
+                                        HackMdm.DeviceMDM.enableBluetooth();
                                     }if(which==5){
-                                        hackMdm.iceApp("com.huawei.hwid",true);
+                                        HackMdm.DeviceMDM.iceApp("com.huawei.hwid",true);
                                     }if(which==6){
-                                        hackMdm.iceApp("com.huawei.hwid",false);
+                                        HackMdm.DeviceMDM.iceApp("com.huawei.hwid",false);
                                     }
 
                                 } catch (Exception e) {
@@ -446,25 +435,20 @@ public class NewUI extends BaseActivity {
                                         intent12.setComponent(new ComponentName("com.android.settings", "com.android.settings.display.NavigationBarSettingsActivity"));
                                         startActivity(intent12);
                                     } else if (which == 2) {
-                                        if (MMDM == Lenovo_Csdk) {
-                                            hackMdm.fix_csdk_compoment();
-                                            Intent intent11 = new Intent();
-                                            intent11.setComponent(new ComponentName("com.android.settings", "com.android.settings.password.ChooseLockGeneric"));
-                                            startActivity(intent11);
-                                        } else {
-                                            throw new Exception("...");
-                                        }
+                                        Intent intent11 = new Intent();
+                                        intent11.setComponent(new ComponentName("com.android.settings", "com.android.settings.password.ChooseLockGeneric"));
+                                        startActivity(intent11);
                                     } else if (which == 3) {
                                         final EditText et = new EditText(NewUI.this);
                                         new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入密码").setIcon(android.R.drawable.sym_def_app_icon).setView(et)
                                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        hackMdm.mia_setpasswd(et.getText().toString());
+                                                        HackMdm.DeviceMDM.setDevicePassword_lenovo_mia(et.getText().toString());
                                                     }
                                                 }).setNegativeButton("取消", null).show();
                                     } else if (which == 4) {
-                                        hackMdm.Lenovo_clear_whitelist_app();
+                                        HackMdm.DeviceMDM.clear_whitelist_app_lenovo();
                                     }
                                 } catch (Exception e) {
 
@@ -475,7 +459,7 @@ public class NewUI extends BaseActivity {
                         builder2.create().show();
                         break;
                     case 8:
-                        final String[] deviceitems = new String[]{"启用adb", "禁用adb", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面"};
+                        final String[] deviceitems = new String[]{"启用adb(需要激活写设置权限)", "禁用adb(需要激活写设置权限)", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面"};
                         MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder3.setIcon(R.drawable.settings);
                         builder3.setTitle("设备设置");
@@ -484,22 +468,30 @@ public class NewUI extends BaseActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 i++;
                                 if (i == 1) {
-                                    hackMdm.dpm_enable_adb();
+                                    if(HackMdm.DeviceMDM.isDeviceOwnerActive()){
+                                        HackMdm.DeviceMDM.settings_enable_adb(false);
+                                    }else{
+                                        HackMdm.DeviceMDM.settings_enable_adb(true);
+                                    }
                                 } else if (i == 2) {
-                                    hackMdm.dpm_disable_adb();
+                                    if(HackMdm.DeviceMDM.isDeviceOwnerActive()){
+                                        HackMdm.DeviceMDM.settings_enable_adb(false);
+                                    }else {
+                                        HackMdm.DeviceMDM.settings_enable_adb(true);
+                                    }
                                 } else if (i == 3) {
                                     try {
                                         startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
                                     } catch (Exception e) {
                                     }
                                 } else if (i == 4) {
-                                    hackMdm.DisableStatusBar();
+                                    HackMdm.DeviceMDM.disableStatusBar();
                                 } else if (i == 5) {
-                                    hackMdm.EnableStatusBar();
+                                    HackMdm.DeviceMDM.enableStatusBar();
                                 } else if (i == 6) {
                                     showstatusbar();
                                 } else if (i == 7) {
-                                    hackMdm.RestoreFactory_DeviceAdmin();
+                                    HackMdm.DeviceMDM.RestoreFactory_DeviceAdmin();
                                 } else if (i == 8) {
                                     try {
                                         Intent intent11 = new Intent();
@@ -515,7 +507,7 @@ public class NewUI extends BaseActivity {
 
                                     }
                                 } else if (i == 10) {
-                                    hackMdm.setwallpaper("1");
+                                    HackMdm.DeviceMDM.setLinspirerDesktopWallpaper("1");
                                     DataUtils.saveStringValue(getApplicationContext(), "wallpaper", "");
                                 } else if (i == 11) {
                                     DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 1);
@@ -531,7 +523,7 @@ public class NewUI extends BaseActivity {
                                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                                    hackMdm.SetDeviceName(et.getText().toString());
+                                                    HackMdm.DeviceMDM.SetDeviceName(et.getText().toString());
                                                 }
                                             }).setNegativeButton("取消", null).show();
                                 }
@@ -546,7 +538,7 @@ public class NewUI extends BaseActivity {
                                                     String[] x=et.getText().toString().split("/");
                                                     try{
                                                         android.util.Log.e(x[0],x[1]);
-                                                        hackMdm.setdefaultlauncher(new ComponentName(x[0],x[1]));
+                                                        HackMdm.DeviceMDM.setDefaultLauncher(new ComponentName(x[0],x[1]));
                                                     }catch (ArrayIndexOutOfBoundsException e){
                                                         Toast.ShowErr(NewUI.this, "失败");
                                                     }
@@ -632,7 +624,8 @@ public class NewUI extends BaseActivity {
                         appbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                hackMdm.thirdpartylauncher_hideapps(saves);
+                                NewUI.this.logger.logSuccess("第三方桌面图标隐藏:"+saves);
+                                HackMdm.DeviceMDM.thirdParty_HideApps(saves);
                             }
                         });
                         appbuilder.show();
@@ -656,13 +649,13 @@ public class NewUI extends BaseActivity {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     String ans=et3.getText().toString();
-                                                    hackMdm.T11Cmd("touch /data/adb/modules/"+ans+"/disable");
+                                                    HackMdm.DeviceMDM.RootCMD("touch /data/adb/modules/"+ans+"/disable");
                                                 }
                                             }).setNegativeButton("启用", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     String ans=et3.getText().toString();
-                                                    hackMdm.T11Cmd("rm /data/adb/modules/"+ans+"/disable");
+                                                    HackMdm.DeviceMDM.RootCMD("rm /data/adb/modules/"+ans+"/disable");
                                                 }
                                             })
                                             .show();
@@ -676,18 +669,19 @@ public class NewUI extends BaseActivity {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     String ans=et3.getText().toString();
-                                                    if(MMDM==T11) hackMdm.RootCommand(ans);
+                                                    if(HackMdm.DeviceMDM.getMDMName().equals("supi_T11"))
+                                                        HackMdm.DeviceMDM.RootCMD(ans);
                                                 }
                                             })
                                             .show();
                                 }
                                 else if(i==3){
-                                    hackMdm.T11Cmd("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.DebugActivity");
+                                    HackMdm.DeviceMDM.RootCMD("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.DebugActivity");
                                 }
                                 else if(i==4){
-                                    hackMdm.T11Cmd("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.WelcomeActivity");
+                                    HackMdm.DeviceMDM.RootCMD("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.WelcomeActivity");
                                 }else if(i==5){
-                                    hackMdm.T11Cmd("sh /system/tshook/network.sh");
+                                    HackMdm.DeviceMDM.RootCMD("sh /system/tshook/network.sh");
                                 }
                             }
                         }).show();
@@ -780,15 +774,15 @@ public class NewUI extends BaseActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         i++;
                         if(i==1){
-                           hackMdm.RootCommand("reboot");
+                           HackMdm.DeviceMDM.RootCMD("reboot");
                         }else if(i==2){
-                            hackMdm.RootCommand("reboot recovery");
+                            HackMdm.DeviceMDM.RootCMD("reboot recovery");
 
                         }else if(i==3){
-                            hackMdm.RootCommand("reboot bootloader");
+                            HackMdm.DeviceMDM.RootCMD("reboot bootloader");
 
                         }else if(i==4){
-                            hackMdm.RootCommand("reboot edl");
+                            HackMdm.DeviceMDM.RootCMD("reboot edl");
                         }
                     }
                 }).show();
@@ -843,7 +837,7 @@ public class NewUI extends BaseActivity {
                             new Postutil(NewUI.this).CloudAuthorize();
                         }
                         else if(i==4){
-                            hackMdm.RemoveOwner_admin();
+                            HackMdm.DeviceMDM.RemoveDeviceOwner_admin();
                         }
                     }
                 }).show();
@@ -889,7 +883,7 @@ public class NewUI extends BaseActivity {
 
                             }
                             else if(i==3){
-                                hackMdm.RemoveOwner_admin();
+                                HackMdm.DeviceMDM.RemoveDeviceOwner_admin();
                             }
                         }
                     }).show();
@@ -898,16 +892,26 @@ public class NewUI extends BaseActivity {
             @Override
             public  void onLeftClick(TitleBar titleBar){
                 setfalseVisibility();
-                hackMdm.backToLSP();
+                HackMdm.DeviceMDM.backToLSPDesktop();
             }
         });
         verifyStoragePermissions(this);
-        TextView devicetips=findViewById(R.id.devicetips);
-        devicetips.setMovementMethod(ScrollingMovementMethod.getInstance());
-        devicetips.post(new Runnable() {
+        logger=findViewById(R.id.logger);
+        logger.setLogFormatter((logContent, logType) -> TimeUtils.getNowString(new SimpleDateFormat("[HH:mm]")) +" "+logContent);
+        getannouncement();
+    }
+    private void getannouncement(){
+        new Postutil(this).getAnnouncement(new IPostcallback() {
             @Override
-            public void run() {
-                devicetips.setText(deviceinfo());
+            public void onSuccess(String data) {
+                logger.logNormal("服务器连接成功!\n"+data);
+                deviceinfo();
+            }
+
+            @Override
+            public void onInternetErr() {
+                logger.logError("网络连接异常，请检查网络");
+                deviceinfo();
             }
         });
     }
@@ -917,7 +921,7 @@ public class NewUI extends BaseActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        hackMdm.huawei_MDM_Unlock();
+                        HackMdm.DeviceMDM.sendBackDoorLINS("command_release_control",1);
                     }
                 })
                 .setNeutralButton("取消",null).create().show();
@@ -925,8 +929,8 @@ public class NewUI extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        hackMdm = new HackMdm(this);
-        hackMdm.initHack(1);
+        new HackMdm(this).initMDM();
+        HackMdm.DeviceMDM.initHack(1);
         postutil.SwordPlan();
         String modex = "Linspirer Demo";
         titleBar=findViewById(R.id.titlebar);
@@ -935,19 +939,19 @@ public class NewUI extends BaseActivity {
             modex+="(未授权,点击授权)";
             titleBar.setTitleColor(getResources().getColor(R.color.redddd));
         }
-        if (!hackMdm.isDeviceAdminActive() && !hackMdm.isDeviceOwnerActive()) {
+        if (!HackMdm.DeviceMDM.isDeviceAdminActive() && !HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             modex += "(未激活设备管理器)";
             titleBar.setTitleColor(getResources().getColor(R.color.redddd));
         }
-        if (hackMdm.isDeviceAdminActive() && !hackMdm.isDeviceOwnerActive()) {
+        if (HackMdm.DeviceMDM.isDeviceAdminActive() && !HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             modex += "(DeviceAdmin)";
             titleBar.setTitleColor(getResources().getColor(R.color.lspdemo));
         }
-        if (hackMdm.isDeviceOwnerActive()) {
+        if (HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             modex += "(DeviceOwner)";
             titleBar.setTitleColor(getResources().getColor(R.color.lspdemo));
         }
-        if (hackMdm.isDeviceAdminActive() && !hackMdm.isDeviceOwnerActive() && MMDM == Lenovo_Mia) {
+        if (HackMdm.DeviceMDM.isDeviceAdminActive() && !HackMdm.DeviceMDM.isDeviceOwnerActive() && HackMdm.DeviceMDM.getMDMName().equals("Mia")) {
             modex += "(DeviceAdmin,建议激活deviceowner)";
             titleBar.setTitleColor(getResources().getColor(R.color.holo_orange_bright));
         }
@@ -996,7 +1000,7 @@ public class NewUI extends BaseActivity {
                 }
                 if (info != null) {
                     String packageName = info.applicationInfo.packageName;
-                    hackMdm.appwhitelist_add(packageName);
+                    HackMdm.DeviceMDM.AppWhiteList_add(packageName);
                     Intent intent1 = new Intent(Intent.ACTION_VIEW);
                     intent1.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent1.setDataAndType(uri, "application/vnd.android.package-archive");
@@ -1008,17 +1012,25 @@ public class NewUI extends BaseActivity {
                 PackageManager pm1 = getPackageManager();
                 PackageInfo info1 = pm1.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
                 String appname = info1.packageName;
-                hackMdm.appwhitelist_add(appname);
+                HackMdm.DeviceMDM.AppWhiteList_add(appname);
                 Toast.ShowErr(this, "静默安装" + appname);
-                hackMdm.installapp(filePath);
+                HackMdm.DeviceMDM.installApp(filePath);
             }
             if (requestCode == 1011) {
                 String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
                 DataUtils.saveStringValue(this, "wallpaper", filePath);
-                hackMdm.setwallpaper(filePath);
+                HackMdm.DeviceMDM.setLinspirerDesktopWallpaper(filePath);
             }
             if (requestCode == 666) {
-                if (resultCode == RESULT_OK) vpnService.start(this);
+                if (resultCode == RESULT_OK) {
+                    if(logger!=null){
+                        logger.logSuccess("领创网络屏蔽:已启动");
+                        if(DataUtils.readint(this,"disallow_appstore_internet",1)==1){
+                            logger.logSuccess("领创应用商店网络屏蔽:已启动");
+                        }
+                    }
+                    vpnService.start(this);
+                }
             }
             if (requestCode == 155 && resultCode == RESULT_OK) {
                 String scanResult = CameraScan.parseScanResult(data);
@@ -1036,7 +1048,7 @@ public class NewUI extends BaseActivity {
                         if (cmd[i].equals("addwhite")) {
                             i++;
                             Toast.ShowInfo(this, "addwhite:" + cmd[i]);
-                            hackMdm.appwhitelist_add(cmd[i]);
+                            HackMdm.DeviceMDM.AppWhiteList_add(cmd[i]);
                             continue;
                         }
                         if (cmd[i].equals("deactivekey")) {
@@ -1075,8 +1087,8 @@ public class NewUI extends BaseActivity {
                 PackageInfo info = pm.getPackageArchiveInfo(tempFile.toString(), PackageManager.GET_ACTIVITIES);
                 if (info != null) {
                     String packageName = info.applicationInfo.packageName;
-                    hackMdm.appwhitelist_add(packageName);
-                    hackMdm.installapp(FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", tempFile).toString());
+                    HackMdm.DeviceMDM.AppWhiteList_add(packageName);
+                    HackMdm.DeviceMDM.installApp(FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", tempFile).toString());
                 }
             }
             if (requestCode == 1015&& resultCode==RESULT_OK){
@@ -1108,7 +1120,7 @@ public class NewUI extends BaseActivity {
                                         setvisibility(false);
                                     }
                                 } else if (et.getText().toString().equals(factory_passwd)) {
-                                    hackMdm.RestoreFactory_anymode();
+                                    HackMdm.DeviceMDM.RestoreFactory_AnyMode();
                                 }
                             }
                         }).setNegativeButton("取消", null)
@@ -1136,7 +1148,7 @@ public class NewUI extends BaseActivity {
             counter++;
             DataUtils.saveintvalue(this, "factory", counter);
             if (DataUtils.readint(this, "factory") == 5) {
-                hackMdm.RestoreFactory_anymode();
+                HackMdm.DeviceMDM.RemoveDeviceOwner_admin();
             }
             return true;
         }
@@ -1149,8 +1161,10 @@ public class NewUI extends BaseActivity {
     }
     public void setvisibility(boolean enable){
         super.setvisibility(enable);
-        showdialog();
-        show_upload_dialog();
+        if(enable){
+            showdialog();
+            show_upload_dialog();
+        }
     }
     private void show_upload_dialog(){
         String lcmdm_version="";
@@ -1177,7 +1191,7 @@ public class NewUI extends BaseActivity {
                     })      .setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            hackMdm.backToLSP();
+                            HackMdm.DeviceMDM.backToLSPDesktop();
                             finish();
                         }
                     }).show();
@@ -1187,7 +1201,7 @@ public class NewUI extends BaseActivity {
         if (DataUtils.readint(this, "vpnmode") == 1) {
             startvpn();
         }
-        hackMdm.backToLSP();
+        HackMdm.DeviceMDM.backToLSPDesktop();
     }
     public void setfalseVisibility(){
         try{
@@ -1198,41 +1212,59 @@ public class NewUI extends BaseActivity {
         }catch (Exception e){}
     }
 
-    private  String deviceinfo(){
-        if (MMDM == Lenovo_Csdk) {
-            currMDM = "CSDK";
-        }
-        if (MMDM == Lenovo_Mia) {
-            currMDM = "Mia";
-        }
-        if (MMDM == T11) {
-            currMDM = "T11";
-        }
-        String msg = "设备信息:\n\n"+"版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")" + "\n\n" +
-                "包名:" + getPackageName() + "\n\n" +
-                "MDM接口:" + currMDM + "\n\n" +
-                "系统版本:" + String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT) + "\n\n" +
-                "系统:" +
-                Build.FINGERPRINT + "\n\n" +
-                "设备:" + Sysutils.getDevice() + "\n\n"+
-                "CPU:"+ Sysutils.getCpuName()+" ("+Build.CPU_ABI+")\n\n";
-        if (!Sysutils.getDeviceid(NewUI.this).toLowerCase(Locale.ROOT).equals(RSA.decryptByPublicKey(DataUtils.readStringValue(this, "key", "null"), pubkey))) {
-            msg += "授权状态:未授权";
-        }else {
-            msg+="授权状态:已授权";
-        }
-        msg+="\n\n";
-        if(Sysutils.isActiveime(this)){msg+="输入法:已激活";} else {msg+="输入法:未激活";}
-        msg+="\n\n";
-        if(Sysutils.isAssistantApp(this)){msg+="语音助手:已激活";} else {msg+="语音助手:未激活";}
-        msg+="\n\n";
-        msg+="HackMdm Ver:"+hackMdm.getHackmdm_version()+"\n\n";
-        double used=(double) Long.parseLong(Sysutils.getRomavailablesize(this))/Long.parseLong(Sysutils.getRomtotalsize(this))*100;
-        msg+="设备已用空间"+(100.00000000-used)+"%("+ Sysutils.getRomavailablesize(this)+"/"+ Sysutils.getRomtotalsize(this)+")";
-        return msg;
-        //String msg = "版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")" +"\nHackMdm Ver:"+hackMdm.getHackmdm_version();
-        //return msg;
+    private  void deviceinfo(){
+        logger.logNormal("版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")");
+        logger.logNormal("包名:" + getPackageName());
+        logger.logNormal("MDM接口:" + HackMdm.DeviceMDM.getMDMName());
+        logger.logNormal("系统版本:" + String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+        logger.logNormal("系统:"+Build.FINGERPRINT);
+        logger.logNormal("设备:" + Sysutils.getDevice());
+        logger.logNormal("CPU:"+ Sysutils.getCpuName()+" ("+Build.CPU_ABI+")");
+        logger.logNormal("HackMdm Version:"+HackMdm.DeviceMDM.getVersion());
 
+        if(Sysutils.isAssistantApp(this)){
+            logger.logSuccess("语音助手:已激活");
+        }
+        else{
+            logger.logWarning("语音助手:未激活");
+        }
+        if(Sysutils.isActiveime(this)){
+            logger.logSuccess("输入法:已激活");
+        }
+        else{
+            logger.logWarning("输入法:未激活");
+        }
+
+        String emui=Sysutils.getHwemui();
+        if(!emui.equals("")){
+            if(emui.startsWith("EmotionUI_12")){
+                logger.logSuccess("华为鸿蒙设备:"+emui);
+            }else {
+                logger.logSuccess("华为emui设备:"+emui);
+            }
+        }
+        if(Sysutils.isUsbDebug(this)){
+            logger.logSuccess("usb调试:已开启");
+        }else{
+            logger.logWarning("usb调试:未开启");
+
+        }
+        String lspirer=Sysutils.getLcmdm_version(this);
+        if(!lspirer.equals("设备未安装管控")){
+            logger.logNormal("管控版本:"+lspirer);
+        }
+        if(DataUtils.readint(this,"vpnmode")!=1){
+            logger.logNormal("领创网络屏蔽:未启动");
+        }
+        if(envcheck.IsDeviceRooted()){
+            logger.logWarning("root状态:已root");
+        }else{
+            logger.logWarning("root状态:未root");
+        }
+        double used=(double) Long.parseLong(Sysutils.getRomavailablesize(this))/Long.parseLong(Sysutils.getRomtotalsize(this))*100;
+        String msg="设备已用空间"+(100.00000000-used)+"%("+ Sysutils.getRomavailablesize(this)+"/"+ Sysutils.getRomtotalsize(this)+")";
+        logger.logNormal(msg);
+        logger.logNormal("app白名单"+HackMdm.DeviceMDM.getAppWhitelist());
     }
     public static void VerifyCameraPermissions(Activity activity) {
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -1241,7 +1273,7 @@ public class NewUI extends BaseActivity {
         }
     }
     private void showstatusbar() {
-        hackMdm.RootCommand("cmd statusbar expand-notifications");
+        HackMdm.DeviceMDM.RootCMD("cmd statusbar expand-notifications");
     }
     public  void verifyStoragePermissions(Activity activity) {
         XXPermissions.with(this)
@@ -1253,7 +1285,7 @@ public class NewUI extends BaseActivity {
                     @Override
                     public void onDenied(List<String> permissions, boolean never) {
                         if (never) {
-                            Toast.ShowWarn(NewUI.this,"部分权限授权,请在设置赋予所有权限");
+                            Toast.ShowWarn(NewUI.this,"部分权限没有被授权,请在设置赋予所有权限");
                         }
                     }
                 });
@@ -1277,17 +1309,17 @@ public class NewUI extends BaseActivity {
         th.start();
     }
     private void showdialog() {
-        if (hackMdm.isDeviceOwnerActive()) {
+        if (HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             return;
         }
-        if (MMDM == Lenovo_Mia) {
+        if (HackMdm.DeviceMDM.getMDMName()=="Mia") {
             MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
             alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
             alertdialogbuilder1.setPositiveButton("仍然使用", null)
                     .setNegativeButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            hackMdm.RootCommand("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
+                            HackMdm.DeviceMDM.RootCMD("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
                         }
                     }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
                         @Override
@@ -1296,15 +1328,15 @@ public class NewUI extends BaseActivity {
                         }
                     }).create().show();
         }
-        if (MMDM == -1) {
-            if (hackMdm.isDeviceOwnerActive("com.android.launcher3")) return;
+        if (HackMdm.DeviceMDM.getMDMName() .equals( "DevicePolicyManager_GenericMDM")) {
+            if (HackMdm.DeviceMDM.isDeviceOwnerActive("com.android.launcher3")) return;
             MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
             alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下:\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\n华为还需激活:adb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
             alertdialogbuilder1.setPositiveButton("仍然使用", null)
                     .setNegativeButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            hackMdm.RootCommand("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
+                            HackMdm.DeviceMDM.RootCMD("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
                         }
                     }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
                         @Override

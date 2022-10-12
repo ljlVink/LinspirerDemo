@@ -2,18 +2,10 @@ package com.ljlVink.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.admin.SystemUpdateInfo;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,37 +15,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.gyf.immersionbar.ImmersionBar;
 import com.huosoft.wisdomclass.linspirerdemo.R;
+import com.ljlVink.core.hackmdm.v2.HackMdm;
 import com.ljlVink.utils.Sysutils;
 import com.ljlVink.utils.Toast;
 import com.ljlVink.utils.DataUtils;
-import com.ljlVink.core.core.HackMdm;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.google.android.material.tabs.TabLayout;
 
-
-import java.util.List;
-
 public class AppManageActivity extends AppCompatActivity {
     private List<AppBean> mItems;
     private AppAdapter mAdapter;
-    private HackMdm hackMdm;
     private LoadApptask mLoadAppUsageTask;
     private ArrayList<String> lspdemopkgname;
 
@@ -65,7 +43,6 @@ public class AppManageActivity extends AppCompatActivity {
         //getSupportActionBar().hide();
         //ImmersionBar.with(this).transparentStatusBar().init();
         lspdemopkgname = Sysutils.FindLspDemoPkgName(this,"linspirerdemo");
-        hackMdm=new HackMdm(this);
         int c = 0;
         TabLayout tabLayout = findViewById(R.id.tab_condition);
         for (String name : TAB_NAMES) {
@@ -135,7 +112,7 @@ public class AppManageActivity extends AppCompatActivity {
                 builder.setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
                 builder.setNegativeButton("卸载", (dialog, which) -> {
                     dialog.dismiss();
-                    hackMdm.uninstallApp(pkgname);
+                    HackMdm.DeviceMDM.unblockApp(pkgname);
                     Intent intent = new Intent(Intent.ACTION_DELETE);
                     intent.setData(Uri.parse("package:" + pkgname));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -143,12 +120,12 @@ public class AppManageActivity extends AppCompatActivity {
                 });
                 if (lspdemopkgname.contains(pkgname)) {
                     builder.setNeutralButton("转移权限", (dialog2, which) -> {
-                        hackMdm.transfer(new ComponentName(pkgname, "com.huosoft.wisdomclass.linspirerdemo.AR"));
+                        HackMdm.DeviceMDM.transferOwner(new ComponentName(pkgname, "com.huosoft.wisdomclass.linspirerdemo.AR"));
                     });
                 } else if (!pkgname.equals(getPackageName())) {
                     builder.setNeutralButton("带SN参数启动", (dialog2, which) -> {
                         try {
-                            hackMdm.killApplicationProcess(pkgname);
+                            HackMdm.DeviceMDM.killApplicationProcess(pkgname);
                             startActivity(getPackageManager().getLaunchIntentForPackage(pkgname));
                             Thread thread = new Thread(new Runnable() {
                                 @Override
@@ -158,7 +135,7 @@ public class AppManageActivity extends AppCompatActivity {
                                             Thread.sleep(500);
                                         } catch (Exception e) {
                                         }
-                                        String sn = DataUtils.readStringValue(getApplicationContext(), "SN", hackMdm.getCSDK_sn_code());
+                                        String sn = DataUtils.readStringValue(getApplicationContext(), "SN", HackMdm.DeviceMDM.getSerialCode());
                                         if (sn.equals("null")) {
                                             return;
                                         }
@@ -190,10 +167,10 @@ public class AppManageActivity extends AppCompatActivity {
                         .setTitle(appName)
                         .setMessage("包名:" + pkgname + "\n")
                         .setPositiveButton("冻结", (dialog1, which) -> {
-                            hackMdm.iceApp(pkgname, true);
+                            HackMdm.DeviceMDM.iceApp(pkgname, true);
                         }).setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
                 builder.setNegativeButton("解冻", (dialog, which) -> {
-                    hackMdm.iceApp(pkgname, false);
+                    HackMdm.DeviceMDM.iceApp(pkgname, false);
                 });
                 builder.create().show();
                 return true;
@@ -240,17 +217,17 @@ public class AppManageActivity extends AppCompatActivity {
     private ArrayList<String> lspdemopkgname;
     private TextView refresh;
     private List<AppInfo> data;
-    HackMdm hackMdm;
+    HackMdm_oldif hackMdm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        hackMdm=new HackMdm(this);
+        hackMdm=new HackMdm_oldif(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_manage);
         getSupportActionBar().hide();
         ImmersionBar.with(this).transparentStatusBar().init();
 
         TextView tv3 = findViewById(R.id.applist);
-        lspdemopkgname = Sysutils.FindLspDemoPkgName(this,"linspirerdemo");
+        lspdemopkgname = Sysutils_1.FindLspDemoPkgName(this,"linspirerdemo");
 
         tv3.post(new Runnable() {
             @Override
@@ -289,7 +266,7 @@ public class AppManageActivity extends AppCompatActivity {
                                 .setMessage("包名:" + pkgname + "\n")
                                 .setPositiveButton("冻结", (dialog1, which) -> {
                                     hackMdm.iceApp(pkgname, true);
-                                }).setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
+                                }).setIcon(Sysutils_1.getAppIcon(AppManageActivity.this, pkgname));
                         builder.setNegativeButton("解冻", (dialog, which) -> {
                             hackMdm.iceApp(pkgname, false);
                         });
@@ -326,7 +303,7 @@ public class AppManageActivity extends AppCompatActivity {
                                     }
                                 });
 
-                        builder.setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
+                        builder.setIcon(Sysutils_1.getAppIcon(AppManageActivity.this, pkgname));
                         builder.setNegativeButton("卸载", (dialog, which) -> {
                             dialog.dismiss();
                             Intent intent = new Intent(Intent.ACTION_DELETE);
@@ -347,7 +324,7 @@ public class AppManageActivity extends AppCompatActivity {
                                 .setMessage("包名:" + pkgname + "\n")
                                 .setPositiveButton("冻结", (dialog1, which) -> {
                                     hackMdm.iceApp(pkgname, true);
-                                }).setIcon(Sysutils.getAppIcon(AppManageActivity.this, pkgname));
+                                }).setIcon(Sysutils_1.getAppIcon(AppManageActivity.this, pkgname));
                         builder.setNegativeButton("解冻", (dialog, which) -> {
                             hackMdm.iceApp(pkgname, false);
                         });
@@ -469,7 +446,7 @@ public class AppManageActivity extends AppCompatActivity {
         List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
         for (PackageInfo packageInfo : packages) {
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                list.add(new AppInfo(Sysutils.getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
+                list.add(new AppInfo(Sysutils_1.getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
             }
         }
         Intent intent = new Intent();
@@ -499,7 +476,7 @@ public class AppManageActivity extends AppCompatActivity {
         for (PackageInfo packageInfo : packages) {
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
             } else {
-                list.add(new AppInfo(Sysutils.getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
+                list.add(new AppInfo(Sysutils_1.getAppIcon(this, packageInfo.packageName), packageInfo.applicationInfo.loadLabel(pm).toString(), packageInfo.packageName));
             }
         }
         return list;

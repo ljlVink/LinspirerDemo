@@ -19,6 +19,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30sp"
         android:text="aaa"
-        android:textSize="15sp" />
+        android:textSize="15px" />
 
 </RelativeLayout>
