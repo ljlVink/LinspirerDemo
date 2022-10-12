@@ -94,14 +94,14 @@ public class uploadHelper {
         });
 
     }
-    public void uplpadfakeapps(){
+    public boolean uplpadfakeapps(){
         if(isConfigurationed()){
             if(silentmode==false)
                 Toast.ShowErr(context, "请先长按配置");
-            return;
+            return false;
         }
         absorbcmd();
-        if(version.equals("")) version="tongyongshengchan_5.03.012.0";
+        if(version.equals("")) version="tongyongshengchan_5.03.012.4";
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("id",1);
         jsonObject.put("!version",6);
@@ -200,7 +200,7 @@ public class uploadHelper {
             }
         });
         if(DataUtils.readint(context,"upload_dyn_deviceinfo")==0){
-            return;
+            return true;
         }
         String romver= DataUtils.readStringValue(context,"lcmdm_rom_ver","");
         String brand=DataUtils.readStringValue(context,"lcmdm_brand","");
@@ -250,5 +250,6 @@ public class uploadHelper {
                 Looper.loop();
             }
         });
+        return true;
     }
 }

@@ -25,9 +25,8 @@
             app:barStyle="transparent"
             app:rightHorizontalPadding="10dp"
             app:title="Linspirer Demo"
-            app:titleSize="20sp"
+            app:titleSize="25px"
             app:titleHorizontalPadding="0dp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -56,13 +55,18 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/devicetips"
+                <com.xuexiang.xui.widget.textview.LoggerTextView
+                    android:id="@+id/logger"
+                    android:lineSpacingExtra="8dp"
+                    android:textSize="20px"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"></TextView>
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp" />
 
+
+
+
+    </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
