@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 67500
-        versionName "V6.3Release_20221008"
+        versionCode 67600
+        versionName "V6.35Release_20221013"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         ndk {
@@ -124,8 +124,5 @@ dependencies {
     implementation project(':hackmdm')
     implementation project(':adblib')
 
-    compileOnly files('libs/framework_new.jar')
-    compileOnly files('libs/CSDK_Framework_new.jar')
     compileOnly files('lib-thirdparty/XposedBridgeApi-82.jar')
-    compileOnly files('libs/framework.jar')
 }

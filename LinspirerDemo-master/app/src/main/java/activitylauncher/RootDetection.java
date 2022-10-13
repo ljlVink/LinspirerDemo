@@ -1,5 +1,6 @@
 package activitylauncher;
 import com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication;
+import com.ljlVink.core.hackmdm.v2.HackMdm;
 
 import java.io.File;
 import java.util.Objects;
@@ -16,7 +17,7 @@ public class RootDetection {
                 return true;
             }
         }
-        if(lspdemoApplication.getMMDM()==4){
+        if(HackMdm.DeviceMDM.getMDMName().equals("supi_T11")){
             return true;
         }
         return false;

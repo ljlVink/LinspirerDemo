@@ -5,9 +5,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 
-import com.ljlVink.MDM;
-
-import com.ljlVink.core.hackmdm.v2.HackMdm;
 import com.ljlVink.utils.DataCleanManager;
 import com.ljlVink.utils.FileUtils;
 import com.ljlVink.utils.Sysutils;
@@ -24,7 +21,7 @@ public class lspdemoApplication extends Application {
     public  static String b="r";
     public static String c="u";
 
-    public static int MMDM=0;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -74,14 +71,10 @@ public class lspdemoApplication extends Application {
         else{
             Toast.ShowInfo(this,"请使用官方渠道安装包进行安装,否则将收不到更新!");
         }
-        MMDM=new MDM(this).MDM();
         FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
     }
     public static Context getApplication() {
         return mApplication;
-    }
-    public static int getMMDM() {
-        return MMDM;
     }
     public static String geta(){
         return a;

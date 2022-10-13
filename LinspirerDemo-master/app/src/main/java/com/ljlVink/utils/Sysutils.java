@@ -1,7 +1,6 @@
 package com.ljlVink.utils;
 
 import android.annotation.SuppressLint;
-import android.app.csdk.CSDKManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -159,8 +158,6 @@ public class Sysutils {
         return manufacturer;
     }
     public static boolean isTabletDevice(Context context) {
-        /*return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >=
-                Configuration.SCREENLAYOUT_SIZE_LARGE;*/
         return true;
     }
     public static boolean copyStr(Context c,String copyStr) {
