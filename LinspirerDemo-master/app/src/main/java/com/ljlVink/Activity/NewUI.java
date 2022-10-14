@@ -765,7 +765,7 @@ public class NewUI extends BaseActivity {
         titleBar.setOnTitleBarListener(new OnTitleBarListener() {
             @Override
             public void onRightClick(TitleBar titleBar){
-                final String[] items = new String[]{"重启","重启到recovery","重启到bootloader","重启到edl"};
+                final String[] items = new String[]{"重启","重启到recovery","重启到bootloader","关机","重启(强制)","重启到recovery(强制)","重启到bootloader(强制)","关机(强制)","重启到edl","安全模式","软重启"};
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewUI.this);
                 builder.setIcon(R.drawable.reboot);
                 builder.setTitle("重启选项");
@@ -774,15 +774,38 @@ public class NewUI extends BaseActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         i++;
                         if(i==1){
-                           HackMdm.DeviceMDM.RootCMD("reboot");
+                           HackMdm.DeviceMDM.RootCMD("svc power reboot");
+                           
                         }else if(i==2){
-                            HackMdm.DeviceMDM.RootCMD("reboot recovery");
+                            HackMdm.DeviceMDM.RootCMD("svc power reboot recovery");
 
                         }else if(i==3){
-                            HackMdm.DeviceMDM.RootCMD("reboot bootloader");
+                            HackMdm.DeviceMDM.RootCMD("svc power reboot bootloader");
 
                         }else if(i==4){
+                            HackMdm.DeviceMDM.RootCMD("svc power shutdown");
+                            
+                        }else if(i==5){
+                            HackMdm.DeviceMDM.RootCMD("reboot");
+
+                        }else if(i==6){
+                            HackMdm.DeviceMDM.RootCMD("reboot recovery");
+
+                        }else if(i==7){
+                            HackMdm.DeviceMDM.RootCMD("reboot bootloader");
+                            
+                        }else if(i==8){
+                            HackMdm.DeviceMDM.RootCMD("reboot -p");
+
+                        }else if(i==9){
                             HackMdm.DeviceMDM.RootCMD("reboot edl");
+                            
+                        }else if(i==10){
+                            HackMdm.DeviceMDM.RootCMD("setprop persist.sys.safemode 1 && setprop ctl.restart zygote");
+                            
+                        }else if(i==11){
+                            HackMdm.DeviceMDM.RootCMD("setprop ctl.restart zygote");
+                            
                         }
                     }
                 }).show();
