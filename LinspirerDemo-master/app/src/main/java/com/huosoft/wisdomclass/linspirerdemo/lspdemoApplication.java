@@ -47,7 +47,7 @@ public class lspdemoApplication extends Application {
 
             throw new RuntimeException("?!! detect!");
         }
-        a="a";
+        a="t";
         a+=b;
         if(!nowPMName.equals(truePMName)){
             throw new RuntimeException("?!! detect!");

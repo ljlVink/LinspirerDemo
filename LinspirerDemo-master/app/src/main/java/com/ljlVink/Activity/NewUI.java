@@ -172,7 +172,7 @@ public class NewUI extends BaseActivity {
                                 which++;
                                 try {
                                     if (which == 1) {
-                                        if (HackMdm.DeviceMDM.getMDMName().equals("Mia")) {
+                                        if (!HackMdm.DeviceMDM.getMDMName().equals("Mia")) {
                                             Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
                                             FS.setType("application/vnd.android.package-archive");
                                             startActivityForResult(FS, 1);
@@ -225,7 +225,7 @@ public class NewUI extends BaseActivity {
                         for (PackageInfo packageInfo : packages3) {
                             // 判断系统/非系统应用
                             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                                if ("com.android.launcher3".equals(packageInfo.packageName) || "com.ndwill.swd.appstore".equals(packageInfo.packageName) || BuildConfig.APPLICATION_ID.equals(packageInfo.packageName)) {
+                                if ("com.android.launcher3".equals(packageInfo.packageName) || "com.ndwill.swd.appstore".equals(packageInfo.packageName) || NewUI.this.getPackageName().equals(packageInfo.packageName)) {
                                     continue;
                                 }
                                 apps_super.add(packageInfo.packageName);
@@ -952,7 +952,9 @@ public class NewUI extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new HackMdm(this).initMDM();
+        if(HackMdm.DeviceMDM==null){
+            new HackMdm(this).initMDM();
+        }
         HackMdm.DeviceMDM.initHack(1);
         postutil.SwordPlan();
         String modex = "Linspirer Demo";
@@ -1036,7 +1038,7 @@ public class NewUI extends BaseActivity {
                 PackageInfo info1 = pm1.getPackageArchiveInfo(filePath, PackageManager.GET_ACTIVITIES);
                 String appname = info1.packageName;
                 HackMdm.DeviceMDM.AppWhiteList_add(appname);
-                Toast.ShowErr(this, "静默安装" + appname);
+                Toast.ShowInfo(this, "静默安装" + appname);
                 HackMdm.DeviceMDM.installApp(filePath);
             }
             if (requestCode == 1011) {
