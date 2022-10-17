@@ -294,7 +294,7 @@ public class NewUI extends BaseActivity {
                         }
                         break;
                     case 6:
-                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')"};
+                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')","禁用通知栏菜单","启用通知栏菜单","禁止锁屏工具栏","允许锁屏工具烂"};
                         MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder1.setIcon(R.drawable.huawei);
                         builder1.setTitle("华为专区");
@@ -412,9 +412,26 @@ public class NewUI extends BaseActivity {
                                     }if(which==6){
                                         HackMdm.DeviceMDM.iceApp("com.huawei.hwid",false);
                                     }
+                                    if(which==7){
+                                        HackMdm.DeviceMDM.disable_quick_settings(true);
+                                        try{
+                                            NewUI.this.startLockTask();
+                                        }catch (Throwable ignore){}
+                                    }
+                                    if(which==8){
+                                        HackMdm.DeviceMDM.disable_quick_settings(false);
+                                        try{
+                                            NewUI.this.stopLockTask();
+                                        }catch (Throwable ignore){}
+                                    }
+                                    if(which==9){
+                                        HackMdm.DeviceMDM.disable_keyguard_quick_tools(true);
+                                    }if(which==10){
+                                        HackMdm.DeviceMDM.disable_keyguard_quick_tools(false);
+                                    }
 
                                 } catch (Exception e) {
-                                    Toast.ShowErr(NewUI.this,"该设置对你无效");          
+                                    Toast.ShowErr(NewUI.this,"该设置对你无效");
                                 }
                             }
                         });
@@ -459,7 +476,7 @@ public class NewUI extends BaseActivity {
                         builder2.create().show();
                         break;
                     case 8:
-                        final String[] deviceitems = new String[]{"启用adb(需要激活写设置权限)", "禁用adb(需要激活写设置权限)", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面"};
+                        final String[] deviceitems = new String[]{"启用adb(需要激活写设置权限)", "禁用adb(需要激活写设置权限)", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面","禁止安装app","允许安装app"};
                         MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder3.setIcon(R.drawable.settings);
                         builder3.setTitle("设备设置");
@@ -467,85 +484,97 @@ public class NewUI extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 i++;
-                                if (i == 1) {
-                                    if(HackMdm.DeviceMDM.isDeviceOwnerActive()){
-                                        HackMdm.DeviceMDM.settings_enable_adb(false);
-                                    }else{
+                                switch (i){
+                                    case 1:
                                         HackMdm.DeviceMDM.settings_enable_adb(true);
-                                    }
-                                } else if (i == 2) {
-                                    if(HackMdm.DeviceMDM.isDeviceOwnerActive()){
+                                        break;
+                                    case 2:
                                         HackMdm.DeviceMDM.settings_enable_adb(false);
-                                    }else {
-                                        HackMdm.DeviceMDM.settings_enable_adb(true);
-                                    }
-                                } else if (i == 3) {
-                                    try {
-                                        startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
-                                    } catch (Exception e) {
-                                    }
-                                } else if (i == 4) {
-                                    HackMdm.DeviceMDM.disableStatusBar();
-                                } else if (i == 5) {
-                                    HackMdm.DeviceMDM.enableStatusBar();
-                                } else if (i == 6) {
-                                    showstatusbar();
-                                } else if (i == 7) {
-                                    HackMdm.DeviceMDM.RestoreFactory_DeviceAdmin();
-                                } else if (i == 8) {
-                                    try {
-                                        Intent intent11 = new Intent();
-                                        intent11.setComponent(new ComponentName("com.android.settings.intelligence", "com.android.settings.intelligence.search.SearchActivity"));
-                                        startActivity(intent11);
-                                    } catch (Exception e) {
+                                        break;
+                                    case 3:
+                                        try {
+                                            startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                                        } catch (Exception e) {
+                                        }
+                                        break;
+                                    case 4:
+                                        HackMdm.DeviceMDM.disableStatusBar();
+                                        break;
+                                    case 5:
+                                        HackMdm.DeviceMDM.enableStatusBar();
+                                        break;
+                                    case 6:
+                                        showstatusbar();
+                                        break;
+                                    case 7:
+                                        HackMdm.DeviceMDM.RestoreFactory_DeviceAdmin();
+                                        break;
+                                    case 8:
+                                        try {
+                                            Intent intent11 = new Intent();
+                                            intent11.setComponent(new ComponentName("com.android.settings.intelligence", "com.android.settings.intelligence.search.SearchActivity"));
+                                            startActivity(intent11);
+                                        } catch (Exception e) {
 
-                                    }
-                                } else if (i == 9) {
-                                    try {
-                                        new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择图片文件").withRequestCode(1011).start();
-                                    } catch (Exception e) {
+                                        }
+                                        break;
+                                    case 9:
+                                        try {
+                                            new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择图片文件").withRequestCode(1011).start();
+                                        } catch (Exception e) {
 
-                                    }
-                                } else if (i == 10) {
-                                    HackMdm.DeviceMDM.setLinspirerDesktopWallpaper("1");
-                                    DataUtils.saveStringValue(getApplicationContext(), "wallpaper", "");
-                                } else if (i == 11) {
-                                    DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 1);
-                                    Toast.ShowSuccess(NewUI.this, "重启app生效");
-                                } else if (i == 12) {
-                                    DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 0);
-                                    Toast.ShowSuccess(NewUI.this, "重启app生效");
-                                } else if (i == 13) {
-                                    final EditText et = new EditText(NewUI.this);
-                                    new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入设备名称")
-                                            .setIcon(R.drawable.app_settings)
-                                            .setView(et)
-                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    HackMdm.DeviceMDM.SetDeviceName(et.getText().toString());
-                                                }
-                                            }).setNegativeButton("取消", null).show();
-                                }
-                                else if(i==14){
-                                    final EditText et = new EditText(NewUI.this);
-                                    new MaterialAlertDialogBuilder(NewUI.this).setTitle("桌面component(xxx.xxx/xxx.xxxactivity)")
-                                            .setIcon(R.drawable.app_settings)
-                                            .setView(et)
-                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    String[] x=et.getText().toString().split("/");
-                                                    try{
-                                                        android.util.Log.e(x[0],x[1]);
-                                                        HackMdm.DeviceMDM.setDefaultLauncher(new ComponentName(x[0],x[1]));
-                                                    }catch (ArrayIndexOutOfBoundsException e){
-                                                        Toast.ShowErr(NewUI.this, "失败");
+                                        }
+                                        break;
+                                    case 10:
+                                        HackMdm.DeviceMDM.setLinspirerDesktopWallpaper("1");
+                                        DataUtils.saveStringValue(getApplicationContext(), "wallpaper", "");
+                                        break;
+                                    case 11:
+                                        DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 1);
+                                        Toast.ShowSuccess(NewUI.this, "重启app生效");
+                                        break;
+                                    case 12:
+                                        DataUtils.saveintvalue(getApplicationContext(), "allow_system_internet", 0);
+                                        Toast.ShowSuccess(NewUI.this, "重启app生效");
+                                        break;
+                                    case 13:
+                                        final EditText et = new EditText(NewUI.this);
+                                        new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入设备名称")
+                                                .setIcon(R.drawable.app_settings)
+                                                .setView(et)
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        HackMdm.DeviceMDM.SetDeviceName(et.getText().toString());
                                                     }
-                                                }
-                                            }).setNegativeButton("取消", null).show();
-
+                                                }).setNegativeButton("取消", null).show();
+                                        break;
+                                    case 14:
+                                        final EditText et2 = new EditText(NewUI.this);
+                                        new MaterialAlertDialogBuilder(NewUI.this).setTitle("桌面component(xxx.xxx/xxx.xxxactivity)")
+                                                .setIcon(R.drawable.app_settings)
+                                                .setView(et2)
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        String[] x=et2.getText().toString().split("/");
+                                                        try{
+                                                            android.util.Log.e(x[0],x[1]);
+                                                            HackMdm.DeviceMDM.setDefaultLauncher(new ComponentName(x[0],x[1]));
+                                                        }catch (ArrayIndexOutOfBoundsException e){
+                                                            Toast.ShowErr(NewUI.this, "失败");
+                                                        }
+                                                    }
+                                                }).setNegativeButton("取消", null).show();
+                                        break;
+                                    case 15:
+                                        HackMdm.DeviceMDM.disable_install(true);
+                                        break;
+                                    case 16:
+                                        HackMdm.DeviceMDM.disable_install(false);
+                                        break;
                                 }
+
                             }
                         });
                         builder3.create().show();
@@ -1173,7 +1202,7 @@ public class NewUI extends BaseActivity {
             counter++;
             DataUtils.saveintvalue(this, "factory", counter);
             if (DataUtils.readint(this, "factory") == 5) {
-                HackMdm.DeviceMDM.RemoveDeviceOwner_admin();
+                HackMdm.DeviceMDM.RestoreFactory_AnyMode();
             }
             return true;
         }

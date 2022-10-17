@@ -24,7 +24,7 @@ public class AboutActivity extends BaseActivity {
         adsElement.setTitle("关于");
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
-                .setImage(R.drawable.about)
+                .setImage(R.drawable.aboutme)
                 .addItem(new Element().setTitle("Version:"+ BuildConfig.VERSION_NAME))
                 .addItem(new Element().setTitle("QQ群").setOnClickListener(new View.OnClickListener() {
                     @Override

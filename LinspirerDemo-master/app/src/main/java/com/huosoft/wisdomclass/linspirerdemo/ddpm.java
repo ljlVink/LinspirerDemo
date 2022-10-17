@@ -15,7 +15,7 @@ public class ddpm extends Activity {
         setContentView(R.layout.activity_ddpm);
         new AlertDialog.Builder(ddpm.this)
                 .setIcon(R.drawable.app_settings)
-                .setTitle("确定要解除LinspirerDemo的DeviceOwner吗")
+                .setTitle("确定要解除Linspirer Demo的设备管理器吗")
                 .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
