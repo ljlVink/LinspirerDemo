@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 67668
-        versionName "V6.38Release_20221017"
+        versionCode 67669
+        versionName "V6.39Release_20221017"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         ndk {

@@ -294,7 +294,7 @@ public class NewUI extends BaseActivity {
                         }
                         break;
                     case 6:
-                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')","禁用通知栏菜单","启用通知栏菜单","禁止锁屏工具栏","允许锁屏工具烂"};
+                        final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')","禁用通知栏菜单","启用通知栏菜单","禁止锁屏工具栏","允许锁屏工具烂","关闭手势导航","开启手势导航","禁用安全模式","启用安全模式"};
                         MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder1.setIcon(R.drawable.huawei);
                         builder1.setTitle("华为专区");
@@ -355,7 +355,7 @@ public class NewUI extends BaseActivity {
                                             settings.add("com.google.android.gms.app.settings.GoogleSettingsIALink");
                                             settings.add("com.android.settings.Settings$FingerprintEnrollSuggestionActivity");
                                             settings.add("com.android.settings.Settings$ZenModeAutomationSuggestionActivity");
-                                            settings.add(" com.android.settings.facechecker.unlock.FaceUnLockSettingsActivity$FaceUnLockSuggestionActivity");
+                                            settings.add("com.android.settings.facechecker.unlock.FaceUnLockSettingsActivity$FaceUnLockSuggestionActivity");
                                             settings.add("com.android.settings.wallpaper.WallpaperSuggestionActivity");
                                             settings.add("com.huawei.android.remotecontrol.ui.PhoneFinderForSettingActivity");
                                             settings.add("com.huawei.android.hicloud.ui.activity.BackupMainforSettingActivity");
@@ -428,6 +428,14 @@ public class NewUI extends BaseActivity {
                                         HackMdm.DeviceMDM.disable_keyguard_quick_tools(true);
                                     }if(which==10){
                                         HackMdm.DeviceMDM.disable_keyguard_quick_tools(false);
+                                    }if(which==11){
+                                        HackMdm.DeviceMDM.disable_gesture(true);
+                                    }if(which==12){
+                                        HackMdm.DeviceMDM.disable_gesture(false);
+                                    }if(which==13){
+                                        HackMdm.DeviceMDM.disable_safemode(true);
+                                    }if(which==14){
+                                        HackMdm.DeviceMDM.disable_safemode(false);
                                     }
 
                                 } catch (Exception e) {
