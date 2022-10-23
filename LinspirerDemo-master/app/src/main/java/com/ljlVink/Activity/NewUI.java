@@ -61,6 +61,10 @@ import com.lzf.easyfloat.enums.ShowPattern;
 import com.lzf.easyfloat.interfaces.OnInvokeView;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+import com.xuexiang.xui.adapter.simple.AdapterItem;
+import com.xuexiang.xui.adapter.simple.ExpandableItem;
+import com.xuexiang.xui.adapter.simple.XUISimpleExpandableListAdapter;
+import com.xuexiang.xui.widget.popupwindow.popup.XUISimpleExpandablePopup;
 import com.xuexiang.xui.widget.textview.LoggerTextView;
 
 
@@ -78,6 +82,7 @@ import java.util.regex.Pattern;
 
 import activitylauncher.MainActivity;
 import adbotg.adbMainActivity;
+import me.jessyan.autosize.utils.AutoSizeUtils;
 
 public class NewUI extends BaseActivity {
     private BaseAdapter mAdapter = null;
@@ -294,6 +299,7 @@ public class NewUI extends BaseActivity {
                         }
                         break;
                     case 6:
+                        //showHuaweiArea();
                         final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')","禁用通知栏菜单","启用通知栏菜单","禁止锁屏工具栏","允许锁屏工具烂","关闭手势导航","开启手势导航","禁用安全模式","启用安全模式"};
                         MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder1.setIcon(R.drawable.huawei);
@@ -960,6 +966,42 @@ public class NewUI extends BaseActivity {
         logger.setLogFormatter((logContent, logType) -> TimeUtils.getNowString(new SimpleDateFormat("[HH:mm]")) +" "+logContent);
         getannouncement();
     }
+
+    private void showHuaweiArea(){
+        String[] huawei_bt = new String[]{
+                "启用蓝牙",
+                "禁用蓝牙"
+        };
+        String[] enable_disable = new String[]{
+                "启用",
+                "禁用"
+        };
+        String[] secure_gesture = new String[]{
+                "启用",
+                "禁用"
+        };
+        ExpandableItem[] expandableItems =new ExpandableItem[]{
+                ExpandableItem.of(new AdapterItem("设置隐藏", R.drawable.settings)),
+                ExpandableItem.of(new AdapterItem("华为解控")),
+                ExpandableItem.of(new AdapterItem("蓝牙", R.drawable.bt)).addChild(AdapterItem.arrayof(huawei_bt)),
+                ExpandableItem.of(new AdapterItem("HMS core(设置'华为账号')",R.drawable.huawei)).addChild(AdapterItem.arrayof(enable_disable)),
+                ExpandableItem.of(new AdapterItem("通知栏菜单")).addChild(AdapterItem.arrayof(enable_disable)),
+                ExpandableItem.of(new AdapterItem("锁屏工具栏")).addChild(AdapterItem.arrayof(enable_disable)),
+                ExpandableItem.of(new AdapterItem("安全模式")).addChild(AdapterItem.arrayof(enable_disable)),
+                ExpandableItem.of(new AdapterItem("手势导航")).addChild(AdapterItem.arrayof(secure_gesture))
+        };
+        new XUISimpleExpandablePopup(this,expandableItems).create(AutoSizeUtils.dp2px(this,200),AutoSizeUtils.dp2px(this,200))
+                .setOnExpandableItemClickListener(false, new XUISimpleExpandablePopup.OnExpandableItemClickListener() {
+                    @Override
+                    public void onExpandableItemClick(XUISimpleExpandableListAdapter adapter, ExpandableItem group, int groupPosition, int childPosition) {
+                        switch (groupPosition){
+                            case 0:
+                                Toast.ShowInfo(NewUI.this,"0");
+                                break;
+                        }
+                    }
+                });
+    }
     private void getannouncement(){
         new Postutil(this).getAnnouncement(new IPostcallback() {
             @Override
@@ -967,7 +1009,6 @@ public class NewUI extends BaseActivity {
                 logger.logNormal("服务器连接成功!\n"+data);
                 deviceinfo();
             }
-
             @Override
             public void onInternetErr() {
                 logger.logError("网络连接异常，请检查网络");
@@ -1273,7 +1314,6 @@ public class NewUI extends BaseActivity {
             findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
         }catch (Exception e){}
     }
-
     private  void deviceinfo(){
         logger.logNormal("版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")");
         logger.logNormal("包名:" + getPackageName());
@@ -1283,7 +1323,6 @@ public class NewUI extends BaseActivity {
         logger.logNormal("设备:" + Sysutils.getDevice());
         logger.logNormal("CPU:"+ Sysutils.getCpuName()+" ("+Build.CPU_ABI+")");
         logger.logNormal("HackMdm Version:"+HackMdm.DeviceMDM.getVersion());
-
         if(Sysutils.isAssistantApp(this)){
             logger.logSuccess("语音助手:已激活");
         }
@@ -1296,7 +1335,6 @@ public class NewUI extends BaseActivity {
         else{
             logger.logWarning("输入法:未激活");
         }
-
         String emui=Sysutils.getHwemui();
         if(!emui.equals("")){
             if(emui.startsWith("EmotionUI_12")){
@@ -1309,7 +1347,6 @@ public class NewUI extends BaseActivity {
             logger.logSuccess("usb调试:已开启");
         }else{
             logger.logWarning("usb调试:未开启");
-
         }
         String lspirer=Sysutils.getLcmdm_version(this);
         if(!lspirer.equals("设备未安装管控")){
@@ -1374,7 +1411,7 @@ public class NewUI extends BaseActivity {
         if (HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             return;
         }
-        if (HackMdm.DeviceMDM.getMDMName()=="Mia") {
+        if (HackMdm.DeviceMDM.getMDMName().equals("Mia")) {
             MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
             alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
             alertdialogbuilder1.setPositiveButton("仍然使用", null)
@@ -1390,7 +1427,7 @@ public class NewUI extends BaseActivity {
                         }
                     }).create().show();
         }
-        if (HackMdm.DeviceMDM.getMDMName() .equals( "DevicePolicyManager_GenericMDM")) {
+        if (HackMdm.DeviceMDM.getMDMName().equals("DevicePolicyManager_GenericMDM")) {
             if (HackMdm.DeviceMDM.isDeviceOwnerActive("com.android.launcher3")) return;
             MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
             alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下:\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\n华为还需激活:adb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
@@ -1408,5 +1445,4 @@ public class NewUI extends BaseActivity {
                     }).create().show();
         }
     }
-
 }
