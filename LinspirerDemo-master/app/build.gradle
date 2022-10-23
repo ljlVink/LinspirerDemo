@@ -11,8 +11,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 67669
-        versionName "V6.39Release_20221017"
+        versionCode 68000
+        versionName "V6.40"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         ndk {
@@ -108,7 +108,7 @@ dependencies {
     implementation 'com.nbsp:materialfilepicker:1.9.1'
     implementation 'com.github.princekin-f:EasyFloat:2.0.3'
     implementation 'com.squareup.okhttp3:okhttp:latest.release'
-    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    //implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.alibaba:fastjson:1.2.79'
     implementation 'com.github.getActivity:XXPermissions:15.0'
     implementation 'com.github.GrenderG:Toasty:1.5.2'

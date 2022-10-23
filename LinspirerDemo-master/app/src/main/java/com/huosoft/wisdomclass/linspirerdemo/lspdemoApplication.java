@@ -10,7 +10,6 @@ import com.ljlVink.utils.FileUtils;
 import com.ljlVink.utils.Sysutils;
 import com.ljlVink.utils.Toast;
 import com.ljlVink.utils.Signutil;
-import com.tencent.bugly.Bugly;
 
 import java.lang.reflect.Field;
 
@@ -26,6 +25,7 @@ public class lspdemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mApplication = this;
+        FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
         DataCleanManager.clearAllCache(this);
         String truePMName = "android.content.pm.IPackageManager$Stub$Proxy";
         String nowPMName = "";
@@ -66,12 +66,10 @@ public class lspdemoApplication extends Application {
         }
         a+=d;
         if ( 666 == keystatus) {
-            Bugly.init(this, "50a36059a3", false);
         }
         else{
             Toast.ShowInfo(this,"请使用官方渠道安装包进行安装,否则将收不到更新!");
         }
-        FileUtils.getInstance(this).copyAssetsToSD("apk","lspdemo.apks");
     }
     public static Context getApplication() {
         return mApplication;
