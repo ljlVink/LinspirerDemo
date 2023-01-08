@@ -1,10 +1,12 @@
 package com.huosoft.wisdomclass.linspirerdemo;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 
+import com.ljlVink.Activity.NewUI;
 import com.ljlVink.utils.DataCleanManager;
 import com.ljlVink.utils.FileUtils;
 import com.ljlVink.utils.Sysutils;
@@ -44,7 +46,6 @@ public class lspdemoApplication extends Application {
         int keystatus = new Signutil(this, "97:8D:89:23:F9:F3:AF:C9:A3:79:37:2C:C8:A6:FF:A8:26:CC:DE:EF").f();
 
         if (!this.getApplicationInfo().name.equals("com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication")){
-
             throw new RuntimeException("?!! detect!");
         }
         a="t";
@@ -69,6 +70,18 @@ public class lspdemoApplication extends Application {
         }
         else{
             Toast.ShowInfo(this,"请使用官方渠道安装包进行安装,否则将收不到更新!");
+        }
+        if(BuildConfig.VERSION_NAME.contains("oem")){
+            if(!Sysutils.isSystemApplication(this)){
+                Toast.ShowErr(this,"请安装到系统或使用正常版本");
+                throw new RuntimeException("oem app error");
+            }
+            else{
+                Toast.ShowSuccess(this,"oem app loaded!");
+                Intent intent=new Intent(this, NewUI.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
         }
     }
     public static Context getApplication() {

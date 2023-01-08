@@ -170,6 +170,17 @@
 
             <TextView
                 android:id="@+id/textview_information"
+                android:textIsSelectable="true"
+                android:focusable="true"
+                android:longClickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/textview_information2"
+                android:textIsSelectable="true"
+                android:focusable="true"
+                android:longClickable="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />

@@ -13,6 +13,7 @@ public class ddpm extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ddpm);
+        new HackMdm(this).initMDM();
         new AlertDialog.Builder(ddpm.this)
                 .setIcon(R.drawable.app_settings)
                 .setTitle("确定要解除Linspirer Demo的设备管理器吗")

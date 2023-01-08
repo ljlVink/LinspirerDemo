@@ -33,6 +33,18 @@
             android:layout_height="wrap_content"
             android:hint="emui10需要sn,其余mac地址即可" />
 
+        <EditText
+            android:id="@+id/et2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入userid" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="userid为空默认计算设备初始密码\n关于userid的获取：\n可在应用上传界面输入对应设备信息获取userid" />
+
+
     </LinearLayout>
 
     <Button

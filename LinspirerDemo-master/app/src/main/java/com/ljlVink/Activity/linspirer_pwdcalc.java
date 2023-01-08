@@ -28,10 +28,11 @@ public class linspirer_pwdcalc extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.button: {
                     TextView tv3 = (TextView) findViewById(R.id.tv3);
+                    String userid=((EditText)this.findViewById(R.id.et2)).getText().toString();
                     tv3.setText("");
                     String swdid = ((EditText)this.findViewById(R.id.et)).getText().toString();
-                    String pass500 = calc(swdid,key500);
-                    String pass501 = calc(swdid,key501);
+                    String pass500 = calc(swdid,key500,userid);
+                    String pass501 = calc(swdid,key501,userid);
                     TextView tvs = (TextView) findViewById(R.id.tv);
                     tvs.setText("5.0.***:"+pass500+"\n5.01.***:"+pass501+"\n孩子端(5.05):"+hzd(swdid));
                     JSONObject jsonObject=new JSONObject();
@@ -87,8 +88,8 @@ public class linspirer_pwdcalc extends AppCompatActivity {
         setContentView(R.layout.activity_linspirer_pwdcalc);
 
     }
-    public static String calc(String str,String key) {
-        String str2 = new SimpleDateFormat("yyyyMMdd").format(new Date()) + str + key;
+    public static String calc(String str,String key,String userid) {
+        String str2 = new SimpleDateFormat("yyyyMMdd").format(new Date()) + str + key+userid;
         String b = m3759b(str2);
         if (b.length() > 8) {
             return m3758c(b.substring(b.length() - 8, b.length()));

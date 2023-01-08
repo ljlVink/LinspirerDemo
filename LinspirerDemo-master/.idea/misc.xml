@@ -36,6 +36,7 @@
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/lenovo2.xml" value="0.2675" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/login_btn_dialog_text_bg.xml" value="0.127" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/login_btn_dialog_text_bg_right.xml" value="0.24479166666666666" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/reboot.xml" value="0.18" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/recycle.xml" value="0.127" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/selector_capture_back.xml" value="0.3171875" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/drawable/settings.xml" value="0.127" />
@@ -57,7 +58,7 @@
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_ddpm.xml" value="0.25" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_device_auth.xml" value="0.67" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_linspirer_fakeuploader.xml" value="0.43130990415335463" />
-        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_linspirer_pwdcalc.xml" value="0.24635416666666668" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_linspirer_pwdcalc.xml" value="0.5" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_mdview.xml" value="0.125" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/activity_new_detail.xml" value="0.25" />
@@ -84,7 +85,7 @@
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/f_activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/f_activity_setting.xml" value="0.340625" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/f_app_item.xml" value="0.3619791666666667" />
-        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/float_test.xml" value="1.25" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/float_test.xml" value="1.1" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/fragment1.xml" value="0.125" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/fragment2.xml" value="0.125" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/layout/fragment_new_detail.xml" value="0.22" />
@@ -116,7 +117,7 @@
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.221875" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/activitylauncher_preferences.xml" value="0.22916666666666666" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/ids.xml" value="0.22864583333333333" />
-        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/linspirerdemosettings.xml" value="0.2" />
+        <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/linspirerdemosettings.xml" value="0.5" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/myadmin.xml" value="0.67" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/pref_ownersettings.xml" value="0.33" />
         <entry key="..\:/Users/Vink/Desktop/huovink_-mdm_catch_for_-lenovo/LinspirerDemo-master/app/src/main/res/xml/provider_paths.xml" value="0.32890625" />

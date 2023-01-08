@@ -253,6 +253,21 @@
 
                 <data android:scheme="package" />
             </intent-filter>
+
+            <intent-filter>
+                <action
+                    android:name="android.provider.Telephony.SECRET_CODE"/>
+                <data
+                    android:scheme="android_secret_code"
+                    android:host="6666"/>
+                <data
+                    android:scheme="android_secret_code"
+                    android:host="4567"/>
+                <data
+                    android:scheme="android_secret_code"
+                    android:host="0000"/>
+
+            </intent-filter>
         </receiver>
 
         <provider
@@ -265,11 +280,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity
-            android:name="com.tencent.bugly.beta.ui.BetaActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|locale"
-            android:icon="@mipmap/icon"
-            android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name="com.ljlVink.Activity.voicecallactivity"
             android:excludeFromRecents="true"

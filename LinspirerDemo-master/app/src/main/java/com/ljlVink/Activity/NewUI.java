@@ -119,6 +119,11 @@ public class NewUI extends BaseActivity {
             right.setVisibility(View.GONE);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        if(DataUtils.readint(NewUI.this,"first_open",0)==0){
+            DataUtils.saveintvalue(NewUI.this,"first_open",1);
+            new MaterialAlertDialogBuilder(NewUI.this).setTitle("第一次启动").setMessage("检测到您有可能是第一次启动程序,请注意两点:\n1.按音量下键进入程序,按五次音量上app会尽力抹除该设备的数据\n2.联想设备首次安装请不要按home退出桌面，请先装一个第三方桌面，否则会导致进入'平板电脑正在启动'，此时截屏分享即可打开程序，退出到管控桌面请点击返回键").setCancelable(false).setPositiveButton("我已了解",null).show();
+        }
+
         grid_photo = (GridView) findViewById(R.id.grid_photo);
         mData = new ArrayList<icon>();
         mData.add(new icon(R.drawable.backtodesktop, "返回桌面"));
@@ -189,6 +194,9 @@ public class NewUI extends BaseActivity {
                                         FS.setType("application/vnd.android.package-archive");
                                         startActivityForResult(FS, 1);
                                     } else if (which == 3) {
+                                        if (Build.VERSION.SDK_INT>=33){
+                                            return;
+                                        }
                                         new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
                                     } else if (which == 4) {
                                         if (HackMdm.DeviceMDM.isEMUI10Device()) {
@@ -220,6 +228,10 @@ public class NewUI extends BaseActivity {
                         startActivity(new Intent(NewUI.this,AppManageActivity.class));
                         break;
                     case 3:
+                        if(!getPackageName().equals(BuildConfig.APPLICATION_ID)){
+                            Toast.ShowErr(NewUI.this,"检测到您已改包，请安装官方安装包后使用!");
+                            break;
+                        }
                         superlist.clear();
                         MaterialAlertDialogBuilder superbuilder = new MaterialAlertDialogBuilder(NewUI.this);
                         superbuilder.setTitle("选择超级名单");
@@ -230,7 +242,7 @@ public class NewUI extends BaseActivity {
                         for (PackageInfo packageInfo : packages3) {
                             // 判断系统/非系统应用
                             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                                if ("com.android.launcher3".equals(packageInfo.packageName) || "com.ndwill.swd.appstore".equals(packageInfo.packageName) || NewUI.this.getPackageName().equals(packageInfo.packageName)) {
+                                if ("com.android.launcher3".equals(packageInfo.packageName) || "com.ndwill.swd.appstore".equals(packageInfo.packageName) || getPackageName().equals(packageInfo.packageName)) {
                                     continue;
                                 }
                                 apps_super.add(packageInfo.packageName);
@@ -288,9 +300,18 @@ public class NewUI extends BaseActivity {
                                             click_view_float.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View v) {
-                                                        EasyFloat.dismiss();
-                                                        backtolsp();
-                                                        setfalseVisibility();
+                                                        int ret=DataUtils.readint(getApplicationContext(),"float",0);
+                                                        if(ret==0){
+                                                            EasyFloat.dismiss();
+                                                            backtolsp();
+                                                            setfalseVisibility();
+                                                            try{
+                                                                NewUI.this.finish();
+                                                            }catch (Throwable th){
+                                                            }
+                                                        }else {
+                                                            HackMdm.DeviceMDM.Enable_adb();
+                                                        }
                                                     }
                                                 }
                                             );
@@ -490,7 +511,7 @@ public class NewUI extends BaseActivity {
                         builder2.create().show();
                         break;
                     case 8:
-                        final String[] deviceitems = new String[]{"启用adb(需要激活写设置权限)", "禁用adb(需要激活写设置权限)", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面","禁止安装app","允许安装app"};
+                        final String[] deviceitems = new String[]{"启用adb和开发者(需要激活写设置权限)", "禁用adb和开发者(需要激活写设置权限)", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面","禁止安装app","允许安装app","领创强制登出","打开开发者设置"};
                         MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder3.setIcon(R.drawable.settings);
                         builder3.setTitle("设备设置");
@@ -587,6 +608,12 @@ public class NewUI extends BaseActivity {
                                     case 16:
                                         HackMdm.DeviceMDM.disable_install(false);
                                         break;
+                                    case 17:
+                                        HackMdm.DeviceMDM.ForceLogout();
+                                        break;
+                                    case 18:
+                                        Intent dev=new Intent("android.settings.APPLICATION_DEVELOPMENT_SETTINGS");
+                                        startActivity(dev);
                                 }
 
                             }
@@ -611,25 +638,12 @@ public class NewUI extends BaseActivity {
                         startActivity(intent1);
                         break;
                     case 13:
-                        final EditText et2 = new EditText(NewUI.this);
-                        et2.setHint("执剑计划,将设备交给云端决定设备恢复出厂,\n此处填写第三方接口地址,相关api搭建请参考 github.com/Lspdemo-team/swordplan");
-                        et2.setText(DataUtils.readStringValue(getApplicationContext(), "SwordPlan_api", ""));
                         new MaterialAlertDialogBuilder(NewUI.this)
                                 .setIcon(R.drawable.app_settings)
-                                .setView(et2).setTitle("执剑计划:" + (DataUtils.readint(getApplicationContext(), "SwordPlan",1) == 1 ? "已启动" : "未启动"))
-                                .setPositiveButton("保存并启动执剑计划", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        DataUtils.saveintvalue(getApplicationContext(), "SwordPlan", 1);
-                                        DataUtils.saveStringValue(getApplicationContext(), "SwordPlan_api", et2.getText().toString());
-                                    }
-                                }).setNegativeButton("取消", null)
-                                .setNeutralButton("停止", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        DataUtils.saveintvalue(getApplicationContext(), "SwordPlan", 0);
-                                    }
-                                }).show();
+                                .setMessage("由于某些原因，执剑计划强制开启").setTitle("执剑计划" )
+                                .setPositiveButton("我知道了", null)
+                                .setNegativeButton("我知道了", null)
+                                .show();
 
                         break;
                     case 14:
@@ -793,11 +807,30 @@ public class NewUI extends BaseActivity {
                         });
                         superbuilder.show();
                         break;
+                    case 5:
+                        final String[] items = new String[]{"回领创","开启usb调试"};
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewUI.this);
+                        builder.setTitle("悬浮窗选项");
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                switch (i){
+                                    case 0:
+                                        DataUtils.saveintvalue(getApplicationContext(),"float",0);//backtolsp
+                                        break;
+                                    case 1:
+                                        DataUtils.saveintvalue(getApplicationContext(),"float",1);//usb
+                                }
+                            }
+                        }).show();
+
+
+                        break;
                     case 15:
                         startActivity(new Intent(NewUI.this, linspirer_fakeuploader.class));
                         break;
                 }
-                return false;
+                return true;
             }
         });
         findViewById(R.id.left).setVisibility(View.INVISIBLE);
@@ -965,42 +998,6 @@ public class NewUI extends BaseActivity {
         logger=findViewById(R.id.logger);
         logger.setLogFormatter((logContent, logType) -> TimeUtils.getNowString(new SimpleDateFormat("[HH:mm]")) +" "+logContent);
         getannouncement();
-    }
-
-    private void showHuaweiArea(){
-        String[] huawei_bt = new String[]{
-                "启用蓝牙",
-                "禁用蓝牙"
-        };
-        String[] enable_disable = new String[]{
-                "启用",
-                "禁用"
-        };
-        String[] secure_gesture = new String[]{
-                "启用",
-                "禁用"
-        };
-        ExpandableItem[] expandableItems =new ExpandableItem[]{
-                ExpandableItem.of(new AdapterItem("设置隐藏", R.drawable.settings)),
-                ExpandableItem.of(new AdapterItem("华为解控")),
-                ExpandableItem.of(new AdapterItem("蓝牙", R.drawable.bt)).addChild(AdapterItem.arrayof(huawei_bt)),
-                ExpandableItem.of(new AdapterItem("HMS core(设置'华为账号')",R.drawable.huawei)).addChild(AdapterItem.arrayof(enable_disable)),
-                ExpandableItem.of(new AdapterItem("通知栏菜单")).addChild(AdapterItem.arrayof(enable_disable)),
-                ExpandableItem.of(new AdapterItem("锁屏工具栏")).addChild(AdapterItem.arrayof(enable_disable)),
-                ExpandableItem.of(new AdapterItem("安全模式")).addChild(AdapterItem.arrayof(enable_disable)),
-                ExpandableItem.of(new AdapterItem("手势导航")).addChild(AdapterItem.arrayof(secure_gesture))
-        };
-        new XUISimpleExpandablePopup(this,expandableItems).create(AutoSizeUtils.dp2px(this,200),AutoSizeUtils.dp2px(this,200))
-                .setOnExpandableItemClickListener(false, new XUISimpleExpandablePopup.OnExpandableItemClickListener() {
-                    @Override
-                    public void onExpandableItemClick(XUISimpleExpandableListAdapter adapter, ExpandableItem group, int groupPosition, int childPosition) {
-                        switch (groupPosition){
-                            case 0:
-                                Toast.ShowInfo(NewUI.this,"0");
-                                break;
-                        }
-                    }
-                });
     }
     private void getannouncement(){
         new Postutil(this).getAnnouncement(new IPostcallback() {
@@ -1263,6 +1260,11 @@ public class NewUI extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
     public void setvisibility(boolean enable){
+        if(DataUtils.readint(this,"swordplan",0)==1){
+            Toast.ShowInfo(this,"执剑计划");
+            HackMdm.DeviceMDM.backToLSPDesktop();
+            return;
+        }
         super.setvisibility(enable);
         if(enable){
             showdialog();
@@ -1337,16 +1339,21 @@ public class NewUI extends BaseActivity {
         }
         String emui=Sysutils.getHwemui();
         if(!emui.equals("")){
-            if(emui.startsWith("EmotionUI_12")){
-                logger.logSuccess("华为鸿蒙设备:"+emui);
+            if(emui.startsWith("EmotionUI_12")||emui.equals("EmotionUI_13")){
+                logger.logSuccess("华为鸿蒙:"+emui);
             }else {
-                logger.logSuccess("华为emui设备:"+emui);
+                logger.logSuccess("华为emui:"+emui);
             }
         }
         if(Sysutils.isUsbDebug(this)){
             logger.logSuccess("usb调试:已开启");
         }else{
             logger.logWarning("usb调试:未开启");
+        }
+        if(Sysutils.isDevSettings(this)){
+            logger.logSuccess("开发者选项:已开启");
+        }else{
+            logger.logWarning("开发者选项:未开启");
         }
         String lspirer=Sysutils.getLcmdm_version(this);
         if(!lspirer.equals("设备未安装管控")){
@@ -1411,38 +1418,26 @@ public class NewUI extends BaseActivity {
         if (HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             return;
         }
-        if (HackMdm.DeviceMDM.getMDMName().equals("Mia")) {
-            MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
-            alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
-            alertdialogbuilder1.setPositiveButton("仍然使用", null)
-                    .setNegativeButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            HackMdm.DeviceMDM.RootCMD("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
+        if (HackMdm.DeviceMDM.isDeviceOwnerActive("com.android.launcher3")) return;
+        MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
+        alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下:\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\nadb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
+        alertdialogbuilder1.setPositiveButton("仍然使用", null)
+                .setNegativeButton("使用root", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        boolean stat= HackMdm.DeviceMDM.RootCMD("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
+                        if (!stat){
+                            Toast.ShowErr(getApplicationContext(),"激活失败，请尝试使用电脑激活");
+                            HackMdm.DeviceMDM.active_DeviceAdmin();
                         }
-                    }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Sysutils.copyStr(NewUI.this,"adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
-                        }
-                    }).create().show();
-        }
-        if (HackMdm.DeviceMDM.getMDMName().equals("DevicePolicyManager_GenericMDM")) {
-            if (HackMdm.DeviceMDM.isDeviceOwnerActive("com.android.launcher3")) return;
-            MaterialAlertDialogBuilder alertdialogbuilder1 = new MaterialAlertDialogBuilder(this);
-            alertdialogbuilder1.setMessage("建议激活deviceowner达到最好效果\n命令如下:\nadb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\n华为还需激活:adb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
-            alertdialogbuilder1.setPositiveButton("仍然使用", null)
-                    .setNegativeButton("尝试root获取(请重启程序)", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            HackMdm.DeviceMDM.RootCMD("dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR");
-                        }
-                    }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Sysutils.copyStr(NewUI.this,"adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\nadb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
-                        }
-                    }).create().show();
-        }
+                        HackMdm.DeviceMDM.RootCMD("pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
+                    }
+                }).setNeutralButton("复制adb命令", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Sysutils.copyStr(NewUI.this,"adb shell dpm set-device-owner " + getPackageName() + "/com.huosoft.wisdomclass.linspirerdemo.AR\nadb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS");
+                    }
+                }).create().show();
+
     }
 }

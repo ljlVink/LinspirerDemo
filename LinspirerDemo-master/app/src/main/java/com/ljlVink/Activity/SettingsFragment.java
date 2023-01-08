@@ -45,6 +45,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference get_in_app_with_assist=Objects.requireNonNull(findPreference("get_in_app_with_assist"));
         Preference emui_control=Objects.requireNonNull(findPreference("emui_control"));
         Preference desktop_pkg=Objects.requireNonNull(findPreference("desktop_pkg"));
+        SwitchPreference no_hmscore_hms=Objects.requireNonNull(findPreference("no_hmscore_hms"));
         Preference miahash_add=Objects.requireNonNull(findPreference("miahash_add"));
         SwitchPreference bjszmode=Objects.requireNonNull(findPreference("bjsz_mode"));
         SwitchPreference firewall_ctrl=Objects.requireNonNull(findPreference("firewall_ctrl"));
@@ -265,6 +266,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     DataUtils.saveintvalue(getContext(),"bjsz_mode_disable_recent",1);
                 }else{
                     DataUtils.saveintvalue(getContext(),"bjsz_mode_disable_recent",0);
+                }
+                return true;
+            }
+        });
+        no_hmscore_hms.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if((boolean) newValue==true){
+                    DataUtils.saveintvalue(getContext(),"not_load_hmscore",1);
+                }else{
+                    DataUtils.saveintvalue(getContext(),"not_load_hmscore",0);
                 }
                 return true;
             }

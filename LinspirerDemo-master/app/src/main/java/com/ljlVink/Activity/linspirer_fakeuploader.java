@@ -43,6 +43,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
         TextView tv_devicesn=findViewById(R.id.device_sn);
         TextView tv_androidver=findViewById(R.id.android_ver);
         TextView textview_information=findViewById(R.id.textview_information);
+        TextView textview_information2=findViewById(R.id.textview_information2);
         TextView tv_macaddr=findViewById(R.id.device_mac);
         Button btn_gettastics=findViewById(R.id.btn_gettastics);
         Button btn_save=findViewById(R.id.btn_save);
@@ -117,7 +118,14 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                             int len=jsonArray.size();
                             for(int i=0;i<len;i++){
                                 JSONObject object=jsonArray.getJSONObject(i);
-                                result+="app名:"+object.getString("name")+" "+"app包名:"+object.getString("packagename")+" "+"app版本名:"+object.getString("versionname")+" "+"app版本号:"+String.valueOf(object.getInteger("versioncode"))+"\n";
+                                result+="app名:"+object.getString("name")+" "+"app包名:"+object.getString("packagename")+" "+"app版本名:"+object.getString("versionname")+" "+"app版本号:"+String.valueOf(object.getInteger("versioncode"))+"应用商店id:"+object.getInteger("id").toString()+"\n";
+                                String sha1=object.getString("sha1");
+                                if (sha1!=null){
+                                    result+="sha1:"+sha1+"\n";
+                                }else{
+                                    result+="sha1:没有sha1签名验证，此包名可以被改包安装\n";
+                                }
+                                result+="应用商店下载链接:https://cloud.linspirer.com:883/download.php?email="+account+"&appid="+object.getInteger("id").toString()+"&swdid="+swdid+"\n";
                             }
                             final String result1=result;
                             textview_information.post(new Runnable() {
@@ -160,6 +168,55 @@ public class linspirer_fakeuploader extends AppCompatActivity {
 
                     }
                 });
+
+                JSONObject Stuinfo=new JSONObject();
+                Stuinfo.put("id","1");
+                Stuinfo.put("!version",6);
+                Stuinfo.put("jsonrpc","2.0");
+                Stuinfo.put("is_encrypt",false);
+                Stuinfo.put("client_version","tongyongshengchan_5.03.012.4");
+                JSONObject Stuinfo_para=new JSONObject();
+                Stuinfo_para.put("swdid",swdid);
+                Stuinfo_para.put("model",model);
+                Stuinfo_para.put("email",account);
+                Stuinfo.put("params",Stuinfo_para);
+                Stuinfo.put("method","com.linspirer.user.getuserinfo");
+                new PostUtils().sendPost(Stuinfo, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
+                    @Override
+                    public void callback(String str) {
+                        JSONObject obj= JSON.parseObject(AES.decrypt(str));
+                        if (Objects.equals(obj.get("code"), 0)){
+                            String result="";
+                            JSONObject obj1=obj.getJSONObject("data");
+                            result+="姓名:" +obj1.getString("name");
+                            result+=",学校名:"+obj1.get("school_name");
+                            result+=",班级名:"+obj1.get("class_name");
+                            result+=",用户userid(用于计算动态码):"+obj1.get("id");
+                            final String result1=result;
+                            textview_information2.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textview_information2.setText(result1);
+                                    scrolldown();
+                                }
+                            });
+                        }else{
+                            textview_information2.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    textview_information.setText("获取学生信息失败\n"+ AES.decrypt(str));
+                                    scrolldown();
+                                }});
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+
             }
         });
         cb.setOnClickListener(new View.OnClickListener() {

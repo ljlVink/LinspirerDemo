@@ -117,5 +117,12 @@
             android:title="手动设置管控模式"
             android:summary="设置手动后,将执行不同的策略"
             ></Preference>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="no_hmscore_hms"
+            android:title="取消自动解冻hms core"
+            android:summary="设置开启后,将取消解冻hms core"
+            ></SwitchPreference>
+
     </PreferenceCategory>
 </PreferenceScreen>

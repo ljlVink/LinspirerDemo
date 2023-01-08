@@ -57,6 +57,10 @@ public class Sysutils {
         boolean enableAdb = (Settings.Secure.getInt(mContext.getContentResolver(), "adb_enabled", 0) > 0);
         return enableAdb;
     }
+    public static boolean isDevSettings(Context mContext) {
+        boolean isDev = (Settings.Secure.getInt(mContext.getContentResolver(), "development_settings_enabled", 0) > 0);
+        return isDev;
+    }
     public static String getLcmdm_version(Context context){
         String lcmdm_version="";
         try{
