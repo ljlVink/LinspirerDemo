@@ -1,7 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'top.niunaijun.blackobfuscator'
-    id 'stringfog'
 }
 android {
     compileSdkVersion 32
@@ -12,7 +10,7 @@ android {
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
         versionCode 68911
-        versionName "V6.61p1"
+        versionName "V6.61_dailybuild_20230305"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
     }
@@ -54,8 +52,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_10
-        targetCompatibility JavaVersion.VERSION_1_10
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         dataBinding = true
@@ -71,22 +69,6 @@ android {
     }
 }
 
-BlackObfuscator {
-    // 是否启用
-    enabled false
-    // 混淆深度
-    depth 3
-    obfClass=["com.ljlVink","com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication"]
-    // 需要混淆的包或者类(匹配前面一段)
-    blackClass = ["com.ljlVink.xposed"]
-    // blackClass中的包或者类不会进行混淆(匹配前面一段)
-}
-stringfog {
-    enable true
-    implementation 'com.github.megatronking.stringfog.xor.StringFogImpl'
-    fogPackages = ["com.ljlVink","com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication"]
-}
-
 dependencies{
     //UI Tools
     implementation 'com.github.bumptech.glide:glide:4.13.2'
@@ -100,7 +82,6 @@ dependencies {
     //Tools
     implementation 'io.github.medyo:android-about-page:2.0.0'
     implementation 'com.github.jenly1314:zxing-lite:2.1.1'
-    implementation 'com.github.megatronking.stringfog:xor:3.0.0'
     implementation 'com.nbsp:materialfilepicker:1.9.1'
     implementation 'com.github.princekin-f:EasyFloat:2.0.3'
     implementation 'com.squareup.okhttp3:okhttp:latest.release'

@@ -2,6 +2,7 @@ package com.ljlVink.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -47,6 +48,7 @@ public class linspirer_fakeuploader extends AppCompatActivity {
         TextView tv_macaddr=findViewById(R.id.device_mac);
         Button btn_gettastics=findViewById(R.id.btn_gettastics);
         Button btn_save=findViewById(R.id.btn_save);
+        Button btn_getinfo=findViewById(R.id.btn_getinfo);
         CheckBox cb=findViewById(R.id.checkBox_upload_device);
         CheckBox cb2=findViewById(R.id.checkBox_absorb_command);
         String lcmdm_version="";
@@ -274,6 +276,15 @@ public class linspirer_fakeuploader extends AppCompatActivity {
                 }
                 else DataUtils.saveStringValue(getApplicationContext(),"device_mac",device_mac.toUpperCase(Locale.ROOT));
                 Toast.ShowSuccess(linspirer_fakeuploader.this, "已保存");
+            }
+        });
+        btn_getinfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent("com.linspirer.edu.obtain.userinfo");
+                intent.setPackage("com.android.launcher3");
+                intent.putExtra("packageName",getPackageName());
+                sendBroadcast(intent);
             }
         });
     }

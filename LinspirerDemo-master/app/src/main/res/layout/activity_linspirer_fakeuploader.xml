@@ -154,6 +154,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <Button
+                android:id="@+id/btn_getinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789"
+                android:text="向领创获取账号信息(仅限非联想通用模式)" />
 
             <Button
                 android:id="@+id/btn_gettastics"

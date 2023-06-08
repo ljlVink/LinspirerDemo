@@ -172,7 +172,7 @@ public class NewUI extends BaseActivity {
                         }
                         break;
                     case 1:
-                        final String[] items = new String[]{"通过apk安装(自动选择)", "通过apk安装(DocumentUI)", "静默安装(Filepicker)", "静默安装(仅限EMUI10静默)", "写app白名单"};
+                        final String[] items = new String[]{"通过apk安装(自动选择)", "通过apk安装(DocumentUI)", "静默安装(Filepicker)", "静默安装(仅限华为emui10/鸿蒙)", "写app白名单"};
                         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NewUI.this);
                         builder.setIcon(R.drawable.installapps);
                         builder.setTitle("请选择方式：");
@@ -199,11 +199,11 @@ public class NewUI extends BaseActivity {
                                         }
                                         new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
                                     } else if (which == 4) {
-                                        if (HackMdm.DeviceMDM.isEMUI10Device()) {
+                                            Toast.ShowInfo(NewUI.this,"仅限华为emui10/鸿蒙");
                                             Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
                                             FS.setType("application/vnd.android.package-archive");
                                             startActivityForResult(FS, 2);
-                                        }
+
                                     } else if (which == 5) {
                                         final EditText et = new EditText(NewUI.this);
                                         new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入包名")
@@ -658,14 +658,13 @@ public class NewUI extends BaseActivity {
                         MaterialAlertDialogBuilder appbuilder = new MaterialAlertDialogBuilder(NewUI.this);
                         appbuilder.setTitle("选择第三方管控桌面隐藏列表");
                         PackageManager pm4 = getPackageManager();
-                        List<PackageInfo> packages4 = pm4.getInstalledPackages(0);
+                        List<PackageInfo> packages4 = pm4.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
                         for (PackageInfo packageInfo : packages4) {
-                            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                                 if ("com.android.launcher3".equals(packageInfo.packageName) || "com.ndwill.swd.appstore".equals(packageInfo.packageName)) {
                                     continue;
                                 }
                                 apps1.add(packageInfo.packageName);
-                            }
+
                         }
                         appbuilder.setMultiChoiceItems(apps1.toArray(new String[0]), null, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
@@ -834,8 +833,9 @@ public class NewUI extends BaseActivity {
             }
         });
         findViewById(R.id.left).setVisibility(View.INVISIBLE);
-        if(Sysutils.isTabletDevice(this))
-        findViewById(R.id.right).setVisibility(View.INVISIBLE);
+        if(Sysutils.isTabletDevice(this)){
+            findViewById(R.id.right).setVisibility(View.INVISIBLE);
+        }
         findViewById(R.id.grid_photo).setVisibility(View.INVISIBLE);
         titleBar.setVisibility(View.INVISIBLE);
         titleBar.setOnTitleBarListener(new OnTitleBarListener() {

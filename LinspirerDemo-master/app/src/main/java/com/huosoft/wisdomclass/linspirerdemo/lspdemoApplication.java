@@ -3,8 +3,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Process;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.ljlVink.Activity.NewUI;
 import com.ljlVink.utils.DataCleanManager;
@@ -46,19 +50,19 @@ public class lspdemoApplication extends Application {
         int keystatus = new Signutil(this, "97:8D:89:23:F9:F3:AF:C9:A3:79:37:2C:C8:A6:FF:A8:26:CC:DE:EF").f();
 
         if (!this.getApplicationInfo().name.equals("com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication")){
-            throw new RuntimeException("?!! detect!");
+            throw new RuntimeException("application failed");
         }
         a="t";
         a+=b;
         if(!nowPMName.equals(truePMName)){
-            throw new RuntimeException("?!! detect!");
+            throw new RuntimeException("pm failed");
         }
         a+=c;
         String[] permission={"android.permission.INTERNET","android.permission.ACCESS_NETWORK_STATE","android.permission.ACCESS_WIFI_STATE"};
         for (String permissions : permission) {
             int per =this.checkPermission(permissions, Process.myPid(),Process.myUid());
             if (PackageManager.PERMISSION_GRANTED != per) {
-                throw new RuntimeException("?!! detect!");
+                throw new RuntimeException("permission failed");
             }
         }
 
@@ -69,7 +73,7 @@ public class lspdemoApplication extends Application {
         if ( 666 == keystatus) {
         }
         else{
-            Toast.ShowInfo(this,"请使用官方渠道安装包进行安装,否则将收不到更新!");
+            throw new RuntimeException("app error");
         }
         if(BuildConfig.VERSION_NAME.contains("oem")){
             if(!Sysutils.isSystemApplication(this)){
@@ -82,6 +86,17 @@ public class lspdemoApplication extends Application {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
+        }
+        boolean isPad = (getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics dm = new DisplayMetrics();
+        display.getMetrics(dm);
+        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
+        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
+        double screenInches = Math.sqrt(x + y); // 屏幕尺寸
+        if(!(isPad || screenInches >= 7.0)){
+            Toast.ShowErr(lspdemoApplication.this,"非平板设备");
         }
     }
     public static Context getApplication() {
