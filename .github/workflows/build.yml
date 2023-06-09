@@ -18,10 +18,10 @@ jobs:
     - name: Copy important files
       run: |
         mkdir /LinspirerDemo-master/app/src/main/java/com/ljlVink/core/core
-        cp github/IPostcallback.java /LinspirerDemo-master/app/src/main/java/com/ljlVink/core/core
-        cp github/Postutil.java /LinspirerDemo-master/app/src/main/java/com/ljlVink/core/core
+        cp .github/IPostcallback.java /LinspirerDemo-master/app/src/main/java/com/ljlVink/core/core
+        cp .github/Postutil.java /LinspirerDemo-master/app/src/main/java/com/ljlVink/core/core
         rm LinspirerDemo-master/app/src/main/java/com/ljlVink/Activity/BaseActivity.java
-        cp github/BaseActivity.java /LinspirerDemo-master/app/src/main/java/com/ljlVink/Activity
+        cp .github/BaseActivity.java /LinspirerDemo-master/app/src/main/java/com/ljlVink/Activity
     - name: Clone base app and Build Release APK
       run: |
         cd ./LinspirerDemo-master
