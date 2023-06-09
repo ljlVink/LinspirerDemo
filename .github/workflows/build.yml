@@ -1,0 +1,26 @@
+name: Build Apk
+
+on: [workflow_dispatch,push]
+
+jobs:
+  Gradle:
+    runs-on: windows-2022
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v2
+    - name: setup jdk
+      uses: actions/setup-java@v2
+      with:
+        distribution: zulu
+        java-version: 11
+    - name: Make Gradle executable
+      run: chmod +x ./LinspirerDemo-master/gradlew
+    - name: Build Release APK
+      run: |
+        cd ./LinspirerDemo-master
+        ./gradlew aR
+    - name: Upload apk
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: LinspirerDemo-master/app/build/outputs/apk
