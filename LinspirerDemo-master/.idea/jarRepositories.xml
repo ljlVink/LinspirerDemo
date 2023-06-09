@@ -71,5 +71,10 @@
       <option name="name" value="maven3" />
       <option name="url" value="https://developer.huawei.com/repo" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven3" />
+      <option name="name" value="maven3" />
+      <option name="url" value="https://maven.aliyun.com/repository/jcenter" />
+    </remote-repository>
   </component>
 </project>

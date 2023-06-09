@@ -5,6 +5,7 @@ android {
     compileSdkVersion 32
     buildToolsVersion "30.0.3"
     defaultConfig {
+
         applicationId "vizpower.imeeting"
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
@@ -13,7 +14,10 @@ android {
         versionName "V6.61_dailybuild_20230305"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
+        buildConfigField "string","BUILD_DATE",getDate()
+        buildConfigField "string","BUILD_GITVER","\"${getGithubVersion()}\""
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -22,6 +26,8 @@ android {
         }
         debug{
             minifyEnabled false
+            buildConfigField "string","BUILD_DATE",getDate()
+            buildConfigField "string","BUILD_GITVER",getGithubVersion()
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -69,6 +75,17 @@ android {
     }
 }
 
+static def getDate() {
+    Date date = new Date();
+    String dates = "\""+date.format("yyyy-MM-dd hh:mm:ss", TimeZone.getTimeZone("UTC"))+"\"";
+    return dates;
+}
+static def getGithubVersion(){
+    return 'git rev-parse --short HEAD'.execute().text.trim()
+}
+
+
+
 dependencies{
     //UI Tools
     implementation 'com.github.bumptech.glide:glide:4.13.2'
@@ -87,7 +104,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:latest.release'
     //implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'
     implementation 'com.alibaba:fastjson:1.2.79'
-    implementation 'com.github.getActivity:XXPermissions:15.0'
+    implementation 'com.github.getActivity:XXPermissions:18.2'
     implementation 'com.github.GrenderG:Toasty:1.5.2'
     implementation 'com.google.android.material:material:1.6.1'
 
