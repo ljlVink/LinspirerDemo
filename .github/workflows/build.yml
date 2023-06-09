@@ -15,9 +15,10 @@ jobs:
         java-version: 11
     - name: Make Gradle executable
       run: chmod +x ./LinspirerDemo-master/gradlew
-    - name: Build Release APK
+    - name: Clone base app and Build Release APK
       run: |
         cd ./LinspirerDemo-master
+        git clone https://github.com/ljlVink/HackMdm-core hackmdm
         ./gradlew aR
     - name: Upload apk
       uses: actions/upload-artifact@v2
