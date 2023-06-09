@@ -14,8 +14,8 @@ android {
         versionName "V6.61_dailybuild_20230305"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
-        buildConfigField "string","BUILD_DATE",getDate()
-        buildConfigField "string","BUILD_GITVER","\"${getGithubVersion()}\""
+        buildConfigField "String","BUILD_DATE",getDate()
+        buildConfigField "String","BUILD_GITVER","\"${getGithubVersion()}\""
     }
 
     buildTypes {
@@ -26,8 +26,6 @@ android {
         }
         debug{
             minifyEnabled false
-            buildConfigField "String","BUILD_DATE",getDate()
-            buildConfigField "String","BUILD_GITVER",getGithubVersion()
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
