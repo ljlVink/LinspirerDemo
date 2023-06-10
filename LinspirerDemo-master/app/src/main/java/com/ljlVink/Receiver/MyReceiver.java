@@ -8,6 +8,7 @@ import com.huosoft.wisdomclass.linspirerdemo.ddpm;
 import com.ljlVink.Activity.NewUI;
 import com.ljlVink.Activity.autostart;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
+import com.ljlVink.utils.DataUtils;
 import com.ljlVink.utils.Toast;
 
 public class MyReceiver extends BroadcastReceiver {
@@ -20,11 +21,19 @@ public class MyReceiver extends BroadcastReceiver {
         if (action==null){
             return;
         }
+        new HackMdm(context).initMDM();
         switch (action){
             case "android.intent.action.BOOT_COMPLETED":
                 Intent myIntent = new Intent(context, autostart.class);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(myIntent);
+
+                if(HackMdm.DeviceMDM.getMDMName().equals("supi_T11")){
+                    String cmd=DataUtils.readStringValue(context,"t11_start_rootCmd","");
+                    if(!cmd.equals("")){
+                        HackMdm.DeviceMDM.RootCMD(cmd);
+                    }
+                }
                 break;
             case "com.linspirer.edu.return.userinfo":
                 String account=intent.getStringExtra("account");

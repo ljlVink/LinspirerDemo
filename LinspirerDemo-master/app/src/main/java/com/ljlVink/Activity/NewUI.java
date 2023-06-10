@@ -685,7 +685,7 @@ public class NewUI extends BaseActivity {
                         appbuilder.show();
                         break;
                     case 17:
-                        final String[] t11items = new String[]{"禁用面具模块","自定义su指令","打开t11调试界面","打开edxp","重新执行开网脚本"};
+                        final String[] t11items = new String[]{"禁用面具模块","自定义su指令","打开t11调试界面","打开edxp","重新执行开网脚本","开机自动执行root指令"};
                         MaterialAlertDialogBuilder buildert11 = new MaterialAlertDialogBuilder(NewUI.this);
                         buildert11.setIcon(R.drawable.tensafe);
                         buildert11.setTitle("T11专区");
@@ -736,6 +736,19 @@ public class NewUI extends BaseActivity {
                                     HackMdm.DeviceMDM.RootCMD("am start -n de.robv.android.xposed.installer/de.robv.android.xposed.installer.WelcomeActivity");
                                 }else if(i==5){
                                     HackMdm.DeviceMDM.RootCMD("sh /system/tshook/network.sh");
+                                }else if(i==6){
+                                    final EditText et3 = new EditText(NewUI.this);
+                                    new MaterialAlertDialogBuilder(NewUI.this)
+                                            .setIcon(R.drawable.app_settings)
+                                            .setView(et3).setTitle("输入每次开机自动执行的命令")
+                                            .setPositiveButton("保存", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    String ans=et3.getText().toString();
+                                                    DataUtils.saveStringValue(NewUI.this,"t11_start_rootCmd",ans);
+                                                }
+                                            })
+                                            .show();
                                 }
                             }
                         }).show();
