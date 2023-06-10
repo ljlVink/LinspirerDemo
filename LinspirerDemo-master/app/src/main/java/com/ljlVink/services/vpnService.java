@@ -64,7 +64,7 @@ public class vpnService extends VpnService {
             }
         }catch (Exception ignore){}
         Intent configure = new Intent(this, NewUI.class);
-        PendingIntent pi = PendingIntent.getActivity(this, 0, configure, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, configure, PendingIntent.FLAG_IMMUTABLE);
         builder.setConfigureIntent(pi);
         try {
             return builder.establish();

@@ -14,7 +14,7 @@ public class Postutil {
     public void getAnnouncement(final IPostcallback callback) {
         callback.onSuccess(
                 "正在使用git自编译版本,仅限个人使用\n"+
-                "version:"+BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE+"\n"+
+                "version:"+BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE+")\n"+
                 "Git commit Version:"+BuildConfig.BUILD_GITVER+"\n"+
                 "BuildTime"+BuildConfig.BUILD_DATE);
     }
