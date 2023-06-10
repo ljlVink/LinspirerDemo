@@ -107,9 +107,7 @@ public class NewUI extends BaseActivity {
         titleBar=findViewById(R.id.titlebar);
         super.onCreate(savedInstanceState);
         new HackMdm(this).initMDM();
-        if(Boolean.parseBoolean(lspdemoApplication.geta())){
-            HackMdm.DeviceMDM.initHack(0);
-        }
+        HackMdm.DeviceMDM.initHack(0);
         postutil = new Postutil(this);
         postutil.CloudAuthorize();
         //初始化view
