@@ -9,8 +9,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 68911
-        versionName "V6.61_${getDate2()}"
+        versionCode 68999
+        versionName "V6.699_${getDate2()}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         buildConfigField "String","BUILD_DATE",getDate()
