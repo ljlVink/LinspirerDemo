@@ -836,6 +836,14 @@ public class NewUI extends BaseActivity {
 
 
                         break;
+                    case 8:
+                        int orig_mode=DataUtils.readint(NewUI.this,"OnTestMode",0);
+                        if (orig_mode ==0)
+                            orig_mode=1;
+                        else
+                            orig_mode=0;
+                        DataUtils.saveintvalue(NewUI.this,"OnTestMode",orig_mode);
+                        break;
                     case 15:
                         startActivity(new Intent(NewUI.this, linspirer_fakeuploader.class));
                         break;

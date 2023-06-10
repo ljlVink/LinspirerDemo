@@ -27,7 +27,6 @@ public class MyReceiver extends BroadcastReceiver {
                 Intent myIntent = new Intent(context, autostart.class);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(myIntent);
-
                 if(HackMdm.DeviceMDM.getMDMName().equals("supi_T11")){
                     String cmd=DataUtils.readStringValue(context,"t11_start_rootCmd","");
                     if(!cmd.equals("")){
@@ -44,16 +43,18 @@ public class MyReceiver extends BroadcastReceiver {
                 break;
             case "android.intent.action.PACKAGE_ADDED":
                 String packageName = intent.getDataString();
-                Toast.ShowInfo(context, "安装了应用"+packageName);
+                if(DataUtils.readint(context,"OnTestMode",0)==1)
+                    Toast.ShowInfo(context, "安装了应用"+packageName);
                 break;
             case "android.intent.action.PACKAGE_REMOVED":
                 String packagen = intent.getDataString();
-                Toast.ShowInfo(context, "卸载了应用："+packagen);
+                if(DataUtils.readint(context,"OnTestMode",0)==1)
+                    Toast.ShowInfo(context, "卸载了应用："+packagen);
                 break;
             case "android.intent.action.PACKAGE_REPLACED":
                 String pn = intent.getDataString();
-                Toast.ShowInfo(context, "覆盖安装应用："+pn);
-
+                if(DataUtils.readint(context,"OnTestMode",0)==1)
+                    Toast.ShowInfo(context, "覆盖安装应用："+pn);
         }
         String code=intent.getData().getHost();
         if (code !=null){
