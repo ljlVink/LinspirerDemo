@@ -47,8 +47,6 @@ public class lspdemoApplication extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        int keystatus = new Signutil(this, "97:8D:89:23:F9:F3:AF:C9:A3:79:37:2C:C8:A6:FF:A8:26:CC:DE:EF").f();
-
         if (!this.getApplicationInfo().name.equals("com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication")){
             throw new RuntimeException("application failed");
         }
@@ -70,11 +68,6 @@ public class lspdemoApplication extends Application {
             throw new RuntimeException("Detected non-mdm illegal os");
         }
         a+=d;
-        if ( 666 == keystatus) {
-        }
-        else{
-            throw new RuntimeException("app error");
-        }
         if(BuildConfig.VERSION_NAME.contains("oem")){
             if(!Sysutils.isSystemApplication(this)){
                 Toast.ShowErr(this,"请安装到系统或使用正常版本");
