@@ -3,7 +3,7 @@ name: Build Apk (Test)
 on: 
   push:
     tags: [test]
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   Gradle:

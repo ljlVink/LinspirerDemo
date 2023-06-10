@@ -3,7 +3,7 @@ name: Build Apk
 on: 
   push:
     tags: [release]
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   Gradle:
