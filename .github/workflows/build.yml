@@ -1,6 +1,8 @@
 name: Build Apk
 
-on: [workflow_dispatch,push]
+on: 
+  push:
+    tags: [release]
 
 jobs:
   Gradle:
@@ -26,7 +28,7 @@ jobs:
       run: |
         cd ./LinspirerDemo-master
         git clone https://github.com/ljlVink/HackMdm-core hackmdm
-        ./gradlew aR
+        ./gradlew assemblelspdemo_bronya
     - name: Upload apk
       uses: actions/upload-artifact@v2
       with:

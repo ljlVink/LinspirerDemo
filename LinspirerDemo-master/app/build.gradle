@@ -11,7 +11,7 @@ android {
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
         versionCode 68911
-        versionName "V6.61_dailybuild_20230305"
+        versionName "V6.61_"+getDate2()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         buildConfigField "String","BUILD_DATE",getDate()
@@ -76,6 +76,11 @@ android {
 static def getDate() {
     Date date = new Date();
     String dates = "\""+date.format("yyyy-MM-dd hh:mm:ss", TimeZone.getTimeZone("UTC"))+"\"";
+    return dates;
+}
+static def getDate2() {
+    Date date = new Date();
+    String dates = "\""+date.format("yyyyMMdd", TimeZone.getTimeZone("UTC"))+"\"";
     return dates;
 }
 static def getGithubVersion(){
