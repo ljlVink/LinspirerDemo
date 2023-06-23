@@ -118,6 +118,7 @@ dependencies {
 
     implementation project(':hackmdm')
     implementation project(':adblib')
+    implementation project(':csdk5lib')
 
     compileOnly files('lib-thirdparty/XposedBridgeApi-82.jar')
 }

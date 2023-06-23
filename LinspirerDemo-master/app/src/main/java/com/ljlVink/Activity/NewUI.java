@@ -43,6 +43,8 @@ import com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication;
 import com.king.zxing.CameraScan;
 import com.ljlVink.core.core.IPostcallback;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
+import com.ljlVink.csdk5lib.CSDKAbility;
+import com.ljlVink.csdk5lib.CSDK_new_MDM;
 import com.ljlVink.utils.TimeUtils;
 import com.ljlVink.utils.Toast;
 import com.ljlVink.core.core.Postutil;
@@ -77,6 +79,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -471,7 +474,7 @@ public class NewUI extends BaseActivity {
                         builder1.create().show();
                         break;
                     case 7:
-                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)", "设置锁屏密码(Lenovo10+)", "联想设置锁屏密码(仅支持mia)", "白名单临时清空(解除app管控)"};
+                        final String[] lenovoitems = new String[]{"设置导航栏(Lenovo10+)", "设置锁屏密码(Lenovo10+)", "联想设置锁屏密码(仅支持mia)", "白名单临时清空(解除app管控)","允许oem开关(android11+)","允许危险权限(指定包名)"};
                         MaterialAlertDialogBuilder builder2 = new MaterialAlertDialogBuilder(NewUI.this);
                         builder2.setIcon(R.drawable.lenovo);
                         builder2.setTitle("联想专区");
@@ -499,6 +502,32 @@ public class NewUI extends BaseActivity {
                                                 }).setNegativeButton("取消", null).show();
                                     } else if (which == 4) {
                                         HackMdm.DeviceMDM.clear_whitelist_app_lenovo();
+                                    }else if (which ==5){
+                                        if(!CSDKAbility.HasAbilityCSDK_new()){
+                                            Toast.ShowErr(NewUI.this,"无能力");
+                                            return;
+                                        }
+                                        new CSDK_new_MDM(NewUI.this).bypassOemlock();
+                                    }else if (which ==6){
+                                        if(!CSDKAbility.HasAbilityCSDK_new()){
+                                            Toast.ShowErr(NewUI.this,"无能力");
+                                            return;
+                                        }
+                                        CSDK_new_MDM csdk=new CSDK_new_MDM(NewUI.this);
+                                        final EditText et = new EditText(NewUI.this);
+                                        new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入包名").setIcon(android.R.drawable.sym_def_app_icon).setView(et)
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        csdk.enableDangerousPermissions(et.getText().toString());
+                                                    }
+                                                }).setNeutralButton("允许本app", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        csdk.enableDangerousPermissions(NewUI.this.getPackageName());
+                                                    }
+                                                })
+                                                .setNegativeButton("取消", null).show();
                                     }
                                 } catch (Exception e) {
 
@@ -1336,9 +1365,15 @@ public class NewUI extends BaseActivity {
         }catch (Exception e){}
     }
     private  void deviceinfo(){
+        String MDMname=HackMdm.DeviceMDM.getMDMName();
         logger.logNormal("版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")");
         logger.logNormal("包名:" + getPackageName());
-        logger.logNormal("MDM接口:" + HackMdm.DeviceMDM.getMDMName());
+        logger.logNormal("MDM接口:" + MDMname);
+        if(MDMname.equals("CSDK")){
+            if(CSDKAbility.HasAbilityCSDK_new()){
+                logger.logSuccess("机型支持新联想csdk接口");
+            }
+        }
         logger.logNormal("系统版本:" + String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         logger.logNormal("系统:"+Build.FINGERPRINT);
         logger.logNormal("设备:" + Sysutils.getDevice());
