@@ -39,7 +39,6 @@ import com.hjq.bar.TitleBar;
 import com.hjq.permissions.OnPermissionCallback;
 import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
-import com.huosoft.wisdomclass.linspirerdemo.lspdemoApplication;
 import com.king.zxing.CameraScan;
 import com.ljlVink.core.core.IPostcallback;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
@@ -63,10 +62,6 @@ import com.lzf.easyfloat.enums.ShowPattern;
 import com.lzf.easyfloat.interfaces.OnInvokeView;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
-import com.xuexiang.xui.adapter.simple.AdapterItem;
-import com.xuexiang.xui.adapter.simple.ExpandableItem;
-import com.xuexiang.xui.adapter.simple.XUISimpleExpandableListAdapter;
-import com.xuexiang.xui.widget.popupwindow.popup.XUISimpleExpandablePopup;
 import com.xuexiang.xui.widget.textview.LoggerTextView;
 
 
@@ -79,13 +74,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import activitylauncher.MainActivity;
 import adbotg.adbMainActivity;
-import me.jessyan.autosize.utils.AutoSizeUtils;
 
 public class NewUI extends BaseActivity {
     private BaseAdapter mAdapter = null;
@@ -714,7 +707,7 @@ public class NewUI extends BaseActivity {
                         appbuilder.show();
                         break;
                     case 17:
-                        final String[] t11items = new String[]{"禁用面具模块","自定义su指令","打开t11调试界面","打开edxp","重新执行开网脚本","开机自动执行root指令"};
+                        final String[] t11items = new String[]{"禁用面具模块","自定义su指令","打开t11调试界面","打开edxp","重新执行开网脚本","开机自动执行root指令","安装模块"};
                         MaterialAlertDialogBuilder buildert11 = new MaterialAlertDialogBuilder(NewUI.this);
                         buildert11.setIcon(R.drawable.tensafe);
                         buildert11.setTitle("T11专区");
@@ -778,6 +771,8 @@ public class NewUI extends BaseActivity {
                                                 }
                                             })
                                             .show();
+                                }else if(i==7){
+                                    new MaterialFilePicker().withActivity(NewUI.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(zip)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(2600).start();
                                 }
                             }
                         }).show();
@@ -1243,6 +1238,10 @@ public class NewUI extends BaseActivity {
                 String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
                 DataUtils.saveStringValue(this,"background_bg",filePath);
             }
+            if(requestCode==2600&&requestCode==RESULT_OK){
+                String filepath=data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                HackMdm.DeviceMDM.InstallMagiskModule_t11(filepath);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1366,7 +1365,8 @@ public class NewUI extends BaseActivity {
     }
     private  void deviceinfo(){
         String MDMname=HackMdm.DeviceMDM.getMDMName();
-        logger.logNormal("版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")");
+        logger.logNormal("版本号:" + BuildConfig.VERSION_NAME + "(" + BuildConfig.VERSION_CODE + ")"+"("+BuildConfig.BUILD_GITVER+")");
+        logger.logNormal("编译时间:"+BuildConfig.BUILD_DATE);
         logger.logNormal("包名:" + getPackageName());
         logger.logNormal("MDM接口:" + MDMname);
         if(MDMname.equals("CSDK")){
@@ -1379,6 +1379,7 @@ public class NewUI extends BaseActivity {
         logger.logNormal("设备:" + Sysutils.getDevice());
         logger.logNormal("CPU:"+ Sysutils.getCpuName()+" ("+Build.CPU_ABI+")");
         logger.logNormal("HackMdm Version:"+HackMdm.DeviceMDM.getVersion());
+        logger.logNormal("");
         if(Sysutils.isAssistantApp(this)){
             logger.logSuccess("语音助手:已激活");
         }
