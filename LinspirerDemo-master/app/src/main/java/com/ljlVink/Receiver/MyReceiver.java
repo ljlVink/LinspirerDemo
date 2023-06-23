@@ -39,6 +39,9 @@ public class MyReceiver extends BroadcastReceiver {
                 String nickName=intent.getStringExtra("nickName");
                 String className=intent.getStringExtra("className");
                 String schoolName=intent.getStringExtra("schoolName");
+                if(account==null||nickName==null||className==null||schoolName==null){
+                    Toast.ShowErr(context,"传回参数存在空值!请确保已经登录!");
+                }
                 Toast.ShowInfo(context, "acc:" + account + ",nickname" + nickName + ",classname" + className + ",schoolname" + schoolName);
                 break;
             case "android.intent.action.PACKAGE_ADDED":
