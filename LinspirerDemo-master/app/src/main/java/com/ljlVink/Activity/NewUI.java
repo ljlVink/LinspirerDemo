@@ -19,9 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
-import android.text.format.DateUtils;
-import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -30,7 +27,6 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -42,8 +38,6 @@ import com.hjq.permissions.XXPermissions;
 import com.king.zxing.CameraScan;
 import com.ljlVink.core.core.IPostcallback;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
-import com.ljlVink.csdk5lib.CSDKAbility;
-import com.ljlVink.csdk5lib.CSDK_new_MDM;
 import com.ljlVink.utils.TimeUtils;
 import com.ljlVink.utils.Toast;
 import com.ljlVink.core.core.Postutil;
@@ -496,28 +490,27 @@ public class NewUI extends BaseActivity {
                                     } else if (which == 4) {
                                         HackMdm.DeviceMDM.clear_whitelist_app_lenovo();
                                     }else if (which ==5){
-                                        if(!CSDKAbility.HasAbilityCSDK_new()){
+                                        if(!HackMdm.DeviceMDM.HasAbilityCSDK_new()){
                                             Toast.ShowErr(NewUI.this,"无能力");
                                             return;
                                         }
-                                        new CSDK_new_MDM(NewUI.this).bypassOemlock();
+                                        HackMdm.DeviceMDM.csdk5_bypassOemlock();
                                     }else if (which ==6){
-                                        if(!CSDKAbility.HasAbilityCSDK_new()){
+                                        if(!HackMdm.DeviceMDM.HasAbilityCSDK_new()){
                                             Toast.ShowErr(NewUI.this,"无能力");
                                             return;
                                         }
-                                        CSDK_new_MDM csdk=new CSDK_new_MDM(NewUI.this);
                                         final EditText et = new EditText(NewUI.this);
                                         new MaterialAlertDialogBuilder(NewUI.this).setTitle("请输入包名").setIcon(android.R.drawable.sym_def_app_icon).setView(et)
                                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        csdk.enableDangerousPermissions(et.getText().toString());
+                                                        HackMdm.DeviceMDM.enableDangerousPermissions(et.getText().toString());
                                                     }
                                                 }).setNeutralButton("允许本app", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        csdk.enableDangerousPermissions(NewUI.this.getPackageName());
+                                                        HackMdm.DeviceMDM.enableDangerousPermissions(NewUI.this.getPackageName());
                                                     }
                                                 })
                                                 .setNegativeButton("取消", null).show();
@@ -1370,7 +1363,7 @@ public class NewUI extends BaseActivity {
         logger.logNormal("包名:" + getPackageName());
         logger.logNormal("MDM接口:" + MDMname);
         if(MDMname.equals("CSDK")){
-            if(CSDKAbility.HasAbilityCSDK_new()){
+            if(HackMdm.DeviceMDM.HasAbilityCSDK_new()){
                 logger.logSuccess("机型支持新联想csdk接口");
             }
         }
@@ -1379,7 +1372,6 @@ public class NewUI extends BaseActivity {
         logger.logNormal("设备:" + Sysutils.getDevice());
         logger.logNormal("CPU:"+ Sysutils.getCpuName()+" ("+Build.CPU_ABI+")");
         logger.logNormal("HackMdm Version:"+HackMdm.DeviceMDM.getVersion());
-        logger.logNormal("");
         if(Sysutils.isAssistantApp(this)){
             logger.logSuccess("语音助手:已激活");
         }

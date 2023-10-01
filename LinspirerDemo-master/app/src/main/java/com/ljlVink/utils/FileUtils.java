@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,10 +40,14 @@ public class FileUtils {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (callback != null) {
-                if (msg.what == SUCCESS) {
+                if (msg.what == SUCCESS)
+                {
+                    Log.e("fileutils","msg.obj.toString()+onsuccess");
+
                     callback.onSuccess();
                 }
                 if (msg.what == FAILED) {
+                    Log.e("fileutils",msg.obj.toString());
                     callback.onFailed(msg.obj.toString());
                 }
             }
