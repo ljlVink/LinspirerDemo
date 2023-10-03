@@ -1,47 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.ljlVink.Activity.linspirer_fakeuploader">
 <ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollview1"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:theme="@style/Theme.LinspirerDemo"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="15dp"></Space>
-
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="伪装上传应用列表app(策略)"
-            android:textSize="20sp"
-
             />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
                 android:id="@+id/launcher_version"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="领创桌面版本"></EditText>
+                android:hint="领创桌面版本">
+
+            </EditText>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
@@ -54,6 +49,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent"
 
             >
@@ -68,6 +65,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
@@ -93,6 +92,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
@@ -104,6 +105,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
@@ -116,6 +119,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
@@ -128,6 +133,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
@@ -140,6 +147,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
             app:boxBackgroundColor="@color/transparent">
 
             <EditText
@@ -193,4 +202,3 @@
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>

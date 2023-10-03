@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/background_lsphunter"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.ljlVink.lsphunter.MainActivity"
+    android:orientation="vertical">
+    <com.hjq.bar.TitleBar
+        android:id="@+id/titlebar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        app:leftHorizontalPadding="10dp"
+        app:rightIcon="@drawable/reboot"
+        app:leftIcon="@drawable/ic_baseline_keyboard_arrow_left_24"
+        app:lineVisible="false"
+        app:barStyle="transparent"
+        app:rightHorizontalPadding="10dp"
+        app:title="Linspirer Demo"
+        app:titleSize="25px"
+        app:titleHorizontalPadding="0dp"
+        />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="90"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/left_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/right_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+    </LinearLayout>
+
+</LinearLayout>

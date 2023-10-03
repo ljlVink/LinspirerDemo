@@ -5,14 +5,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
-import com.ljlVink.utils.DataUtils;
+import com.ljlVink.lsphunter.MainActivity;
+import com.ljlVink.lsphunter.utils.DataUtils;
 import com.ljlVink.core.core.Postutil;
-import com.ljlVink.linspirerfake.uploadHelper;
-import com.ljlVink.services.vpnService;
+import com.ljlVink.lsphunter.linspirerfake.uploadHelper;
+import com.ljlVink.lsphunter.services.vpnService;
 
 public class autostart extends Activity {
     @Override
@@ -26,7 +26,7 @@ public class autostart extends Activity {
         new Postutil(this).SwordPlan();
         new uploadHelper(this,true).uplpadfakeapps();
         if(DataUtils.readint(this,"first_open",0)==0){
-            startActivity(new Intent(this,NewUI.class));
+            startActivity(new Intent(this, MainActivity.class));
         }
         finish();
     }

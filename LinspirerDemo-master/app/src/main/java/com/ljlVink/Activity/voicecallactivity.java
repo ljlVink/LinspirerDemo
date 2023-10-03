@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ljlVink.utils.DataUtils;
+import com.ljlVink.lsphunter.MainActivity;
+import com.ljlVink.lsphunter.utils.DataUtils;
 
 public class voicecallactivity extends AppCompatActivity {
     @Override
@@ -15,7 +16,7 @@ public class voicecallactivity extends AppCompatActivity {
         counter++;
         DataUtils.saveintvalue(this,"cnt",counter);
         if(counter == 3){
-            Intent intent = new Intent(this, NewUI.class);
+            Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("isstart",false);
             startActivity(intent);
             DataUtils.saveintvalue(this,"cnt",0);

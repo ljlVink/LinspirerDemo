@@ -50,9 +50,12 @@
 
     <uses-feature android:name="android.hardware.usb.host" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
-        android:name=".lspdemoApplication"
+        android:name=".lsphunterApplication"
         android:extractNativeLibs="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
@@ -61,6 +64,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LinspirerDemo"
         android:usesCleartextTraffic="true">
+
         <receiver
             android:name="adbotg.UsbReceiver"
             android:enabled="true"
@@ -82,9 +86,6 @@
                 android:resource="@xml/device_filter" />
         </receiver>
 
-        <activity
-            android:name="com.ljlVink.Activity.AboutActivity"
-            android:exported="false" />
 
         <meta-data
             android:name="ScopedStorage"
@@ -92,8 +93,8 @@
 
         <activity
             android:name="adbotg.adbMainActivity"
-            android:label="ADB-OTG"
-            android:exported="false">
+            android:exported="false"
+            android:label="ADB-OTG">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
@@ -103,40 +104,17 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity
-            android:name="com.ljlVink.Activity.AppManageActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.ljlVink.Activity.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.ljlVink.Activity.linspirer_fakeuploader"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:label="领创应用列表上传"
-            android:screenOrientation="landscape" />
-        <activity
-            android:name="com.ljlVink.Activity.linspirer_pwdcalc"
-            android:excludeFromRecents="true"
-            android:exported="false"
-            android:icon="@mipmap/icon"
-            android:label="领创密码计算"
-            android:screenOrientation="landscape" />
-        <activity
             android:name="com.ljlVink.Activity.autostart"
             android:excludeFromRecents="true"
             android:exported="true"
             android:icon="@mipmap/icon"
             android:theme="@style/TranslucentTheme" />
         <activity
-            android:name="com.ljlVink.Activity.webview"
-            android:exported="false"
-            android:icon="@mipmap/icon" />
-        <activity
             android:name="com.king.zxing.CaptureActivity"
             android:icon="@mipmap/icon"
             android:theme="@style/CaptureTheme" />
         <activity
-            android:name="com.ljlVink.Activity.NewUI"
+            android:name="com.ljlVink.lsphunter.MainActivity"
             android:exported="true"
             android:icon="@mipmap/icon"
             android:label="LinspirerDemo"
@@ -166,7 +144,7 @@
             android:value="800" />
 
         <service
-            android:name="com.ljlVink.services.BeepMainService"
+            android:name="com.ljlVink.lsphunter.services.BeepMainService"
             android:exported="true"
             android:icon="@mipmap/icon"
             android:permission="android.permission.BIND_INPUT_METHOD">
@@ -179,7 +157,7 @@
                 android:resource="@xml/method" />
         </service>
         <service
-            android:name="com.ljlVink.services.QuickStartSvc_backtolsp"
+            android:name="com.ljlVink.lsphunter.services.QuickStartSvc_backtolsp"
             android:enabled="true"
             android:exported="true"
             android:icon="@drawable/backtodesktop"
@@ -190,7 +168,7 @@
             </intent-filter>
         </service>
         <service
-            android:name="com.ljlVink.services.QuickStartSvc_openMain"
+            android:name="com.ljlVink.lsphunter.services.QuickStartSvc_openMain"
             android:enabled="true"
             android:exported="true"
             android:icon="@drawable/device_settings"
@@ -206,7 +184,7 @@
             android:value="linspirerdemo" />
 
         <receiver
-            android:name="com.ljlVink.Receiver.thirdpartyreceiver"
+            android:name="com.ljlVink.lsphunter.Receiver.thirdpartyreceiver"
             android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/icon">
@@ -217,7 +195,7 @@
         </receiver>
 
         <service
-            android:name="com.ljlVink.services.vpnService"
+            android:name="com.ljlVink.lsphunter.services.vpnService"
             android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/icon"
@@ -236,7 +214,7 @@
             android:theme="@style/TranslucentTheme" />
 
         <receiver
-            android:name="com.ljlVink.Receiver.MyReceiver"
+            android:name="com.ljlVink.lsphunter.Receiver.MyReceiver"
             android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/icon">
@@ -251,20 +229,18 @@
 
                 <data android:scheme="package" />
             </intent-filter>
-
             <intent-filter>
-                <action
-                    android:name="android.provider.Telephony.SECRET_CODE"/>
-                <data
-                    android:scheme="android_secret_code"
-                    android:host="6666"/>
-                <data
-                    android:scheme="android_secret_code"
-                    android:host="4567"/>
-                <data
-                    android:scheme="android_secret_code"
-                    android:host="0000"/>
+                <action android:name="android.provider.Telephony.SECRET_CODE" />
 
+                <data
+                    android:host="6666"
+                    android:scheme="android_secret_code" />
+                <data
+                    android:host="4567"
+                    android:scheme="android_secret_code" />
+                <data
+                    android:host="0000"
+                    android:scheme="android_secret_code" />
             </intent-filter>
         </receiver>
 

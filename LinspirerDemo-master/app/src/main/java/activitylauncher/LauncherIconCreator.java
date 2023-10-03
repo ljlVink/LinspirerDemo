@@ -33,7 +33,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
-import com.ljlVink.utils.Sysutils;
+import com.ljlVink.lsphunter.utils.Sysutils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

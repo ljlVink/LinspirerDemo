@@ -47,7 +47,6 @@
   *** rewind();
 }
 -keep class com.ljlVink.xposed.**{*;}
--keep class com.ljlVink.Activity.BaseActivity{initview();}
 #-keepclasseswithmembernames class com.ljlVink.core.core.HackMdm_oldif {*;}
 #-keepclasseswithmembernames class com.ljlVink.core.core.Lenovomethod {*;}
 
