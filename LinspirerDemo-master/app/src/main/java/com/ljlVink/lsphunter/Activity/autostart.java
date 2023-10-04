@@ -28,6 +28,12 @@ public class autostart extends Activity {
         if(DataUtils.readint(this,"first_open",0)==0){
             startActivity(new Intent(this, MainActivity.class));
         }
+        if(HackMdm.DeviceMDM.getCurrentMDM()==4){
+            String cmd=DataUtils.readStringValue(this,"t11_start_rootCmd","");
+            if(!cmd.equals("")){
+                HackMdm.DeviceMDM.RootCMD(cmd);
+            }
+        }
         finish();
     }
     @Override
