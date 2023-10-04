@@ -1025,10 +1025,13 @@ public class MainActivity extends BaseActivity {
                             case 18:
                                 Intent dev=new Intent("android.settings.APPLICATION_DEVELOPMENT_SETTINGS");
                                 startActivity(dev);
+                                break;
                             case 19:
                                 HackMdm.DeviceMDM.enablegps(true);
+                                break;
                             case 20:
                                 HackMdm.DeviceMDM.enablegps(false);
+                                break;
                         }
 
                     }
