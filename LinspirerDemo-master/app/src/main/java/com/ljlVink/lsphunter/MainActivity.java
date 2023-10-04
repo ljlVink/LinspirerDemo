@@ -938,7 +938,23 @@ public class MainActivity extends BaseActivity {
                                 showstatusbar();
                                 break;
                             case 7:
-                                HackMdm.DeviceMDM.RestoreFactory_DeviceAdmin();
+                                MaterialAlertDialogBuilder alertdialogbuilder11 = new MaterialAlertDialogBuilder(MainActivity.this);
+                                alertdialogbuilder11.setMessage("是否恢复出厂???\n")
+                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                MaterialAlertDialogBuilder alertdialogbuilder11 = new MaterialAlertDialogBuilder(MainActivity.this);
+                                                alertdialogbuilder11.setMessage("是否恢复出厂???\n")
+                                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                                HackMdm.DeviceMDM.RestoreFactory_DeviceAdmin();
+                                                            }
+                                                        })
+                                                        .setNeutralButton("取消",null).create().show();
+                                            }
+                                        })
+                                        .setNeutralButton("取消",null).create().show();
                                 break;
                             case 8:
                                 try {
