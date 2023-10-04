@@ -452,7 +452,7 @@ public class MainActivity extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if(i==0){
-                                if(isActivited) new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage/emulated/0").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择app的背景").withRequestCode(1015).start();
+                                if(isActivited) new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage/emulated/0/").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择app的背景").withRequestCode(1015).start();
                             }
                             if(i==1){
 
@@ -528,8 +528,7 @@ public class MainActivity extends BaseActivity {
                     .setPositiveButton("配置", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            ///TODO
-                            Toast.ShowErr(MainActivity.this,"not yet completed");
+                            startActivity(new Intent(MainActivity.this, linspirer_fakeuploader.class));
                         }
                     })      .setNegativeButton("退出程序", new DialogInterface.OnClickListener() {
                         @Override
@@ -608,7 +607,7 @@ public class MainActivity extends BaseActivity {
                                     FS.setType("application/vnd.android.package-archive");
                                     startActivityForResult(FS, 1);
                                 } else {
-                                    new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
+                                    new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage/emulated/0/").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
                                 }
                             } else if (which == 2) {
                                 Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
@@ -618,7 +617,7 @@ public class MainActivity extends BaseActivity {
                                 if (Build.VERSION.SDK_INT>=33){
                                     return;
                                 }
-                                new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
+                                new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage/emulated/0/").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(apk)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(1000).start();
                             } else if (which == 4) {
                                 Toast.ShowInfo(MainActivity.this,"仅限华为emui10/鸿蒙");
                                 Intent FS = new Intent(Intent.ACTION_GET_CONTENT);
@@ -661,7 +660,7 @@ public class MainActivity extends BaseActivity {
                     } catch (Exception e) {
                     }
                 } else {
-                    EasyFloat.with(getApplicationContext()).setShowPattern(ShowPattern.ALL_TIME).
+                    EasyFloat.with(MainActivity.this).setShowPattern(ShowPattern.ALL_TIME).
                         setLayout(R.layout.float_test, new OnInvokeView() {
                             @Override
                             public void invoke(View view) {
@@ -907,7 +906,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case 9:
                 Flag=true;
-                final String[] deviceitems = new String[]{"启用adb和开发者(需要激活写设置权限)", "禁用adb和开发者(需要激活写设置权限)", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面","禁止安装app","允许安装app","领创强制登出","打开开发者设置"};
+                final String[] deviceitems = new String[]{"启用adb和开发者(需要激活写设置权限)", "禁用adb和开发者(需要激活写设置权限)", "蓝牙设置", "禁用任务栏", "启用任务栏", "下放任务栏", "恢复出厂(DeviceAdmin)", "Settings suggestions", "设置领创壁纸", "清空领创壁纸", "允许系统App联网", "禁止系统App联网", "设置设备名称","设置第三方桌面","禁止安装app","允许安装app","领创强制登出","打开开发者设置","启用gps(5.04领创)","禁用gps(5.04领创)"};
                 MaterialAlertDialogBuilder builder3 = new MaterialAlertDialogBuilder(MainActivity.this);
                 builder3.setIcon(R.drawable.settings);
                 builder3.setTitle("设备设置");
@@ -967,7 +966,7 @@ public class MainActivity extends BaseActivity {
                                 break;
                             case 9:
                                 try {
-                                    new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择图片文件").withRequestCode(1011).start();
+                                    new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage/emulated/0/").withHiddenFiles(true).withFilterDirectories(false).withTitle("选择图片文件").withRequestCode(1011).start();
                                 } catch (Exception e) {
 
                                 }
@@ -1026,6 +1025,10 @@ public class MainActivity extends BaseActivity {
                             case 18:
                                 Intent dev=new Intent("android.settings.APPLICATION_DEVELOPMENT_SETTINGS");
                                 startActivity(dev);
+                            case 19:
+                                HackMdm.DeviceMDM.enablegps(true);
+                            case 20:
+                                HackMdm.DeviceMDM.enablegps(false);
                         }
 
                     }
@@ -1152,7 +1155,7 @@ public class MainActivity extends BaseActivity {
                                     })
                                     .show();
                         }else if(i==7){
-                            new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(zip)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(2600).start();
+                            new MaterialFilePicker().withActivity(MainActivity.this).withCloseMenu(true).withRootPath("/storage/emulated/0/").withHiddenFiles(true).withFilter(Pattern.compile(".*\\.(zip)$")).withFilterDirectories(false).withTitle("new API_选择文件").withRequestCode(2600).start();
                         }
                     }
                 }).show();
