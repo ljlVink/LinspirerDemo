@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/TranslucentTheme"
-    tools:context="com.ljlVink.Activity.autostart">
+    tools:context="com.ljlVink.lsphunter.Activity.autostart">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

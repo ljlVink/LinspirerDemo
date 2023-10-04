@@ -34,6 +34,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cgutman.adblib.AdbBase64;
@@ -74,10 +75,6 @@ public class adbMainActivity extends AppCompatActivity implements TextView.OnEdi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String  action=getIntent().getAction();
-        if(action!=null&&action.equals("android.hardware.usb.action.USB_DEVICE_ATTACHED")){
-            finish();
-        }
         setContentView(R.layout.activity_adb);
         tvStatus = findViewById(R.id.tv_status);
         usb_icon = findViewById(R.id.usb_icon);
@@ -90,7 +87,7 @@ public class adbMainActivity extends AppCompatActivity implements TextView.OnEdi
         mManager = (UsbManager) getSystemService(Context.USB_SERVICE);
         handler = new Handler() {
             @Override
-            public void handleMessage(android.os.Message msg) {
+            public void handleMessage(@NonNull android.os.Message msg) {
                 switch (msg.what) {
                     case DEVICE_FOUND:
                         closeWaiting();
@@ -157,7 +154,11 @@ public class adbMainActivity extends AppCompatActivity implements TextView.OnEdi
                     if (mManager.hasPermission(usbDevice)) { ;
                         asyncRefreshAdbConnection(usbDevice);
                     } else {
-                        mManager.requestPermission(usbDevice, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"), 0));
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                            mManager.requestPermission(usbDevice, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
+                        }else{
+                            mManager.requestPermission(usbDevice, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"), 0));
+                        }
                     }
                 }
             }catch (Exception ignore){
@@ -280,11 +281,18 @@ public class adbMainActivity extends AppCompatActivity implements TextView.OnEdi
                 }
             }else if ("htetznaing.usb.permission".equals(action)){
                 UsbDevice usbDevice = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+
                 handler.sendEmptyMessage(CONNECTING);
                 if (mManager.hasPermission(usbDevice))
                     asyncRefreshAdbConnection(usbDevice);
-                else
-                    mManager.requestPermission(usbDevice,PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"), 0));
+                else{
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                        mManager.requestPermission(usbDevice, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"),   PendingIntent.FLAG_IMMUTABLE));
+                    }else{
+                        mManager.requestPermission(usbDevice, PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent("htetznaing.usb.permission"), 0));
+                    }
+
+                }
             }
         }
     };

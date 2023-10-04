@@ -104,7 +104,7 @@
                 android:resource="@xml/device_filter" />
         </activity>
         <activity
-            android:name="com.ljlVink.Activity.autostart"
+            android:name="com.ljlVink.lsphunter.Activity.autostart"
             android:excludeFromRecents="true"
             android:exported="true"
             android:icon="@mipmap/icon"
@@ -253,9 +253,15 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <activity
+            android:name="com.ljlVink.lsphunter.Activity.linspirer_fakeuploader"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:label="领创应用列表上传"
+            android:screenOrientation="landscape" />
 
         <activity
-            android:name="com.ljlVink.Activity.voicecallactivity"
+            android:name="com.ljlVink.lsphunter.Activity.voicecallactivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:icon="@mipmap/icon"
@@ -267,7 +273,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ljlVink.Activity.PreMainActivity"
+            android:name="com.ljlVink.lsphunter.Activity.PreMainActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:icon="@mipmap/icon"

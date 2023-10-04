@@ -29,6 +29,7 @@ public class Homefragment {
     public void HandleFragment(){
         logger=view.findViewById(R.id.logger2);
         logger.setLogFormatter((logContent, logType) -> TimeUtils.getNowString(new SimpleDateFormat("[HH:mm]")) +" "+logContent);
+        logger.setTextSize(15);
         getannouncement();
 
     }
@@ -97,6 +98,11 @@ public class Homefragment {
     }
 
     private void getannouncement(){
+        if(BuildConfig.DEBUG){
+            logger.logNormal("开发模式");
+            deviceinfo();
+            return;
+        }
         new Postutil(ctx).getAnnouncement(new IPostcallback() {
             @Override
             public void onSuccess(String data) {

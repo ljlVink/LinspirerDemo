@@ -19,7 +19,6 @@
         app:barStyle="transparent"
         app:rightHorizontalPadding="10dp"
         app:title="Linspirer Demo"
-        app:titleSize="25px"
         app:titleHorizontalPadding="0dp"
         />
 

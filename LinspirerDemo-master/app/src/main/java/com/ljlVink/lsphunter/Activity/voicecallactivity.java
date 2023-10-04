@@ -1,4 +1,4 @@
-package com.ljlVink.Activity;
+package com.ljlVink.lsphunter.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

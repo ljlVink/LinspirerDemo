@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.huosoft.wisdomclass.linspirerdemo.ddpm;
 
-import com.ljlVink.Activity.autostart;
+import com.ljlVink.lsphunter.Activity.autostart;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
 import com.ljlVink.lsphunter.MainActivity;
 import com.ljlVink.lsphunter.utils.DataUtils;

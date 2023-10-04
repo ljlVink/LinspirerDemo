@@ -73,16 +73,6 @@ public class SecondFragment extends Fragment {
                 LinspirerPWDFragment linspirerPWDFragment=new LinspirerPWDFragment(view,ctx);
                 linspirerPWDFragment.HandleFragment();
                 break;
-            case 16:
-                final Context contextThemeWrapper = new ContextThemeWrapper(
-                        getActivity(), R.style.Theme_LinspirerDemo);
-                LayoutInflater localInflater = inflater
-                        .cloneInContext(contextThemeWrapper);
-
-                view =localInflater.inflate(R.layout.activity_linspirer_fakeuploader,container,false);
-                FakeUploaderFragment fakeUploaderFragment =new FakeUploaderFragment(view,ctx);
-                fakeUploaderFragment.HandleFragment();
-                break;
             case 20:
                 view =inflater.inflate(R.layout.activity_about,container,false);
                 FragmentTransaction transaction1 = getChildFragmentManager().beginTransaction();

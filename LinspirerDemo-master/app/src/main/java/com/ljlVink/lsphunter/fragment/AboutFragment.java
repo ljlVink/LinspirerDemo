@@ -52,7 +52,7 @@ public class AboutFragment extends Fragment {
 
                     }
                 }))
-                .setDescription("Linspirer Demo,比领创更懂你的MDM").create();
+                .setDescription("Linspirer Hunter(原Linspirer Demo),比领创更懂你的MDM").create();
 
     }
     private void urlstart(String url){

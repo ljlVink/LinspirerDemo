@@ -35,6 +35,7 @@ import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.king.zxing.CameraScan;
 import com.ljlVink.core.core.Postutil;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
+import com.ljlVink.lsphunter.Activity.linspirer_fakeuploader;
 import com.ljlVink.lsphunter.linspirerfake.uploadHelper;
 import com.ljlVink.lsphunter.services.vpnService;
 import com.ljlVink.lsphunter.utils.ContentUriUtil;
@@ -324,7 +325,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void update_title(){
-        String modex = "Linspirer Demo";
+        String modex = "Linspirer Hunter";
         boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(MainActivity.this).toLowerCase(Locale.ROOT));
         if(!isActivited){
             modex+="(未授权,点击授权)";
@@ -407,7 +408,7 @@ public class MainActivity extends BaseActivity {
                 final String[] item1 = new String[]{"设置app背景","扫码授权","手动输入授权码","解除设备管理器(危险)"};
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
                 builder.setIcon(R.mipmap.icon);
-                builder.setTitle("Linspirer Demo(" + Sysutils.getDeviceid(getApplicationContext()).toLowerCase()+")");
+                builder.setTitle("Linspirer Hunter(" + Sysutils.getDeviceid(getApplicationContext()).toLowerCase()+")");
                 if(!isActivited)
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
@@ -1152,9 +1153,7 @@ public class MainActivity extends BaseActivity {
         }
     }
     public void onMenuItemLongClicked(int menuItemId){
-        if(menuItemId==16){
-            jump2page(menuItemId);
-        }
+
         switch (menuItemId) {
             case 1:
                 startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
@@ -1232,6 +1231,9 @@ public class MainActivity extends BaseActivity {
                     orig_mode=0;
                 DataUtils.saveintvalue(MainActivity.this,"OnTestMode",orig_mode);
                 Toast.ShowInfo(MainActivity.this,"debug mode on!");
+                break;
+            case 16:
+                startActivity(new Intent(MainActivity.this, linspirer_fakeuploader.class));
                 break;
         }
     }
