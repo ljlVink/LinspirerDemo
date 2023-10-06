@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.lsphunter.fragment.AboutFragment;
 import com.ljlVink.lsphunter.fragment.AppManageFragment;
-import com.ljlVink.lsphunter.fragment.FakeUploaderFragment;
 import com.ljlVink.lsphunter.fragment.Homefragment;
 import com.ljlVink.lsphunter.fragment.LinspirerPWDFragment;
 import com.ljlVink.lsphunter.fragment.SettingsFragment;

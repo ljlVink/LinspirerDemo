@@ -1,19 +1,29 @@
 package com.ljlVink.lsphunter.services;
 
+
+import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.VpnService;
 
 import android.os.ParcelFileDescriptor;
 
+import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
 
+import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
+import com.huosoft.wisdomclass.linspirerdemo.R;
 import com.ljlVink.lsphunter.utils.DataUtils;
 
 import java.io.IOException;
@@ -50,7 +60,34 @@ public class vpnService extends VpnService {
         }
         return START_STICKY;
     }
+    private String createNotificationChannel(String channelId, String channelName){
+        NotificationChannel chan = new NotificationChannel(channelId,
+                channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(Color.WHITE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager service = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        service.createNotificationChannel(chan);
+        return channelId;
+    }
+
+    private void showNotification() {
+        String channelId = createNotificationChannel(getPackageName(), "lsphunter_vpn_channel");
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setOngoing(true)
+                .setPriority(PRIORITY_HIGH)
+                .setSmallIcon(R.drawable.transpatent_page)
+                .setContentTitle("　")
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setContentText("　");
+
+        Notification notification = builder.build();
+        startForeground(123, notification);
+    }
+
+
     private ParcelFileDescriptor vpnStart() {
+        showNotification();
         final Builder builder = new Builder();
         builder.setSession("Linspirer Demo");
         builder.addAddress("10.1.10.1", 32);
@@ -58,6 +95,9 @@ public class vpnService extends VpnService {
         builder.addRoute("0.0.0.0", 0);
         builder.addRoute("0:0:0:0:0:0:0:0", 0);
         try {
+            if(BuildConfig.DEBUG){
+                builder.addAllowedApplication("mark.via");
+            }
             builder.addAllowedApplication("com.android.launcher3");
             if(DataUtils.readint(this,"disallow_appstore_internet",1)==1){
                 builder.addAllowedApplication("com.ndwill.swd.appstore");
@@ -75,7 +115,9 @@ public class vpnService extends VpnService {
     private void vpnStop(ParcelFileDescriptor pfd) {
         try {
             pfd.close();
-        } catch (IOException ex) {
+            NotificationManager notificationManage=(NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+            notificationManage.cancelAll();
+        } catch (Exception ex) {
         }
     }
     private BroadcastReceiver connectivityChangedReceiver = new BroadcastReceiver() {

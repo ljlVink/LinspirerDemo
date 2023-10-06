@@ -541,6 +541,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showdialog() {
+        if(BuildConfig.DEBUG){
+            return;
+        }
         if (HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             return;
         }
