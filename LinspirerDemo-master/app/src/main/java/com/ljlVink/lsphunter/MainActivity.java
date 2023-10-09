@@ -1325,8 +1325,8 @@ public class MainActivity extends BaseActivity {
         superbuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.ShowErr(MainActivity.this,superlist.toString());
                 DataUtils.saveStringArrayList(MainActivity.this,"superapp",superlist);
+                Toast.ShowSuccess(MainActivity.this,"添加成功.包名为"+superlist.toString());
             }
         });
         superbuilder.show();
