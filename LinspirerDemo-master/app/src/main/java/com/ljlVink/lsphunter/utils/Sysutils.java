@@ -1,5 +1,6 @@
 package com.ljlVink.lsphunter.utils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ClipData;
@@ -18,6 +19,8 @@ import android.os.StatFs;
 import android.provider.Settings;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.core.content.ContextCompat;
 
 import com.ljlVink.core.hackmdm.v2.HackMdm;
 
@@ -128,6 +131,14 @@ public class Sysutils {
     public static String getBluetoothMacAddress() {
         BluetoothAdapter defaultAdapter = BluetoothAdapter.getDefaultAdapter();
         return defaultAdapter == null ? "unknown" : defaultAdapter.getAddress();
+    }
+    public static boolean isSecureSettingWriteEnabled(Context context){
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_SECURE_SETTINGS)
+                == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
     }
     public static int getsystemversion() {
         return Integer.valueOf(Build.VERSION.RELEASE);

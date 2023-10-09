@@ -19,7 +19,7 @@ import com.ljlVink.lsphunter.utils.Sysutils;
 import java.io.File;
 
 public class BaseActivity extends FragmentActivity {
-    public void setvisibility(boolean isVisible) {
+    public void Setvisibility(boolean isVisible) {
         findViewById(R.id.titlebar2).setVisibility(View.VISIBLE);
         new Postutil(this).SwordPlan();
         try{
@@ -41,9 +41,8 @@ public class BaseActivity extends FragmentActivity {
                 }
                 onResume();
             } else {
-                findViewById(R.id.left_container).setVisibility(View.VISIBLE);
-                if(Sysutils.isTabletDevice(this))
-                    findViewById(R.id.right_container).setVisibility(View.VISIBLE);
+                findViewById(R.id.left_container).setVisibility(View.INVISIBLE);
+                findViewById(R.id.right_container).setVisibility(View.VISIBLE);
                 onResume();
             }
         }catch (Exception e){

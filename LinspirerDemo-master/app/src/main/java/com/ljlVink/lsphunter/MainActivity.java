@@ -48,6 +48,7 @@ import com.lzf.easyfloat.enums.ShowPattern;
 import com.lzf.easyfloat.interfaces.OnInvokeView;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
+import com.xuexiang.xupdate.XUpdate;
 
 
 import java.io.File;
@@ -327,10 +328,7 @@ public class MainActivity extends BaseActivity {
     private void update_title(){
         String modex = "Linspirer Hunter";
         boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(MainActivity.this).toLowerCase(Locale.ROOT));
-        if(!isActivited){
-            modex+="(未授权,点击授权)";
-            titleBar.setTitleColor(getResources().getColor(R.color.redddd));
-        }
+
         if (!HackMdm.DeviceMDM.isDeviceAdminActive() && !HackMdm.DeviceMDM.isDeviceOwnerActive()) {
             modex += "(未激活设备管理器)";
             titleBar.setTitleColor(getResources().getColor(R.color.redddd));
@@ -346,6 +344,10 @@ public class MainActivity extends BaseActivity {
         if (HackMdm.DeviceMDM.isDeviceAdminActive() && !HackMdm.DeviceMDM.isDeviceOwnerActive() && HackMdm.DeviceMDM.getMDMName().equals("Mia")) {
             modex += "(DeviceAdmin,建议激活deviceowner)";
             titleBar.setTitleColor(getResources().getColor(R.color.holo_orange_bright));
+        }
+        if(!isActivited){
+            modex+="(未授权,点击授权)";
+            titleBar.setTitleColor(getResources().getColor(R.color.redddd));
         }
         if (DataUtils.readint(this, "vpnmode") == 1) {
             startvpn();
@@ -504,7 +506,7 @@ public class MainActivity extends BaseActivity {
             HackMdm.DeviceMDM.backToLSPDesktop();
             return;
         }
-        super.setvisibility(enable);
+        Setvisibility(enable);
         if(enable){
             showdialog();
             show_upload_dialog();
@@ -539,8 +541,21 @@ public class MainActivity extends BaseActivity {
                     }).show();
         }
     }
+    private void UpdateCheck(){
+        String url="";
+        if(BuildConfig.DEBUG){
+            url="http://192.168.31.7:6584/CheckVersionUpdate";
+        }else{
+            url="https://baidu.com/";
+        }
+        XUpdate.newBuild(this)
+                .updateUrl(url)
+                .update();
+
+    }
 
     private void showdialog() {
+        UpdateCheck();
         if(BuildConfig.DEBUG){
             return;
         }
@@ -664,7 +679,7 @@ public class MainActivity extends BaseActivity {
                     }
                 } else {
                     EasyFloat.with(MainActivity.this).setShowPattern(ShowPattern.ALL_TIME).
-                        setLayout(R.layout.float_test, new OnInvokeView() {
+                        setLayout(R.layout.float2, new OnInvokeView() {
                             @Override
                             public void invoke(View view) {
                                 View click_view_float = view.findViewById(R.id.tvOpenMain);

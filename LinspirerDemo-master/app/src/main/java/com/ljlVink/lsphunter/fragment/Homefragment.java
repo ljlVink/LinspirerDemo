@@ -87,9 +87,17 @@ public class Homefragment {
             logger.logNormal("领创网络屏蔽:未启动");
         }
         if(envcheck.IsDeviceRooted()){
-            logger.logWarning("root状态:已root");
+            logger.logSuccess("root状态:已root");
         }else{
             logger.logWarning("root状态:未root");
+        }
+        if(Sysutils.isSecureSettingWriteEnabled(ctx)){
+            logger.logSuccess("写设置权限:已开启");
+        }else{
+            logger.logWarning("写设置权限:未开启");
+            if(Sysutils.isUsbDebug(ctx)){
+                logger.logWarning("可通过adb命令激活:adb shell pm grant "+ctx.getPackageName()+" android.permission.WRITE_SECURE_SETTINGS");
+            }
         }
         double used=(double) Long.parseLong(Sysutils.getRomavailablesize(ctx))/Long.parseLong(Sysutils.getRomtotalsize(ctx))*100;
         String msg="设备已用空间"+(100.00000000-used)+"%("+ Sysutils.getRomavailablesize(ctx)+"/"+ Sysutils.getRomtotalsize(ctx)+")";
