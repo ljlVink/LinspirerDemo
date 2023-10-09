@@ -88,7 +88,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 if (Sysutils.isActiveime(getContext()) && DataUtils.readint(getContext(), "ime") == 1) {
-                    getContext().getPackageManager().setComponentEnabledSetting(new ComponentName(getContext().getPackageName(), "com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+                    getContext().getPackageManager().setComponentEnabledSetting(new ComponentName(getContext().getPackageName(), "com.ljlVink.lsphunter.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 } else {
                     Toast.ShowErr(getContext(), "失败,请成功通过输入法或者语音助手打开后设置");
                 }
@@ -98,7 +98,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         show_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                getContext().getPackageManager().setComponentEnabledSetting(new ComponentName(getContext().getPackageName(), "com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                getContext().getPackageManager().setComponentEnabledSetting(new ComponentName(getContext().getPackageName(), "com.ljlVink.lsphunter.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
                 return true;
             }
         });

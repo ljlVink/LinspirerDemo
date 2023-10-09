@@ -32,11 +32,11 @@ public class BeepMainService extends InputMethodService implements KeyboardView.
                 startActivity(i);
             }
             if(code == 2){
-                getPackageManager().setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.Activity.PreMainActivity"),PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
+                getPackageManager().setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.lsphunter.Activity.PreMainActivity"),PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
             }
             if (code ==3 ){
                 PackageManager p = getPackageManager();
-                p.setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                p.setComponentEnabledSetting(new ComponentName(getPackageName(),"com.ljlVink.lsphunter.Activity.PreMainActivity"), PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
             }
         }
     }
