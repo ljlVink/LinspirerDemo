@@ -682,7 +682,7 @@ public class MainActivity extends BaseActivity {
                         setLayout(R.layout.float2, new OnInvokeView() {
                             @Override
                             public void invoke(View view) {
-                                View click_view_float = view.findViewById(R.id.tvOpenMain);
+                                View click_view_float = view.findViewById(R.id.ivSVGImage);
                                 click_view_float.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {

@@ -138,6 +138,26 @@ public class AppManageFragment {
             }
 
         });
+        rc.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String appName=mItems.get(i).getAppName();
+                String pkgname=mItems.get(i).getPackageName();
+
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(ctx)
+                        .setTitle(appName)
+                        .setMessage("包名:" + pkgname + "\n")
+                        .setPositiveButton("冻结", (dialog1, which) -> {
+                            HackMdm.DeviceMDM.iceApp(pkgname, true);
+                        }).setIcon(Sysutils.getAppIcon(ctx, pkgname));
+                builder.setNegativeButton("解冻", (dialog, which) -> {
+                    HackMdm.DeviceMDM.iceApp(pkgname, false);
+                });
+                builder.create().show();
+                return true;
+            }
+        });
+
     }
         class AppAdapter extends BaseAdapter {
             @Override

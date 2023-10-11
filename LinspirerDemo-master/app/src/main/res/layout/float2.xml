@@ -2,17 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rlContent"
-    android:layout_width="60dp"
-    android:layout_height="wrap_content"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
     android:background="#4d000000"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvOpenMain"
-        android:layout_width="60dp"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/ivSVGImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:clickable="true"
         android:padding="5dp"
-        android:text="　　　　　\n　　　　　\n"
-        android:textColor="@color/white" />
+        android:background="@drawable/ic_baseline_keyboard_arrow_left_24" />
 </RelativeLayout>
