@@ -53,6 +53,12 @@ public class lsphunterApplication extends Application {
         }
         initXupdate();
     }
+    public static void RestartApp(){
+        Intent intent = getApplication().getPackageManager()
+                .getLaunchIntentForPackage(getApplication().getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        getApplication().startActivity(intent);
+    }
     private void initXupdate(){
         XUpdate.get()
                 .debug(true)

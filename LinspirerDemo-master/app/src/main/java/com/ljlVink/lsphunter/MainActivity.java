@@ -1,5 +1,7 @@
 package com.ljlVink.lsphunter;
 
+import static com.huosoft.wisdomclass.linspirerdemo.lsphunterApplication.RestartApp;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -444,6 +446,8 @@ public class MainActivity extends BaseActivity {
                                 new Postutil(MainActivity.this).CloudAuthorize();
                             }else if(i==4){
                                 DataUtils.saveintvalue(MainActivity.this,"emui_control",1);
+                                Toast.ShowInfo(MainActivity.this,"程序重启");
+                                RestartApp();
                             }
                             else if(i==5){
                                 HackMdm.DeviceMDM.RemoveDeviceOwner_admin();
