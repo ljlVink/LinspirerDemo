@@ -28,7 +28,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.NetworkInterface;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -126,6 +128,21 @@ public class Sysutils {
         }
         if(!defaultMac.equals("02:00:00:00:00:00")) return defaultMac;
         return  Settings.System.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+    public static boolean isInLinspirerFirewallMode(){
+        return isWebsiteAccessible("http://cloud.linspirer.com:880/login");
+    }
+    private static boolean isWebsiteAccessible(String url) {
+        try {
+            URL siteURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+            connection.setRequestMethod("HEAD"); // 使用HEAD请求来检查是否可以连接
+            int responseCode = connection.getResponseCode();
+            return (responseCode == HttpURLConnection.HTTP_OK);
+        } catch (IOException e) {
+            // 连接失败
+            return false;
+        }
     }
     @SuppressLint("MissingPermission")
     public static String getBluetoothMacAddress() {
