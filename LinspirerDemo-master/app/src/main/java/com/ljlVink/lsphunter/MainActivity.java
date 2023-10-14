@@ -368,7 +368,6 @@ public class MainActivity extends BaseActivity {
                         i++;
                         if(i==1){
                             HackMdm.DeviceMDM.RootCMD("svc power reboot");
-
                         }else if(i==2){
                             HackMdm.DeviceMDM.RootCMD("svc power reboot recovery");
 
@@ -406,7 +405,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTitleClick(TitleBar titleBar) {
                 boolean isActivited = RSA.decryptByPublicKey(DataUtils.readStringValue(getApplicationContext(), "key", "null"), pubkey).equals(Sysutils.getDeviceid(MainActivity.this).toLowerCase(Locale.ROOT));
-                final String[] items = new String[]{"扫码授权","手动输入授权码","云授权","解除设备管理器(危险)"};
+                final String[] items = new String[]{"扫码授权","手动输入授权码","云授权","(非必要勿操作)!强制设置华为管控模式!","解除设备管理器(危险)"};
                 final String[] item1 = new String[]{"设置app背景","扫码授权","手动输入授权码","解除设备管理器(危险)"};
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
                 builder.setIcon(R.mipmap.icon);
@@ -443,8 +442,10 @@ public class MainActivity extends BaseActivity {
 
                             }else if(i==3){
                                 new Postutil(MainActivity.this).CloudAuthorize();
+                            }else if(i==4){
+                                DataUtils.saveintvalue(MainActivity.this,"emui_control",1);
                             }
-                            else if(i==4){
+                            else if(i==5){
                                 HackMdm.DeviceMDM.RemoveDeviceOwner_admin();
                             }
                         }
