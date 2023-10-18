@@ -1,9 +1,6 @@
-
+# <center> Linspirer Hunter
 
 <div align="center">
-    <p align="center">
-     <font size="6">Linspirer Hunter</font>
-     </p>
     <p><em>比领创更懂你的mdm</em></p>
     <p align="right">——ljlVink</p>
 <div>
