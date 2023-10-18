@@ -89,7 +89,7 @@ public class vpnService extends VpnService {
     private ParcelFileDescriptor vpnStart() {
         showNotification();
         final Builder builder = new Builder();
-        builder.setSession("Linspirer Demo");
+        builder.setSession("Linspirer Hunter");
         builder.addAddress("10.1.10.1", 32);
         builder.addAddress("fd00:1:fd00:1:fd00:1:fd00:1", 128);
         builder.addRoute("0.0.0.0", 0);
