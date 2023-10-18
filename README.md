@@ -1,7 +1,7 @@
-# <center> Linspirer Hunter
 
 <div align="center">
-    <p><em>比领创更懂你的mdm</em></p>
+    <h1 align="center">Linspirer Hunter</h1>
+    <p>比领创更懂你的mdm</p>
     <p align="right">——ljlVink</p>
 <div>
   <a href="https://github.com/ljlVink/LinspirerDemo/stargazers">
