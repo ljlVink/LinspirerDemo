@@ -29,19 +29,24 @@
 
 Linspirer Hunter(原Linspirer Demo)是一个相对通用，针对搭载领创平板管理的的解决(破解)方案，可以在受领创管控的平板安装任意apk，并且无视网络限制，防卸载，快速冻的，以及更多玩法。本程序在安卓8-13,emui8-11,鸿蒙2-鸿蒙3都可以正常运行。本程序尤其针对了华为，联想，T11，希沃等设备进行了深度定制，并且对其他非提及到但搭载领创平板的设备也会起到非常明显的效果。在累计近两年来的维护，程序现在已经非常成熟并且稳定。
 
-支持领创版本: 累计到最近提交，所有领创版本并没有对本程序产生任何威胁。
+累计到最近提交，所有领创版本并没有对本程序产生任何威胁，这远远超出我的预期，稳定运行了两年。我曾认为，被发现了可能就会修掉这个问题，实际并没有。本打算在[8ce796b](https://github.com/ljlVink/LinspirerDemo/tree/8ce796b7d3cbe6014ffa9d6e5884615b4bc2d457)提交点我已经放弃维护本项目之后，领创甚至在后期的版本明显加大了可控范围，这是我意想不到的，于是重新复活了这个项目。
+
+
+### 支持领创版本和系统
 
 针对 领创5.0*支线:5.04.**** 以下版本
 
-针对 领创6.0*hem支线:6.00.005以下版本
+针对 领创6.0*hem(鸿蒙版) 支线:6.00.005以下版本
 
 支持系统: Android 8.1-Android 13，鸿蒙全系
+
+### 发布地址
 
 正式版本发布地址 [链接](https://youngtoday.github.io)
 
 详细使用教程,下载地址,克隆编译问题可参考 [链接](https://youngtoday.github.io)
 
-#### 主要调用
+### 主要调用
 
 程序主核心(gradle module)：[Hackmdm v2内核](https://github.com/ljlVink/HackMdm-core)
 
@@ -68,4 +73,4 @@ Linspirer Hunter(原Linspirer Demo)是一个相对通用，针对搭载领创平
 [ActivityLauncher](https://github.com/butzist/ActivityLauncher)
 [EasyFloat](https://github.com/princekin-f/EasyFloat)
 [zxing-lite](https://github.com/jenly1314/ZXingLite/)
-
+[Xupdate](https://github.com/xuexiangjys/XUpdate)
