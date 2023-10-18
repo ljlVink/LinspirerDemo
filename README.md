@@ -1,13 +1,6 @@
 
-<style>
-  .centered-text {
-    text-align: center;
-    font-size: 32px;
-  }
-</style>
-
 <div align="center">
-  <div class="centered-text">Linspirer Hunter</div>
+    <p align="center" style="font-size: 32px;" >Linspirer Hunter</p>
     <p><em>比领创更懂你的mdm</em></p>
     <p align="right">——ljlVink</p>
 <div>
