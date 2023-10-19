@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
 import com.ljlVink.core.core.IPostcallback;
-import com.ljlVink.utils.Toast;
+import com.ljlVink.lsphunter.utils.Toast;
 
 public class Postutil {
     Context context;
