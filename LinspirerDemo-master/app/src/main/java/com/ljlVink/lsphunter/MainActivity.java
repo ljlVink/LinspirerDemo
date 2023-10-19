@@ -547,13 +547,10 @@ public class MainActivity extends BaseActivity {
         }
     }
     private void UpdateCheck(){
-        String url;
-            url="https://ghproxy.com/https://raw.githubusercontent.com/ljlVink/LinspirerDemo/main/releasetags/"+getPackageName()+".json";
-
+        String url="https://ghproxy.com/https://raw.githubusercontent.com/ljlVink/LinspirerDemo/main/releasetags/"+getPackageName()+".json";
         XUpdate.newBuild(this)
                 .updateUrl(url)
                 .update();
-
     }
 
     private void showdialog() {
