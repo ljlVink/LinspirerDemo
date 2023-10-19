@@ -63,7 +63,7 @@ public class lsphunterApplication extends Application {
         XUpdate.get()
                 .debug(true)
                 .isWifiOnly(false)
-                .isGet(false)
+                .isGet(true)
                 .isAutoMode(false)
                 .param("versionCode", UpdateUtils.getVersionCode(this))
                 .param("appKey", getPackageName())
@@ -77,19 +77,6 @@ public class lsphunterApplication extends Application {
                         if(code == CHECK_NO_NETWORK){
                             Toast.ShowErr(getApplicationContext(),"检测更新失败->>无互联网连接!<<");
                         }
-                    }
-                })
-                .setOnInstallListener(new OnInstallListener() {
-                    @Override
-                    public boolean onInstallApk(@NonNull Context context, @NonNull File apkFile, @NonNull DownloadEntity downloadEntity) {
-                        String filepath=apkFile.getPath();
-
-                        return false;
-                    }
-
-                    @Override
-                    public void onInstallApkSuccess() {
-
                     }
                 })
                 .supportSilentInstall(false)

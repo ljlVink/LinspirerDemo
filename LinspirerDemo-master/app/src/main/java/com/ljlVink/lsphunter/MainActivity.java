@@ -547,12 +547,9 @@ public class MainActivity extends BaseActivity {
         }
     }
     private void UpdateCheck(){
-        String url="";
-        if(BuildConfig.DEBUG){
-            url="http://192.168.31.7:6584/CheckVersionUpdate";
-        }else{
-            url="https://baidu.com/";
-        }
+        String url;
+            url="https://ghproxy.com/https://raw.githubusercontent.com/ljlVink/LinspirerDemo/main/releasetags/"+getPackageName()+".json";
+
         XUpdate.newBuild(this)
                 .updateUrl(url)
                 .update();
