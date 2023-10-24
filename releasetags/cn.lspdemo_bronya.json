@@ -1,12 +1,1 @@
-{
-    "Code": 0,
-    "Msg": "",
-    "UpdateStatus": 1,
-    "VersionCode": 70011,
-    "VersionName": "V7.01",
-    "ModifyContent": "update test",
-    "DownloadUrl": "https://ghproxy.com/https://github.com/ljlVink/LinspirerDemo/releases/download/V7.01/lspdemo_bronya-V7.01_preview_20231019.apk",
-    "ApkSize": 2048,
-    "ApkMd5": ""
-  }
-  
+{"Code":0,"Msg":"OK","UpdateStatus":1,"VersionCode":"71000\r","VersionName":"V7.10","ModifyContent":"Linspirer Hunter 7.10","DownloadUrl":"https://ghproxy.com/https://github.com/ljlVink/LinspirerDemo/releases/download/V7.10/lspdemo_bronya-V7.10_20231024.apk","ApkSize":6666,"ApkMd5":""}
