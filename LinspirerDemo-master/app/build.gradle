@@ -9,8 +9,8 @@ android {
         minSdkVersion 26
         resValue "string", "app_name", "无限宝"
         targetSdkVersion 31
-        versionCode 70011
-        versionName "V7.01_preview_${getDate2()}"
+        versionCode 71000
+        versionName "V7.10_${getDate2()}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         buildConfigField "String","BUILD_DATE",getDate()
@@ -42,11 +42,11 @@ android {
             applicationId "vizpower.imeeting"
         }
         lspdemo_bronya{
-            resValue "string", "app_name", "Lspdemo"
+            resValue "string", "app_name", "Lsphunter"
             applicationId "cn.lspdemo_bronya"
         }
         lspdemo_mana{
-            resValue "string", "app_name", "Lspdemo"
+            resValue "string", "app_name", "Lsphunter"
             applicationId "cn.lspdemo_mana"
         }
         sogou{
