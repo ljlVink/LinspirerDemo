@@ -706,10 +706,10 @@ public class MainActivity extends BaseActivity {
                 break;
             case 7:
                 Flag=true;
-                final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')","禁用通知栏菜单","启用通知栏菜单","禁止锁屏工具栏","允许锁屏工具烂","关闭手势导航","开启手势导航","禁用安全模式","启用安全模式"};
+                final String[] hwitems = new String[]{"设置隐藏", "华为解控(unknown)","禁止蓝牙","允许蓝牙","禁用HMS core(设置'华为账号')","启用HMS core(设置'华为账号')","禁用通知栏菜单","启用通知栏菜单","禁止锁屏工具栏","允许锁屏工具烂","关闭手势导航","开启手势导航","禁用安全模式","启用安全模式","打开华为/荣耀设置搜索(仅限部分系统)"};
                 MaterialAlertDialogBuilder builder1 = new MaterialAlertDialogBuilder(MainActivity.this);
                 builder1.setIcon(R.drawable.huawei);
-                builder1.setTitle("华为专区");
+                builder1.setTitle("华为/荣耀专区");
                 builder1.setItems(hwitems, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -848,6 +848,10 @@ public class MainActivity extends BaseActivity {
                                 HackMdm.DeviceMDM.disable_safemode(true);
                             }if(which==14){
                                 HackMdm.DeviceMDM.disable_safemode(false);
+                            }if(which==15){
+                                Intent intent11 = new Intent();
+                                intent11.setComponent(new ComponentName("com.android.settings", "com.android.settings.SearchOpenToExternal"));
+                                startActivity(intent11);
                             }
 
                         } catch (Exception e) {
