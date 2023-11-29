@@ -3,6 +3,8 @@ package com.ljlVink.lsphunter.Receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.text.TextUtils;
 
 import com.huosoft.wisdomclass.linspirerdemo.ddpm;
 
@@ -36,14 +38,24 @@ public class MyReceiver extends BroadcastReceiver {
                 }
                 break;
             case "com.linspirer.edu.return.userinfo":
+                String ans="获取到的信息:";
                 String account=intent.getStringExtra("account");
                 String nickName=intent.getStringExtra("nickName");
                 String className=intent.getStringExtra("className");
                 String schoolName=intent.getStringExtra("schoolName");
-                if(account==null||nickName==null||className==null||schoolName==null){
-                    Toast.ShowErr(context,"传回参数存在空值!请确保已经登录!");
+                if(!TextUtils.isEmpty(account)){
+                    ans+="账号:"+account;
                 }
-                Toast.ShowInfo(context, "acc:" + account + ",nickname" + nickName + ",classname" + className + ",schoolname" + schoolName);
+                if(!TextUtils.isEmpty(nickName)){
+                    ans+=" 昵称:"+nickName;
+                }
+                if(!TextUtils.isEmpty(className)){
+                    ans+=" 班级名:"+className;
+                }
+                if(!TextUtils.isEmpty(schoolName)){
+                    ans+=" 学校名:"+schoolName;
+                }
+                Toast.ShowInfo(context, ans);
                 break;
             case "android.intent.action.PACKAGE_ADDED":
                 String packageName = intent.getDataString();
@@ -60,25 +72,29 @@ public class MyReceiver extends BroadcastReceiver {
                 if(DataUtils.readint(context,"OnTestMode",0)==1)
                     Toast.ShowInfo(context, "覆盖安装应用："+pn);
         }
-        String code=intent.getData().getHost();
-        if (code !=null){
-            switch (code){
-                case "6666":
-                    Intent intent1=new Intent(context, MainActivity.class);
-                    intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent1);
-                    break;
-                case "4567":
-                    Intent intent2=new Intent(context, ddpm.class);
-                    intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent2);
-                    break;
-                case "0000":
-                    new HackMdm(context).initMDM();
-                    HackMdm.DeviceMDM.RestoreFactory_AnyMode();
-                    break;
+        Uri data = intent.getData();
+        if (data != null) {
+            String code=data.getHost();
+            if (code !=null){
+                switch (code){
+                    case "6666":
+                        Intent intent1=new Intent(context, MainActivity.class);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent1);
+                        break;
+                    case "4567":
+                        Intent intent2=new Intent(context, ddpm.class);
+                        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent2);
+                        break;
+                    case "0000":
+                        new HackMdm(context).initMDM();
+                        HackMdm.DeviceMDM.RestoreFactory_AnyMode();
+                        break;
 
+                }
             }
+
         }
     }
 }
