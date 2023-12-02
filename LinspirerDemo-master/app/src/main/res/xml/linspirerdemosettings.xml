@@ -73,12 +73,17 @@
             android:summary="对于特定rom,成功设置后可通过长按3次home键进入本程序"></Preference>
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="返回到管控设置">
+        android:title="返回/进入到管控设置">
         <Preference
             android:key="desktop_pkg"
             android:title="设置管控包名(手动)"
             android:summary="如您按下返回需要返回到四中桌面或其他桌面,请在此设置包名,清空则默认领创"
             ></Preference>
+        <SwitchPreference
+            android:key="pulldown_app_until_volume_press"
+            android:title="不提前解冻app"
+            android:defaultValue="false"
+            android:summary="开启后,进入程序后将会在音量按下之后解冻在超级名单的app."/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="四中网校附加选项">

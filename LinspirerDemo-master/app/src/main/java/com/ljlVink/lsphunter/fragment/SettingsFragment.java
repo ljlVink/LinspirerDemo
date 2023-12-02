@@ -50,6 +50,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SwitchPreference bjszmode=Objects.requireNonNull(findPreference("bjsz_mode"));
         SwitchPreference firewall_ctrl=Objects.requireNonNull(findPreference("firewall_ctrl"));
         SwitchPreference bjsz_mode_disable_recent=Objects.requireNonNull(findPreference("bjsz_mode_disable_recent"));
+        SwitchPreference pulldown_app_until_volume_press=Objects.requireNonNull(findPreference("pulldown_app_until_volume_press"));
         vpnmode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -277,6 +278,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     DataUtils.saveintvalue(getContext(),"not_load_hmscore",1);
                 }else{
                     DataUtils.saveintvalue(getContext(),"not_load_hmscore",0);
+                }
+                return true;
+            }
+        });
+        pulldown_app_until_volume_press.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if((boolean) newValue){
+                    DataUtils.saveintvalue(getContext(),"pulldown_app_until_volume_press",1);
+                }else{
+                    DataUtils.saveintvalue(getContext(),"pulldown_app_until_volume_press",1);
                 }
                 return true;
             }

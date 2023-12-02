@@ -515,6 +515,9 @@ public class MainActivity extends BaseActivity {
         if(enable){
             showdialog();
             show_upload_dialog();
+            if(DataUtils.readint(this,"pulldown_app_until_volume_press",0)==1){
+                HackMdm.DeviceMDM.pullDown_app();
+            }
         }
     }
     private void show_upload_dialog(){
