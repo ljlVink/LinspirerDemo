@@ -46,19 +46,16 @@ public class autostart extends Activity {
 
     }
     private void startvpn(){
-        Thread th=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Intent prepare = VpnService.prepare(autostart.this);
-                if(prepare == null) {
-                    onActivityResult(666,RESULT_OK,null);
-                }
-                else {
-                    try {
-                        startActivityForResult(prepare, 666);
-                    } catch (Throwable ex) {
-                        onActivityResult(666, RESULT_CANCELED, null);
-                    }
+        Thread th=new Thread(() -> {
+            Intent prepare = VpnService.prepare(autostart.this);
+            if(prepare == null) {
+                onActivityResult(666,RESULT_OK,null);
+            }
+            else {
+                try {
+                    startActivityForResult(prepare, 666);
+                } catch (Throwable ex) {
+                    onActivityResult(666, RESULT_CANCELED, null);
                 }
             }
         });

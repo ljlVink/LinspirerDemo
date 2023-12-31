@@ -45,9 +45,7 @@ public class BaseActivity extends FragmentActivity {
                 findViewById(R.id.right_container).setVisibility(View.VISIBLE);
                 onResume();
             }
-        }catch (Exception e){
-
-        }catch (Throwable th){
+        }catch (Throwable ignore){
 
         }
     }
@@ -56,7 +54,7 @@ public class BaseActivity extends FragmentActivity {
             findViewById(R.id.titlebar2).setVisibility(View.INVISIBLE);
             findViewById(R.id.left_container).setVisibility(View.INVISIBLE);
             if(Sysutils.isTabletDevice(getApplicationContext())) findViewById(R.id.right_container).setVisibility(View.INVISIBLE);
-        }catch (Exception e){}
+        }catch (Exception ignore){}
     }
 
 }

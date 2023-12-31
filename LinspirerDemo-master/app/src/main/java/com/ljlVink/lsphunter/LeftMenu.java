@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -27,18 +26,10 @@ public class LeftMenu extends Fragment {
         CustomMenuAdapter adapter = new CustomMenuAdapter(requireContext(), getMenuItems());
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((MainActivity) requireActivity()).onMenuItemClicked(position);
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                ((MainActivity) requireActivity()).onMenuItemLongClicked(pos);
-                return true;
-            }
+        listView.setOnItemClickListener((parent, view1, position, id) -> ((MainActivity) requireActivity()).onMenuItemClicked(position));
+        listView.setOnItemLongClickListener((adapterView, view12, pos, id) -> {
+            ((MainActivity) requireActivity()).onMenuItemLongClicked(pos);
+            return true;
         });
         return view;
     }

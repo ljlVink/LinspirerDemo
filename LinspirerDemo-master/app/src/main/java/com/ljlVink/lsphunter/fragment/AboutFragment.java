@@ -1,13 +1,11 @@
 package com.ljlVink.lsphunter.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,31 +25,9 @@ public class AboutFragment extends Fragment {
                 .isRTL(false)
                 .setImage(R.drawable.aboutme)
                 .addItem(new Element().setTitle("Version:"+ BuildConfig.VERSION_NAME))
-                .addItem(new Element().setTitle("QQ群").setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        urlstart("https://jq.qq.com/?_wv=1027&k=r1tpCVuO");
-                    }
-                }))
-                .addItem(new Element().setTitle("Github").setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        urlstart("https://github.com/ljlVink/LinspirerDemo");
-                    }
-                }))
-                .addItem(new Element().setTitle("反馈bug").setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        urlstart("https://github.com/ljlVink/LinspirerDemo/issues/new");
-                    }
-                }))
-                .addItem(new Element().setTitle("官网").setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        urlstart("https://youngtoday.github.io/");
-
-                    }
-                }))
+                .addItem(new Element().setTitle("Github").setOnClickListener(view -> urlstart("https://github.com/ljlVink/LinspirerDemo")))
+                .addItem(new Element().setTitle("HackMdm Core").setOnClickListener(view -> urlstart("https://github.com/ljlVink/hackmdm-core")))
+                .addItem(new Element().setTitle("官网").setOnClickListener(view -> urlstart("https://youngtoday.github.io/")))
                 .setDescription("Linspirer Hunter(原Linspirer Demo),比领创更懂你的MDM").create();
 
     }
@@ -62,7 +38,7 @@ public class AboutFragment extends Fragment {
         intent.setData(uri);
         try {
             getContext().startActivity(intent);
-        } catch (Exception e) {
+        } catch (Exception ignore) {
         }
 
     }

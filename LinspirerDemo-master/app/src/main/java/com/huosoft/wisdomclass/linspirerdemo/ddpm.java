@@ -16,7 +16,7 @@ public class ddpm extends Activity {
         new HackMdm(this).initMDM();
         new AlertDialog.Builder(ddpm.this)
                 .setIcon(R.drawable.app_settings)
-                .setTitle("确定要解除Linspirer Demo的设备管理器吗")
+                .setTitle("确定要解除Linspirer Hunter的设备管理器吗")
                 .setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

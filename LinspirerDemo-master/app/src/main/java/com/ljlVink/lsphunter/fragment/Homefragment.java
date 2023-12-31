@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.huosoft.wisdomclass.linspirerdemo.BuildConfig;
 import com.huosoft.wisdomclass.linspirerdemo.R;
-import com.ljlVink.core.core.IPostcallback;
 import com.ljlVink.core.core.Postutil;
 import com.ljlVink.core.hackmdm.v2.HackMdm;
 import com.ljlVink.lsphunter.utils.DataUtils;
@@ -63,7 +62,7 @@ public class Homefragment {
         }
         String emui=Sysutils.getHwemui();
         if(!emui.equals("")){
-            if(emui.startsWith("EmotionUI_12")||emui.startsWith("EmotionUI_13")){
+            if(emui.contains("EmotionUI_12")||emui.contains("EmotionUI_13")||emui.contains("EmotionUI_14")){
                 logger.logSuccess("华为鸿蒙:"+emui);
             }else {
                 logger.logSuccess("华为emui:"+emui);
@@ -111,24 +110,9 @@ public class Homefragment {
             deviceinfo();
             return;
         }
-        new Postutil(ctx).getAnnouncement(new IPostcallback() {
-            @Override
-            public void onSuccess(String data) {
-                logger.logNormal("服务器连接成功!\n"+data);
-                deviceinfo();
-            }
-            @Override
-            public void onInternetErr() {
-                if(Sysutils.isInLinspirerFirewallMode()){
-                    logger.logError("当你看到这条消息时，程序检测到领创防火墙并没有添加本app为网络白名单例外，如果这是第一次启动，可以考虑重启本app" );
-                    logger.logError("如果多次开启都出现此信息，请安装最新版本或者将截屏反馈给开发者处理.");
-                    logger.logError("你的互联网是正常的，因为可以访问领创官网");
-                }else{
-                    logger.logError("网络连接异常，请检查网络");
-                }
-
-                deviceinfo();
-            }
+        new Postutil(ctx).getAnnouncement(data -> {
+            logger.logNormal(data);
+            deviceinfo();
         });
     }
 

@@ -2,15 +2,14 @@ plugins {
     id 'com.android.application'
 }
 android {
-    compileSdkVersion 32
-    buildToolsVersion "30.0.3"
+    compileSdk 34
     defaultConfig {
-        applicationId "vizpower.imeeting"
-        minSdkVersion 26
-        resValue "string", "app_name", "无限宝"
-        targetSdkVersion 31
-        versionCode 71000
-        versionName "V7.10_${getDate2()}"
+        applicationId "cn.lspdemo_bronya"
+        minSdk 26
+        resValue "string", "app_name", "Lsphunter"
+        targetSdk 34
+        versionCode 71100
+        versionName "V7.11_FinalVerison_${getDate2()}"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "versionCode"
         buildConfigField "String","BUILD_DATE",getDate()
@@ -100,7 +99,6 @@ dependencies{
 dependencies {
     //Tools
     implementation 'io.github.medyo:android-about-page:2.0.0'
-    implementation 'com.github.jenly1314:zxing-lite:2.1.1'
     implementation 'com.nbsp:materialfilepicker:1.9.1'
     implementation 'com.github.princekin-f:EasyFloat:2.0.3'
     implementation 'com.squareup.okhttp3:okhttp:latest.release'
@@ -108,8 +106,6 @@ dependencies {
     implementation 'com.github.getActivity:XXPermissions:18.2'
     implementation 'com.github.GrenderG:Toasty:1.5.2'
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'com.github.xuexiangjys:XUpdate:2.1.4'
-    implementation 'com.zhy:okhttputils:2.6.2'
     implementation 'com.github.xuexiangjys.XUtil:xutil-core:2.0.0'
     implementation 'com.github.xuexiangjys.XUtil:xutil-sub:2.0.0'
 

@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.huosoft.wisdomclass.linspirerdemo">
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -110,10 +109,6 @@
             android:icon="@mipmap/icon"
             android:theme="@style/TranslucentTheme" />
         <activity
-            android:name="com.king.zxing.CaptureActivity"
-            android:icon="@mipmap/icon"
-            android:theme="@style/CaptureTheme" />
-        <activity
             android:name="com.ljlVink.lsphunter.MainActivity"
             android:exported="true"
             android:icon="@mipmap/icon"
@@ -183,16 +178,6 @@
             android:name="HackMdm"
             android:value="linspirerdemo" />
 
-        <receiver
-            android:name="com.ljlVink.lsphunter.Receiver.thirdpartyreceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:icon="@mipmap/icon">
-            <intent-filter>
-                <action android:name="ljlVink.thirdparty.app.calldeviceowner" />
-                <action android:name="ljlVink.thirdparty.app.pullrsa" />
-            </intent-filter>
-        </receiver>
 
         <service
             android:name="com.ljlVink.lsphunter.services.vpnService"

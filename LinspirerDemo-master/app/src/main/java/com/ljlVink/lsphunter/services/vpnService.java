@@ -95,9 +95,6 @@ public class vpnService extends VpnService {
         builder.addRoute("0.0.0.0", 0);
         builder.addRoute("0:0:0:0:0:0:0:0", 0);
         try {
-            if(BuildConfig.DEBUG){
-                builder.addAllowedApplication("mark.via");
-            }
             builder.addAllowedApplication("com.android.launcher3");
             if(DataUtils.readint(this,"disallow_appstore_internet",1)==1){
                 builder.addAllowedApplication("com.ndwill.swd.appstore");

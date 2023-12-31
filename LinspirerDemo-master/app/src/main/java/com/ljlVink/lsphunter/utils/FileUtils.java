@@ -40,10 +40,7 @@ public class FileUtils {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (callback != null) {
-                if (msg.what == SUCCESS)
-                {
-                    Log.e("fileutils","msg.obj.toString()+onsuccess");
-
+                if (msg.what == SUCCESS) {
                     callback.onSuccess();
                 }
                 if (msg.what == FAILED) {

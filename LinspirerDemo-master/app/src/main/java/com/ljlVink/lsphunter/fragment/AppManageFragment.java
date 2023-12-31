@@ -4,9 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -55,10 +55,10 @@ public class AppManageFragment {
     }
     public void onTabClick(int position) {
         switch (position) {
-            case 0:// 今天的数据  00:00 到 现在
+            case 0:
                 getapps("已经安装app",1);
                 break;
-            case 1:// 昨天的数据  昨天00:00 - 今天00:00
+            case 1:
                 getapps("系统app",2);
                 break;
         }
@@ -74,88 +74,75 @@ public class AppManageFragment {
         mAdapter = new AppAdapter();
         ListView rc = view.findViewById(R.id.rv_app_usage);
         rc.setAdapter(mAdapter);
-        rc.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String appName = mItems.get(i).getAppName();
-                String pkgname = mItems.get(i).getPackageName();
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(ctx)
-                        .setTitle(appName)
-                        .setMessage("包名:" + pkgname + "\n")
-                        .setPositiveButton("打开", (dialog1, which) -> {
-                            dialog1.dismiss();
-                            try {
-                                ctx.startActivity(ctx.getPackageManager().getLaunchIntentForPackage(pkgname));
-                            } catch (Exception e) {
-                                Toast.ShowErr(ctx, "出现错误");
-                            }
-                        });
-                builder.setIcon(Sysutils.getAppIcon(ctx, pkgname));
-                builder.setNegativeButton("卸载", (dialog, which) -> {
-                    dialog.dismiss();
-                    HackMdm.DeviceMDM.unblockApp(pkgname);
-                    Intent intent = new Intent(Intent.ACTION_DELETE);
-                    intent.setData(Uri.parse("package:" + pkgname));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    ctx.startActivity(intent);
-                });
-                if (lspdemopkgname.contains(pkgname)) {
-                    builder.setNeutralButton("转移权限", (dialog2, which) -> {
-                        HackMdm.DeviceMDM.transferOwner(new ComponentName(pkgname, "com.huosoft.wisdomclass.linspirerdemo.AR"));
-                    });
-                } else if (!pkgname.equals(ctx.getPackageName())) {
-                    builder.setNeutralButton("带SN参数启动", (dialog2, which) -> {
+        rc.setOnItemClickListener((adapterView, view, i, l) -> {
+            String appName = mItems.get(i).getAppName();
+            String pkgname = mItems.get(i).getPackageName();
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(ctx)
+                    .setTitle(appName)
+                    .setMessage("包名:" + pkgname + "\n")
+                    .setPositiveButton("打开", (dialog1, which) -> {
+                        dialog1.dismiss();
                         try {
-                            HackMdm.DeviceMDM.killApplicationProcess(pkgname);
                             ctx.startActivity(ctx.getPackageManager().getLaunchIntentForPackage(pkgname));
-                            Thread thread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    for (int ii = 1; ii <= 7; ii++) {
-                                        try {
-                                            Thread.sleep(500);
-                                        } catch (Exception e) {
-                                        }
-                                        String sn = DataUtils.readStringValue(ctx, "SN", HackMdm.DeviceMDM.getSerialCode());
-                                        if (sn.equals("null")) {
-                                            return;
-                                        }
-                                        ctx.sendBroadcast(new Intent("com.linspirer.edu.getdevicesn"));
-                                        Intent intent8 = new Intent("com.android.laucher3.mdm.obtaindevicesn");
-                                        intent8.putExtra("device_sn", sn);
-                                        ctx.sendBroadcast(intent8);
-                                    }
-                                }
-                            });
-                            thread.start();
                         } catch (Exception e) {
-                            Toast.ShowErr(ctx, "启动失败");
+                            Toast.ShowErr(ctx, "出现错误");
                         }
                     });
-                }
-                builder.create().show();
-
+            builder.setIcon(Sysutils.getAppIcon(ctx, pkgname));
+            builder.setNegativeButton("卸载", (dialog, which) -> {
+                dialog.dismiss();
+                HackMdm.DeviceMDM.unblockApp(pkgname);
+                Intent intent = new Intent(Intent.ACTION_DELETE);
+                intent.setData(Uri.parse("package:" + pkgname));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(intent);
+            });
+            if (lspdemopkgname.contains(pkgname)) {
+                builder.setNeutralButton("转移权限", (dialog2, which) -> HackMdm.DeviceMDM.transferOwner(new ComponentName(pkgname, "com.huosoft.wisdomclass.linspirerdemo.AR")));
+            } else if (!pkgname.equals(ctx.getPackageName())) {
+                builder.setNeutralButton("带SN参数启动", (dialog2, which) -> {
+                    try {
+                        HackMdm.DeviceMDM.killApplicationProcess(pkgname);
+                        ctx.startActivity(ctx.getPackageManager().getLaunchIntentForPackage(pkgname));
+                        Thread thread = new Thread(() -> {
+                            Looper.prepare();
+                            for (int ii = 1; ii <= 7; ii++) {
+                                try {
+                                    Thread.sleep(500);
+                                } catch (Exception ignore) {
+                                }
+                                String sn = DataUtils.readStringValue(ctx, "SN", HackMdm.DeviceMDM.getSerialCode());
+                                if (sn.equals("null")) {
+                                    Toast.ShowErr(ctx,"未设置SN");
+                                    return;
+                                }
+                                ctx.sendBroadcast(new Intent("com.linspirer.edu.getdevicesn"));
+                                Intent intent8 = new Intent("com.android.laucher3.mdm.obtaindevicesn");
+                                intent8.putExtra("device_sn", sn);
+                                ctx.sendBroadcast(intent8);
+                            }
+                            Looper.loop();
+                        });
+                        thread.start();
+                    } catch (Exception e) {
+                        Toast.ShowErr(ctx, "启动失败");
+                    }
+                });
             }
+            builder.create().show();
 
         });
-        rc.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String appName=mItems.get(i).getAppName();
-                String pkgname=mItems.get(i).getPackageName();
+        rc.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            String appName=mItems.get(i).getAppName();
+            String pkgname=mItems.get(i).getPackageName();
 
-                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(ctx)
-                        .setTitle(appName)
-                        .setMessage("包名:" + pkgname + "\n")
-                        .setPositiveButton("冻结", (dialog1, which) -> {
-                            HackMdm.DeviceMDM.iceApp(pkgname, true);
-                        }).setIcon(Sysutils.getAppIcon(ctx, pkgname));
-                builder.setNegativeButton("解冻", (dialog, which) -> {
-                    HackMdm.DeviceMDM.iceApp(pkgname, false);
-                });
-                builder.create().show();
-                return true;
-            }
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(ctx)
+                    .setTitle(appName)
+                    .setMessage("包名:" + pkgname + "\n")
+                    .setPositiveButton("冻结", (dialog1, which) -> HackMdm.DeviceMDM.iceApp(pkgname, true)).setIcon(Sysutils.getAppIcon(ctx, pkgname));
+            builder.setNegativeButton("解冻", (dialog, which) -> HackMdm.DeviceMDM.iceApp(pkgname, false));
+            builder.create().show();
+            return true;
         });
 
     }

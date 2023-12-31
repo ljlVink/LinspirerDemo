@@ -30,61 +30,50 @@ public class LinspirerPWDFragment {
     }
     public void HandleFragment(){
         Button btn=view.findViewById(R.id.button);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView tv3 = (TextView) view.getRootView().findViewById(R.id.tv3);
-                EditText ed=view.getRootView().findViewById(R.id.et2);
-                String userid=ed.getText().toString();
-                tv3.setText("");
-                String swdid = ((EditText)view.getRootView().findViewById(R.id.et)).getText().toString();
-                String pass500 = calc(swdid,key500,userid);
-                String pass501 = calc(swdid,key501,userid);
-                TextView tvs = (TextView) view.getRootView().findViewById(R.id.tv);
-                tvs.setText("5.0.***:"+pass500+"\n5.01.***:"+pass501+"\n孩子端(5.05):"+hzd(swdid));
-                JSONObject jsonObject=new JSONObject();
-                jsonObject.put("id","1");
-                jsonObject.put("!version","1");
-                jsonObject.put("jsonrpc","1.0");
-                jsonObject.put("is_encrypt",false);
-                jsonObject.put("client_version","Vtongyongshengchan_4.3.1");
-                jsonObject.put("method","com.linspirer.whitelist.whitepass");
-                JSONObject para=new JSONObject();
-                para.put("swdid",swdid.toLowerCase(Locale.ROOT));
-                para.put("schoolid","127df023-de3d-4bca-b810-b2b51854a064");
-                jsonObject.put("params",para);
-                new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
-                    @Override
-                    public void callback(String str) {
-                        String passwd="";
-                        try{
-                            JSONObject obj= JSON.parseObject(str);
-                            JSONObject obj1=obj.getJSONObject("data");
-                            JSONObject obj2=obj1.getJSONObject("adminpass");
-                            passwd=obj2.getString("password");
-                        }catch (Exception e){
-                            passwd="未查询到设备密码,请检查设备是否合法";
-                        }
-                        final String psw2="领创设备密码:"+passwd;
-                        tv3.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                tv3.setText(psw2);
-                            }});
+        btn.setOnClickListener(view -> {
+            TextView tv3 = (TextView) view.getRootView().findViewById(R.id.tv3);
+            EditText ed=view.getRootView().findViewById(R.id.et2);
+            String userid=ed.getText().toString();
+            tv3.setText("");
+            String swdid = ((EditText)view.getRootView().findViewById(R.id.et)).getText().toString();
+            String pass500 = calc(swdid,key500,userid);
+            String pass501 = calc(swdid,key501,userid);
+            TextView tvs = (TextView) view.getRootView().findViewById(R.id.tv);
+            tvs.setText("5.0.***:"+pass500+"\n5.01.***:"+pass501+"\n孩子端(5.05):"+hzd(swdid));
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("id","1");
+            jsonObject.put("!version","1");
+            jsonObject.put("jsonrpc","1.0");
+            jsonObject.put("is_encrypt",false);
+            jsonObject.put("client_version","Vtongyongshengchan_4.3.1");
+            jsonObject.put("method","com.linspirer.whitelist.whitepass");
+            JSONObject para=new JSONObject();
+            para.put("swdid",swdid.toLowerCase(Locale.ROOT));
+            para.put("schoolid","127df023-de3d-4bca-b810-b2b51854a064");
+            jsonObject.put("params",para);
+            new PostUtils().sendPost(jsonObject, "https://cloud.linspirer.com:883/public-interface.php", new ICallback() {
+                @Override
+                public void callback(String str) {
+                    String passwd="";
+                    try{
+                        JSONObject obj= JSON.parseObject(str);
+                        JSONObject obj1=obj.getJSONObject("data");
+                        JSONObject obj2=obj1.getJSONObject("adminpass");
+                        passwd=obj2.getString("password");
+                    }catch (Exception e){
+                        passwd="未查询到设备密码,请检查设备是否合法";
                     }
+                    final String psw2="领创设备密码:"+passwd;
+                    tv3.post(() -> tv3.setText(psw2));
+                }
 
-                    @Override
-                    public void onFailure() {
-                        tv3.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                tv3.setText("网络异常");
-                            }});
+                @Override
+                public void onFailure() {
+                    tv3.post(() -> tv3.setText("网络异常"));
 
-                    }
-                });
+                }
+            });
 
-            }
         });
     }
     public static String calc(String str,String key,String userid) {

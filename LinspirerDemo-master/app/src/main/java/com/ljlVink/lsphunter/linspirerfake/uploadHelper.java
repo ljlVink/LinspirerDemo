@@ -21,20 +21,19 @@ public class uploadHelper {
     private String account;
     private String model;
     private boolean silentmode=false;
-    public uploadHelper(Context context){
-        this.context=context;
-        this.version=DataUtils.readStringValue(context,"lcmdm_version","");
-        this.swdid= DataUtils.readStringValue(context,"lcmdm_swdid","");
-        this.account=DataUtils.readStringValue(context,"lcmdm_account","");
-        this.model=DataUtils.readStringValue(context,"lcmdm_model", Build.MODEL);
+    public uploadHelper(Context context) {
+        initialize(context, false);
     }
-    public uploadHelper(Context context,boolean mode){
-        this.context=context;
-        this.version=DataUtils.readStringValue(context,"lcmdm_version","");
-        this.swdid= DataUtils.readStringValue(context,"lcmdm_swdid","");
-        this.account=DataUtils.readStringValue(context,"lcmdm_account","");
-        this.model=DataUtils.readStringValue(context,"lcmdm_model", Build.MODEL);
-        this.silentmode=mode;
+    public uploadHelper(Context context, boolean silentmode) {
+        initialize(context, silentmode);
+    }
+    private void initialize(Context context, boolean silentmode) {
+        this.context = context;
+        this.version = DataUtils.readStringValue(context, "lcmdm_version", "");
+        this.swdid = DataUtils.readStringValue(context, "lcmdm_swdid", "");
+        this.account = DataUtils.readStringValue(context, "lcmdm_account", "");
+        this.model = DataUtils.readStringValue(context, "lcmdm_model", Build.MODEL);
+        this.silentmode = silentmode;
     }
     public boolean isConfigurationed(){
         return version.equals("")||swdid.equals("")||account.equals("");
